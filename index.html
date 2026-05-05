@@ -18,11 +18,18 @@
   .divider{display:flex;align-items:center;gap:12px;margin:32px 0;opacity:.3;}
   .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--gold);}
   .divider-icon{color:var(--gold);font-size:18px;}
-  .draw-section{display:flex;flex-direction:column;align-items:center;gap:16px;margin-bottom:40px;}
-  .btn-draw{background:var(--red);color:white;border:none;font-family:'Playfair Display',serif;font-size:20px;font-weight:700;padding:18px 52px;border-radius:4px;cursor:pointer;transition:all .2s;letter-spacing:1px;}
-  .btn-draw:hover{background:var(--dark-red);transform:scale(1.03);box-shadow:0 8px 30px rgba(192,57,43,.5);}
+  /* spin wheel */
+  .draw-section{display:flex;flex-direction:column;align-items:center;gap:20px;margin-bottom:40px;}
+  .wheel-wrap{position:relative;width:260px;height:260px;}
+  .wheel-wrap canvas{border-radius:50%;box-shadow:0 0 40px rgba(201,168,76,.2);}
+  .wheel-pointer{position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:24px solid var(--gold);filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));z-index:10;}
+  .wheel-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;background:var(--dark);border:3px solid var(--gold);border-radius:50%;z-index:10;}
+  .btn-draw{background:var(--red);color:white;border:none;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;padding:14px 44px;border-radius:4px;cursor:pointer;transition:all .2s;letter-spacing:1px;}
+  .btn-draw:hover:not(:disabled){background:var(--dark-red);transform:scale(1.03);box-shadow:0 8px 30px rgba(192,57,43,.5);}
+  .btn-draw:disabled{opacity:.5;cursor:not-allowed;}
   .btn-secondary{background:transparent;border:1px solid rgba(201,168,76,.4);color:var(--gold);font-size:13px;padding:10px 24px;border-radius:4px;cursor:pointer;transition:all .2s;}
   .btn-secondary:hover{background:rgba(201,168,76,.1);border-color:var(--gold);}
+  /* result */
   .result-card{background:rgba(253,246,236,.03);border:1px solid rgba(201,168,76,.25);border-radius:12px;padding:36px;display:none;animation:fadeUp .4s ease;}
   .result-card.visible{display:block;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -44,7 +51,7 @@
   .timer-ring{position:relative;width:36px;height:36px;flex-shrink:0;}
   .timer-ring svg{transform:rotate(-90deg);}
   .timer-ring circle.bg{fill:none;stroke:rgba(253,246,236,.1);stroke-width:3;}
-  .timer-ring circle.prog{fill:none;stroke:var(--gold);stroke-width:3;stroke-linecap:round;stroke-dasharray:94.2;stroke-dashoffset:0;transition:stroke-dashoffset .9s linear, stroke .3s;}
+  .timer-ring circle.prog{fill:none;stroke:var(--gold);stroke-width:3;stroke-linecap:round;stroke-dasharray:94.2;stroke-dashoffset:0;transition:stroke-dashoffset .9s linear,stroke .3s;}
   .timer-ring circle.prog.warn{stroke:#e67e22;}
   .timer-ring circle.prog.danger{stroke:var(--red);}
   .timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);}
@@ -62,8 +69,7 @@
   .opt-btn.timeout{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.25);color:rgba(253,246,236,.4);}
   .opt-key{font-weight:700;min-width:18px;color:var(--gold);opacity:.8;}
   .opt-btn.correct .opt-key,.opt-btn.reveal .opt-key{color:#6ee7a0;}
-  .opt-btn.wrong .opt-key,.opt-btn.timeout.reveal .opt-key{color:#fca5a5;}
-  .opt-btn.reveal .opt-key{color:#6ee7a0;}
+  .opt-btn.wrong .opt-key{color:#fca5a5;}
   /* feedback */
   .feedback{margin-left:46px;margin-top:10px;border-radius:8px;padding:12px 14px;display:none;font-size:13px;line-height:1.6;}
   .feedback.show{display:block;}
@@ -93,10 +99,17 @@
     <p class="subtitle">4 Pilar Kebangsaan · SMA Kelas 10–12 · 10 Paket</p>
   </header>
   <div class="divider"><span class="divider-icon">❖</span></div>
+
   <div class="draw-section">
-    <button class="btn-draw" onclick="drawPacket()">🎲 Undi Paket</button>
+    <div class="wheel-wrap">
+      <div class="wheel-pointer"></div>
+      <canvas id="wheelCanvas" width="260" height="260"></canvas>
+      <div class="wheel-center"></div>
+    </div>
+    <button class="btn-draw" id="btnSpin" onclick="spinWheel()">🌀 Putar Roda</button>
     <button class="btn-secondary" onclick="resetAll()">↺ Reset Semua</button>
   </div>
+
   <div class="result-card" id="resultCard">
     <div class="result-header">
       <div class="result-title" id="resultTitle"></div>
@@ -108,15 +121,18 @@
     </div>
     <div class="soal-list" id="soalList"></div>
   </div>
+
   <div class="history-section" id="historySection" style="display:none">
     <div class="section-label">Riwayat Paket</div>
     <div class="history-grid" id="historyGrid"></div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
+
 <script>
 const TIMER_SEC = 45;
-const CIRC = 2 * Math.PI * 15; // r=15
+const CIRC = 2 * Math.PI * 15;
+const COLORS = ['#c0392b','#c9a84c','#922b21','#a07830','#7f1d1d','#8b6914','#e74c3c','#d4a017','#6b1a1a','#b8952a'];
 
 const BANK = {
   1:{pilar:"Pancasila",topik:"Pancasila sebagai Dasar Negara dan Ideologi Bangsa",soal:[
@@ -129,7 +145,7 @@ const BANK = {
     {no:7,pertanyaan:"Perbedaan antara ideologi terbuka dan ideologi tertutup terletak pada...",opsi:{A:"Jumlah silanya",B:"Sumber nilai dan kemampuan beradaptasi terhadap perubahan zaman",C:"Tingkat kekuatan militer suatu negara",D:"Bentuk pemerintahan yang dianut"},jawaban:"B",penjelasan:"Ideologi terbuka bersumber dari nilai-nilai hidup masyarakat itu sendiri dan mampu beradaptasi dengan zaman. Ideologi tertutup sebaliknya, bersifat dogmatis, kaku, dan dipaksakan dari luar."},
     {no:8,pertanyaan:"Pancasila digali dari nilai-nilai yang telah ada dalam masyarakat Indonesia, sehingga Pancasila bersifat...",opsi:{A:"Impor dari luar negeri",B:"Ciptaan para pendiri negara semata",C:"Kepribadian dan pandangan hidup bangsa Indonesia",D:"Ideologi sementara yang bisa diubah"},jawaban:"C",penjelasan:"Pancasila bukanlah ideologi yang diimpor dari luar, melainkan digali dari nilai-nilai luhur yang sudah lama hidup dalam masyarakat Indonesia seperti gotong royong, toleransi, dan musyawarah."},
     {no:9,pertanyaan:"Konsep Trisila yang diusulkan Soekarno pada sidang BPUPKI mencakup...",opsi:{A:"Nasionalisme, Humanisme, Theisme",B:"Sosionasionalisme, Sosiodemokrasi, Ketuhanan",C:"Persatuan, Keadilan, Ketuhanan",D:"Demokrasi, Kebangsaan, Kesejahteraan"},jawaban:"B",penjelasan:"Trisila adalah penyederhanaan Pancasila oleh Soekarno menjadi tiga prinsip: Sosionasionalisme, Sosiodemokrasi, dan Ketuhanan Yang Berkebudayaan."},
-    {no:10,pertanyaan:"Alasan utama Piagam Jakarta tidak langsung dijadikan Pembukaan UUD 1945 adalah...",opsi:{A:"Piagam Jakarta terlalu panjang",B:"Sila pertama dianggap memaksakan agama tertentu dan mengancam persatuan bangsa",C:"Para pendiri negara tidak menyukai isi Piagam Jakarta",D:"Piagam Jakarta tidak memuat sila keadilan sosial"},jawaban:"B",penjelasan:"Tujuh kata dalam sila pertama Piagam Jakarta ('dengan kewajiban menjalankan syariat Islam bagi pemeluk-pemeluknya') dinilai dapat memecah persatuan, sehingga dihapus demi keutuhan bangsa."}
+    {no:10,pertanyaan:"Alasan utama Piagam Jakarta tidak langsung dijadikan Pembukaan UUD 1945 adalah...",opsi:{A:"Piagam Jakarta terlalu panjang",B:"Sila pertama dianggap memaksakan agama tertentu dan mengancam persatuan bangsa",C:"Para pendiri negara tidak menyukai isi Piagam Jakarta",D:"Piagam Jakarta tidak memuat sila keadilan sosial"},jawaban:"B",penjelasan:"Tujuh kata dalam sila pertama Piagam Jakarta dinilai dapat memecah persatuan karena memaksa kewajiban agama tertentu, sehingga dihapus demi keutuhan bangsa."}
   ]},
   2:{pilar:"Pancasila",topik:"Nilai-Nilai dan Pengamalan Sila-Sila Pancasila",soal:[
     {no:1,pertanyaan:"Sikap yang mencerminkan pengamalan Sila Pertama Pancasila adalah...",opsi:{A:"Memaksakan agama kepada orang lain",B:"Menghormati pemeluk agama lain dalam menjalankan ibadahnya",C:"Mengikuti semua upacara keagamaan tanpa pilih",D:"Tidak peduli terhadap kegiatan keagamaan"},jawaban:"B",penjelasan:"Sila Pertama menekankan Ketuhanan Yang Maha Esa dengan nilai toleransi beragama. Menghormati ibadah pemeluk agama lain adalah wujud nyata pengamalannya."},
@@ -141,7 +157,7 @@ const BANK = {
     {no:7,pertanyaan:"Hubungan antara sila-sila Pancasila bersifat...",opsi:{A:"Saling bertentangan",B:"Terpisah satu sama lain",C:"Hierarkis piramidal dan organis",D:"Tidak memiliki keterkaitan"},jawaban:"C",penjelasan:"Sila-sila Pancasila membentuk satu kesatuan organis yang hierarkis piramidal — sila pertama mendasari sila-sila berikutnya, dan setiap sila saling mengandaikan serta menguatkan satu sama lain."},
     {no:8,pertanyaan:"Sikap yang BERTENTANGAN dengan nilai Sila Keempat Pancasila adalah...",opsi:{A:"Mengikuti hasil musyawarah meskipun berbeda pendapat",B:"Menghargai pendapat orang lain",C:"Memaksakan kehendak pribadi dalam rapat",D:"Mengutamakan kepentingan bersama"},jawaban:"C",penjelasan:"Sila Keempat mengamanatkan musyawarah dan menghargai pendapat orang lain. Memaksakan kehendak pribadi jelas bertentangan dengan semangat musyawarah mufakat."},
     {no:9,pertanyaan:"Kepala banteng dalam lambang Garuda Pancasila merupakan simbol sila ke...",opsi:{A:"3",B:"4",C:"5",D:"2"},jawaban:"B",penjelasan:"Kepala banteng melambangkan Sila Keempat. Banteng adalah hewan sosial yang menggambarkan semangat musyawarah, kebersamaan, dan kerakyatan."},
-    {no:10,pertanyaan:"'Dengan iktikad yang baik menerima dan melaksanakan hasil keputusan musyawarah' adalah pengamalan sila ke...",opsi:{A:"2",B:"3",C:"4",D:"5"},jawaban:"C",penjelasan:"Menerima dan melaksanakan hasil musyawarah dengan iktikad baik adalah butir pengamalan Sila Keempat, menekankan tanggung jawab bersama atas keputusan yang telah disepakati secara demokratis."}
+    {no:10,pertanyaan:"'Dengan iktikad yang baik menerima dan melaksanakan hasil keputusan musyawarah' adalah pengamalan sila ke...",opsi:{A:"2",B:"3",C:"4",D:"5"},jawaban:"C",penjelasan:"Menerima dan melaksanakan hasil musyawarah dengan iktikad baik adalah butir pengamalan Sila Keempat, menekankan tanggung jawab bersama atas keputusan yang telah disepakati."}
   ]},
   3:{pilar:"UUD 1945",topik:"Sejarah Perumusan dan Penetapan UUD 1945",soal:[
     {no:1,pertanyaan:"Badan yang bertugas merumuskan UUD 1945 sebelum kemerdekaan adalah...",opsi:{A:"KNIP",B:"BPUPKI",C:"PPKI",D:"DPR"},jawaban:"B",penjelasan:"BPUPKI bertugas menyelidiki dan mempersiapkan kemerdekaan, termasuk merumuskan dasar negara dan rancangan UUD."},
@@ -156,22 +172,22 @@ const BANK = {
     {no:10,pertanyaan:"Lembaga yang berwenang mengubah UUD 1945 adalah...",opsi:{A:"DPR",B:"Presiden",C:"MPR",D:"Mahkamah Konstitusi"},jawaban:"C",penjelasan:"Pasal 37 UUD 1945 menyatakan MPR adalah satu-satunya lembaga yang berwenang mengubah UUD 1945 dengan syarat kuorum dan persetujuan minimal 50%+1 anggota."}
   ]},
   4:{pilar:"UUD 1945",topik:"Hak dan Kewajiban Warga Negara dalam UUD 1945",soal:[
-    {no:1,pertanyaan:"Pasal UUD 1945 yang mengatur hak atas pendidikan adalah...",opsi:{A:"Pasal 27",B:"Pasal 28C",C:"Pasal 31",D:"Pasal 34"},jawaban:"C",penjelasan:"Pasal 31 mengatur hak dan kewajiban di bidang pendidikan: ayat (1) menyatakan setiap warga negara berhak mendapat pendidikan, ayat (2) mewajibkan mengikuti pendidikan dasar."},
-    {no:2,pertanyaan:"Hak setiap warga negara untuk mendapat pekerjaan dan penghidupan yang layak diatur dalam...",opsi:{A:"Pasal 26",B:"Pasal 27 ayat 2",C:"Pasal 28",D:"Pasal 30"},jawaban:"B",penjelasan:"Pasal 27 ayat (2) menyatakan: 'Tiap-tiap warga negara berhak atas pekerjaan dan penghidupan yang layak bagi kemanusiaan.' Ini adalah hak ekonomi warga negara."},
-    {no:3,pertanyaan:"Kewajiban membela negara bagi setiap warga negara diatur dalam Pasal...",opsi:{A:"27 ayat 1",B:"27 ayat 3",C:"28J",D:"30 ayat 1"},jawaban:"D",penjelasan:"Pasal 30 ayat (1) menyatakan bahwa tiap-tiap warga negara berhak dan wajib ikut serta dalam usaha pertahanan dan keamanan negara."},
+    {no:1,pertanyaan:"Pasal UUD 1945 yang mengatur hak atas pendidikan adalah...",opsi:{A:"Pasal 27",B:"Pasal 28C",C:"Pasal 31",D:"Pasal 34"},jawaban:"C",penjelasan:"Pasal 31 mengatur hak dan kewajiban di bidang pendidikan: ayat (1) setiap warga negara berhak mendapat pendidikan, ayat (2) mewajibkan mengikuti pendidikan dasar."},
+    {no:2,pertanyaan:"Hak setiap warga negara untuk mendapat pekerjaan dan penghidupan yang layak diatur dalam...",opsi:{A:"Pasal 26",B:"Pasal 27 ayat 2",C:"Pasal 28",D:"Pasal 30"},jawaban:"B",penjelasan:"Pasal 27 ayat (2): 'Tiap-tiap warga negara berhak atas pekerjaan dan penghidupan yang layak bagi kemanusiaan.' Ini adalah hak ekonomi warga negara."},
+    {no:3,pertanyaan:"Kewajiban membela negara bagi setiap warga negara diatur dalam Pasal...",opsi:{A:"27 ayat 1",B:"27 ayat 3",C:"28J",D:"30 ayat 1"},jawaban:"D",penjelasan:"Pasal 30 ayat (1): 'Tiap-tiap warga negara berhak dan wajib ikut serta dalam usaha pertahanan dan keamanan negara.'"},
     {no:4,pertanyaan:"Pasal 28A UUD 1945 menjamin hak...",opsi:{A:"Berserikat dan berkumpul",B:"Hidup dan mempertahankan kehidupan",C:"Mendapat pendidikan",D:"Mendapat pekerjaan"},jawaban:"B",penjelasan:"Pasal 28A menjamin hak untuk hidup serta berhak mempertahankan hidup dan kehidupannya. Ini adalah hak paling dasar yang tidak dapat diganggu gugat."},
-    {no:5,pertanyaan:"Hak asasi yang tidak dapat dikurangi dalam keadaan apapun (non-derogable rights) meliputi...",opsi:{A:"Hak berpendapat dan hak bekerja",B:"Hak hidup, hak bebas dari penyiksaan, hak beragama",C:"Hak memilih dan hak dipilih",D:"Hak mendapat gaji dan hak cuti"},jawaban:"B",penjelasan:"Non-derogable rights tidak boleh dikurangi dalam kondisi apapun, termasuk keadaan darurat. Meliputi hak hidup, bebas dari penyiksaan, bebas dari perbudakan, dan hak beragama."},
+    {no:5,pertanyaan:"Hak asasi yang tidak dapat dikurangi dalam keadaan apapun (non-derogable rights) meliputi...",opsi:{A:"Hak berpendapat dan hak bekerja",B:"Hak hidup, hak bebas dari penyiksaan, hak beragama",C:"Hak memilih dan hak dipilih",D:"Hak mendapat gaji dan hak cuti"},jawaban:"B",penjelasan:"Non-derogable rights tidak boleh dikurangi dalam kondisi apapun termasuk keadaan darurat. Meliputi hak hidup, bebas dari penyiksaan, bebas dari perbudakan, dan hak beragama."},
     {no:6,pertanyaan:"Kewajiban warga negara membayar pajak diatur dalam Pasal...",opsi:{A:"23A",B:"27 ayat 1",C:"30",D:"31"},jawaban:"A",penjelasan:"Pasal 23A menyatakan bahwa pajak dan pungutan lain yang bersifat memaksa untuk keperluan negara diatur dengan undang-undang, menjadi landasan kewajiban membayar pajak."},
     {no:7,pertanyaan:"Pasal 28J ayat 1 UUD 1945 menyatakan bahwa setiap orang wajib...",opsi:{A:"Membayar pajak",B:"Menghormati hak asasi manusia orang lain",C:"Mengikuti wajib militer",D:"Mendukung pemerintah"},jawaban:"B",penjelasan:"Pasal 28J ayat (1) menegaskan kewajiban setiap orang untuk menghormati HAM orang lain dalam tertib kehidupan bermasyarakat, berbangsa, dan bernegara."},
-    {no:8,pertanyaan:"Hak yang dijamin Pasal 28E UUD 1945 meliputi...",opsi:{A:"Hak mendapat pengajaran",B:"Hak atas pekerjaan",C:"Hak memilih agama, kewarganegaraan, dan berpendapat",D:"Hak atas jaminan sosial"},jawaban:"C",penjelasan:"Pasal 28E menjamin kebebasan memilih agama dan beribadat, memilih kewarganegaraan, memilih tempat tinggal, serta kebebasan berserikat, berkumpul, dan berpendapat."},
+    {no:8,pertanyaan:"Hak yang dijamin Pasal 28E UUD 1945 meliputi...",opsi:{A:"Hak mendapat pengajaran",B:"Hak atas pekerjaan",C:"Hak memilih agama, kewarganegaraan, dan berpendapat",D:"Hak atas jaminan sosial"},jawaban:"C",penjelasan:"Pasal 28E menjamin kebebasan memilih agama, kewarganegaraan, tempat tinggal, serta kebebasan berserikat, berkumpul, dan berpendapat."},
     {no:9,pertanyaan:"Persamaan kedudukan warga negara di hadapan hukum diatur dalam Pasal...",opsi:{A:"26",B:"27 ayat 1",C:"28D ayat 1",D:"30"},jawaban:"B",penjelasan:"Pasal 27 ayat (1): 'Segala warga negara bersamaan kedudukannya di dalam hukum dan pemerintahan dan wajib menjunjung hukum dan pemerintahan itu dengan tidak ada kecualinya.'"},
-    {no:10,pertanyaan:"Perbedaan antara hak asasi manusia dan hak warga negara terletak pada...",opsi:{A:"HAM berlaku untuk semua manusia, hak warga negara hanya untuk warga negara tertentu",B:"HAM bisa dicabut, hak warga negara tidak bisa dicabut",C:"Hak warga negara lebih tinggi dari HAM",D:"Tidak ada perbedaan"},jawaban:"A",penjelasan:"HAM melekat pada setiap manusia sejak lahir tanpa memandang kewarganegaraan. Hak warga negara bersifat khusus, hanya berlaku bagi orang yang memiliki status warga negara suatu negara tertentu."}
+    {no:10,pertanyaan:"Perbedaan antara hak asasi manusia dan hak warga negara terletak pada...",opsi:{A:"HAM berlaku untuk semua manusia, hak warga negara hanya untuk warga negara tertentu",B:"HAM bisa dicabut, hak warga negara tidak bisa dicabut",C:"Hak warga negara lebih tinggi dari HAM",D:"Tidak ada perbedaan"},jawaban:"A",penjelasan:"HAM melekat pada setiap manusia sejak lahir tanpa memandang kewarganegaraan. Hak warga negara bersifat khusus, hanya berlaku bagi orang yang memiliki status warga negara tertentu."}
   ]},
   5:{pilar:"UUD 1945",topik:"Lembaga-Lembaga Negara berdasarkan UUD 1945",soal:[
     {no:1,pertanyaan:"Setelah amandemen UUD 1945, presiden dan wakil presiden dipilih oleh...",opsi:{A:"MPR",B:"DPR",C:"Rakyat secara langsung",D:"Mahkamah Agung"},jawaban:"C",penjelasan:"Amandemen ketiga mengubah pemilihan presiden dari MPR menjadi pemilihan langsung oleh rakyat, pertama kali dilaksanakan pada Pemilu 2004."},
     {no:2,pertanyaan:"Lembaga negara yang berwenang menguji undang-undang terhadap UUD 1945 adalah...",opsi:{A:"Mahkamah Agung",B:"Komisi Yudisial",C:"Mahkamah Konstitusi",D:"DPR"},jawaban:"C",penjelasan:"Mahkamah Konstitusi dibentuk melalui amandemen ketiga. Salah satu wewenang utamanya adalah judicial review: menguji undang-undang terhadap UUD 1945."},
     {no:3,pertanyaan:"Badan Pemeriksa Keuangan (BPK) bertugas...",opsi:{A:"Menetapkan APBN",B:"Memeriksa pengelolaan dan tanggung jawab keuangan negara",C:"Mengadili sengketa pemilu",D:"Memberikan pertimbangan kepada presiden"},jawaban:"B",penjelasan:"BPK adalah lembaga independen yang memeriksa pengelolaan dan tanggung jawab keuangan negara. Hasil pemeriksaannya diserahkan kepada DPR, DPD, dan DPRD."},
-    {no:4,pertanyaan:"Berdasarkan UUD 1945 hasil amandemen, MPR terdiri dari...",opsi:{A:"DPR dan DPD",B:"DPR dan utusan golongan",C:"DPR, DPD, dan utusan daerah",D:"DPR saja"},jawaban:"A",penjelasan:"Setelah amandemen, MPR terdiri dari anggota DPR dan DPD. Utusan golongan dihapus sehingga semua anggota MPR merupakan wakil yang dipilih langsung oleh rakyat."},
+    {no:4,pertanyaan:"Berdasarkan UUD 1945 hasil amandemen, MPR terdiri dari...",opsi:{A:"DPR dan DPD",B:"DPR dan utusan golongan",C:"DPR, DPD, dan utusan daerah",D:"DPR saja"},jawaban:"A",penjelasan:"Setelah amandemen, MPR terdiri dari anggota DPR dan DPD. Utusan golongan dihapus sehingga semua anggota MPR dipilih langsung oleh rakyat."},
     {no:5,pertanyaan:"Komisi Yudisial memiliki wewenang untuk...",opsi:{A:"Membuat undang-undang",B:"Mengusulkan pengangkatan hakim agung dan menjaga kehormatan hakim",C:"Mengadili perkara pidana",D:"Menguji peraturan daerah"},jawaban:"B",penjelasan:"Komisi Yudisial berwenang mengusulkan pengangkatan hakim agung kepada DPR dan menjaga kehormatan, keluhuran martabat, serta perilaku hakim agar peradilan tetap bersih."},
     {no:6,pertanyaan:"DPD (Dewan Perwakilan Daerah) dibentuk melalui amandemen UUD 1945 yang ke...",opsi:{A:"Pertama",B:"Kedua",C:"Ketiga",D:"Keempat"},jawaban:"C",penjelasan:"DPD dibentuk melalui amandemen ketiga (2001). Anggotanya dipilih langsung dari setiap provinsi untuk mewakili kepentingan daerah di tingkat nasional."},
     {no:7,pertanyaan:"Kewenangan DPR dalam bidang legislasi adalah...",opsi:{A:"Menetapkan peraturan pemerintah",B:"Membentuk undang-undang bersama presiden",C:"Membuat peraturan daerah",D:"Mengeluarkan dekret"},jawaban:"B",penjelasan:"Pasal 20 UUD 1945 menyatakan DPR memegang kekuasaan membentuk undang-undang. Setiap RUU dibahas bersama presiden dan disahkan atas persetujuan bersama."},
@@ -180,12 +196,12 @@ const BANK = {
     {no:10,pertanyaan:"DPR dapat memberhentikan presiden melalui mekanisme...",opsi:{A:"Interpelasi",B:"Hak angket",C:"Pemakzulan (impeachment)",D:"Mosi tidak percaya"},jawaban:"C",penjelasan:"Pemakzulan adalah proses pemberhentian presiden. DPR mengajukan usul ke MK untuk diperiksa, setelah itu MPR memutuskan. Interpelasi adalah hak bertanya, angket adalah hak penyelidikan."}
   ]},
   6:{pilar:"NKRI",topik:"Konsep dan Hakikat Negara Kesatuan Republik Indonesia",soal:[
-    {no:1,pertanyaan:"Bentuk negara Indonesia berdasarkan Pasal 1 ayat 1 UUD 1945 adalah...",opsi:{A:"Negara serikat",B:"Negara konfederasi",C:"Negara kesatuan",D:"Negara federal"},jawaban:"C",penjelasan:"Pasal 1 ayat (1) UUD 1945 secara tegas menyatakan: 'Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik.' Ini merupakan salah satu pasal yang tidak dapat diubah."},
+    {no:1,pertanyaan:"Bentuk negara Indonesia berdasarkan Pasal 1 ayat 1 UUD 1945 adalah...",opsi:{A:"Negara serikat",B:"Negara konfederasi",C:"Negara kesatuan",D:"Negara federal"},jawaban:"C",penjelasan:"Pasal 1 ayat (1) UUD 1945: 'Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik.' Ini merupakan salah satu pasal yang tidak dapat diubah."},
     {no:2,pertanyaan:"Ciri utama negara kesatuan yang membedakannya dari negara federal adalah...",opsi:{A:"Memiliki konstitusi",B:"Hanya ada satu pemerintahan pusat yang berdaulat",C:"Memiliki parlemen",D:"Menggunakan sistem presidensial"},jawaban:"B",penjelasan:"Dalam negara kesatuan, kedaulatan penuh berada di pemerintah pusat. Berbeda dengan negara federal di mana negara-negara bagian memiliki kedaulatan sendiri."},
     {no:3,pertanyaan:"NKRI diproklamasikan pada tanggal...",opsi:{A:"1 Juni 1945",B:"18 Agustus 1945",C:"17 Agustus 1945",D:"27 Desember 1949"},jawaban:"C",penjelasan:"Proklamasi Kemerdekaan Indonesia dibacakan Soekarno-Hatta pada 17 Agustus 1945 di Jakarta, menandai lahirnya NKRI."},
     {no:4,pertanyaan:"Sistem pemerintahan yang dianut Indonesia berdasarkan UUD 1945 adalah...",opsi:{A:"Parlementer",B:"Presidensial",C:"Monarki konstitusional",D:"Semi presidensial"},jawaban:"B",penjelasan:"Indonesia menganut sistem presidensial, di mana presiden adalah kepala negara sekaligus kepala pemerintahan, dan tidak bertanggung jawab kepada parlemen."},
     {no:5,pertanyaan:"Kedaulatan NKRI berada di tangan...",opsi:{A:"Presiden",B:"MPR",C:"Rakyat dan dilaksanakan menurut UUD",D:"DPR"},jawaban:"C",penjelasan:"Pasal 1 ayat (2) UUD 1945 (setelah amandemen): 'Kedaulatan berada di tangan rakyat dan dilaksanakan menurut Undang-Undang Dasar.'"},
-    {no:6,pertanyaan:"Negara Indonesia pernah berbentuk negara federal, yaitu pada saat berlakunya...",opsi:{A:"UUD 1945 periode pertama",B:"Konstitusi RIS",C:"UUDS 1950",D:"Amandemen UUD 1945"},jawaban:"B",penjelasan:"Konstitusi RIS berlaku 27 Desember 1949–17 Agustus 1950. Pada masa ini Indonesia berbentuk federal dengan beberapa negara bagian, sebelum kembali ke negara kesatuan."},
+    {no:6,pertanyaan:"Negara Indonesia pernah berbentuk negara federal, yaitu pada saat berlakunya...",opsi:{A:"UUD 1945 periode pertama",B:"Konstitusi RIS",C:"UUDS 1950",D:"Amandemen UUD 1945"},jawaban:"B",penjelasan:"Konstitusi RIS berlaku 27 Desember 1949–17 Agustus 1950. Pada masa ini Indonesia berbentuk federal dengan beberapa negara bagian."},
     {no:7,pertanyaan:"Ancaman terhadap keutuhan NKRI yang bersifat nirmiliter antara lain...",opsi:{A:"Invasi militer asing",B:"Pemberontakan bersenjata",C:"Radikalisme dan separatisme melalui propaganda",D:"Serangan udara"},jawaban:"C",penjelasan:"Ancaman nirmiliter tidak menggunakan senjata, melainkan melalui ideologi, propaganda, atau gerakan separatisme. Ini sering lebih berbahaya karena sulit terdeteksi."},
     {no:8,pertanyaan:"Wilayah NKRI mencakup...",opsi:{A:"Hanya daratan",B:"Daratan dan lautan saja",C:"Daratan, lautan, dan udara di atasnya",D:"Daratan sesuai perjanjian kolonial saja"},jawaban:"C",penjelasan:"Wilayah negara secara hukum internasional mencakup tiga dimensi: daratan (termasuk pulau-pulau), lautan (perairan teritorial dan ZEE), dan ruang udara di atasnya."},
     {no:9,pertanyaan:"Integrasi nasional berarti...",opsi:{A:"Penyeragaman semua suku dan budaya",B:"Proses menyatukan perbedaan menjadi satu kesatuan yang utuh",C:"Penghapusan bahasa daerah",D:"Dominasi satu kelompok atas kelompok lain"},jawaban:"B",penjelasan:"Integrasi nasional adalah proses mempersatukan berbagai perbedaan menjadi satu kesatuan bangsa yang utuh, bukan dengan menyeragamkan atau menghapus keberagaman."},
@@ -196,7 +212,7 @@ const BANK = {
     {no:2,pertanyaan:"Deklarasi Djuanda 1957 menyatakan bahwa laut di antara pulau-pulau Indonesia adalah...",opsi:{A:"Laut internasional",B:"Bagian wilayah perairan asing",C:"Bagian wilayah kedaulatan Indonesia",D:"Zona ekonomi eksklusif"},jawaban:"C",penjelasan:"Deklarasi Djuanda (13 Desember 1957) menyatakan laut di antara pulau-pulau Indonesia adalah bagian NKRI, menjadi tonggak konsep negara kepulauan (archipelago state)."},
     {no:3,pertanyaan:"UNCLOS 1982 memberikan hak Indonesia atas zona ekonomi eksklusif sejauh...",opsi:{A:"12 mil laut",B:"24 mil laut",C:"200 mil laut",D:"500 mil laut"},jawaban:"C",penjelasan:"UNCLOS menetapkan ZEE sejauh 200 mil laut dari garis pangkal. Di ZEE ini Indonesia berhak atas sumber daya alam laut meskipun kapal asing boleh melintas."},
     {no:4,pertanyaan:"Ketahanan nasional dalam konteks Indonesia mencakup aspek...",opsi:{A:"Militer saja",B:"Ekonomi saja",C:"IPOLEKSOSBUD-HANKAM secara menyeluruh",D:"Sosial dan budaya saja"},jawaban:"C",penjelasan:"Ketahanan nasional Indonesia bersifat komprehensif, mencakup Ideologi, Politik, Ekonomi, Sosial, Budaya, Pertahanan, dan Keamanan (IPOLEKSOSBUD-HANKAM) sebagai satu kesatuan utuh."},
-    {no:5,pertanyaan:"Yang termasuk gatra alamiah dalam konsep Asta Gatra ketahanan nasional adalah...",opsi:{A:"Politik, ekonomi, sosial",B:"Geografi, demografi, sumber daya alam",C:"Ideologi, budaya, hankam",D:"IPTEK, ekonomi, hukum"},jawaban:"B",penjelasan:"Asta Gatra terdiri dari Tri Gatra (alamiah: geografi, demografi, SDA) dan Panca Gatra (sosial: ideologi, politik, ekonomi, sosial-budaya, hankam). Tri Gatra bersifat given/alami."},
+    {no:5,pertanyaan:"Yang termasuk gatra alamiah dalam konsep Asta Gatra ketahanan nasional adalah...",opsi:{A:"Politik, ekonomi, sosial",B:"Geografi, demografi, sumber daya alam",C:"Ideologi, budaya, hankam",D:"IPTEK, ekonomi, hukum"},jawaban:"B",penjelasan:"Asta Gatra terdiri dari Tri Gatra (alamiah: geografi, demografi, SDA) dan Panca Gatra (sosial: ideologi, politik, ekonomi, sosial-budaya, hankam)."},
     {no:6,pertanyaan:"Ketahanan nasional bersifat dinamis artinya...",opsi:{A:"Tidak pernah berubah",B:"Dapat ditingkatkan dan disesuaikan dengan perkembangan zaman",C:"Bergantung pada kekuatan militer",D:"Hanya berlaku saat perang"},jawaban:"B",penjelasan:"Ketahanan nasional dinamis karena tingkatannya bisa naik-turun sesuai kondisi dan tantangan bangsa. Perlu terus dibina dan ditingkatkan menghadapi berbagai ancaman yang terus berkembang."},
     {no:7,pertanyaan:"Wawasan nusantara bertujuan mewujudkan nasionalisme yang mengutamakan...",opsi:{A:"Kepentingan pribadi",B:"Kepentingan daerah",C:"Kepentingan nasional",D:"Kepentingan golongan"},jawaban:"C",penjelasan:"Wawasan nusantara mendorong setiap warga negara mendahulukan kepentingan nasional di atas kepentingan pribadi, daerah, maupun golongan demi kemajuan bangsa."},
     {no:8,pertanyaan:"Implementasi wawasan nusantara di bidang ekonomi adalah...",opsi:{A:"Mengutamakan produk asing",B:"Meratakan pembangunan ke seluruh pelosok nusantara",C:"Hanya membangun Pulau Jawa",D:"Mengeksploitasi SDA untuk kepentingan asing"},jawaban:"B",penjelasan:"Wawasan nusantara di bidang ekonomi berarti memandang seluruh wilayah sebagai satu kesatuan ekonomi, sehingga pembangunan dan pemerataan harus menjangkau seluruh pelosok nusantara."},
@@ -212,7 +228,7 @@ const BANK = {
     {no:6,pertanyaan:"Daerah Istimewa Yogyakarta mendapat status istimewa berdasarkan...",opsi:{A:"Perjanjian internasional",B:"UU No. 13 Tahun 2012 tentang Keistimewaan DIY",C:"Keputusan presiden",D:"Dekret sultan"},jawaban:"B",penjelasan:"Status istimewa DIY diatur melalui UU No. 13 Tahun 2012, mencakup tata cara pengisian jabatan gubernur dan wakil gubernur yang merupakan Sultan dan Adipati Paku Alam."},
     {no:7,pertanyaan:"Kepala daerah di tingkat kabupaten/kota disebut...",opsi:{A:"Gubernur",B:"Bupati/Walikota",C:"Camat",D:"Lurah"},jawaban:"B",penjelasan:"Gubernur memimpin provinsi, bupati memimpin kabupaten, walikota memimpin kota. Camat dan lurah bukan kepala daerah otonom, melainkan perangkat pemerintah daerah."},
     {no:8,pertanyaan:"Salah satu dampak negatif otonomi daerah yang perlu diwaspadai adalah...",opsi:{A:"Peningkatan pelayanan publik",B:"Munculnya korupsi di tingkat daerah dan primordialisme sempit",C:"Pemerataan pembangunan",D:"Penguatan demokrasi lokal"},jawaban:"B",penjelasan:"Otonomi daerah membuka peluang korupsi anggaran daerah jika pengawasan lemah. Primordialisme (mengutamakan suku/daerah sendiri) dalam rekrutmen jabatan juga menjadi tantangan serius."},
-    {no:9,pertanyaan:"Prinsip otonomi seluas-luasnya berarti...",opsi:{A:"Daerah bebas membuat hukum yang bertentangan dengan pusat",B:"Daerah mendapat kewenangan luas kecuali yang ditentukan sebagai urusan pusat",C:"Pusat tidak boleh campur tangan sama sekali",D:"Daerah boleh memisahkan diri"},jawaban:"B",penjelasan:"Otonomi seluas-luasnya berarti daerah mendapat kewenangan mengurus hampir semua urusan, kecuali enam urusan absolut pusat. Ini bukan berarti daerah bebas tanpa batas atau boleh memisahkan diri."},
+    {no:9,pertanyaan:"Prinsip otonomi seluas-luasnya berarti...",opsi:{A:"Daerah bebas membuat hukum yang bertentangan dengan pusat",B:"Daerah mendapat kewenangan luas kecuali yang ditentukan sebagai urusan pusat",C:"Pusat tidak boleh campur tangan sama sekali",D:"Daerah boleh memisahkan diri"},jawaban:"B",penjelasan:"Otonomi seluas-luasnya berarti daerah mendapat kewenangan mengurus hampir semua urusan, kecuali enam urusan absolut pusat. Ini bukan berarti daerah bebas tanpa batas."},
     {no:10,pertanyaan:"Dalam sistem otonomi daerah Indonesia, hubungan antara pemerintah pusat dan daerah bersifat...",opsi:{A:"Terputus sama sekali",B:"Hirarkis dan koordinatif",C:"Setara penuh tanpa koordinasi",D:"Daerah menentukan pusat"},jawaban:"B",penjelasan:"Hubungan pusat-daerah bersifat hirarkis (pusat di atas dalam kebijakan nasional) sekaligus koordinatif (keduanya bekerja sama mencapai tujuan pembangunan nasional)."}
   ]},
   9:{pilar:"Bhinneka Tunggal Ika",topik:"Keberagaman Suku, Agama, dan Budaya Indonesia",soal:[
@@ -221,7 +237,7 @@ const BANK = {
     {no:3,pertanyaan:"Batik Indonesia diakui UNESCO sebagai warisan budaya tak benda dunia pada tahun...",opsi:{A:"2005",B:"2009",C:"2012",D:"2015"},jawaban:"B",penjelasan:"UNESCO mengakui batik Indonesia sebagai Warisan Budaya Tak Benda pada 2 Oktober 2009. Tanggal ini kemudian diperingati sebagai Hari Batik Nasional setiap tahunnya."},
     {no:4,pertanyaan:"Sikap positif dalam menghadapi keberagaman suku bangsa di Indonesia adalah...",opsi:{A:"Etnosentrisme berlebihan",B:"Menganggap suku sendiri paling unggul",C:"Primordialisme sempit",D:"Toleransi dan apresiasi terhadap budaya lain"},jawaban:"D",penjelasan:"Toleransi dan apresiasi adalah sikap tepat dalam keberagaman. Etnosentrisme, menganggap suku sendiri paling unggul, dan primordialisme sempit justru menjadi sumber konflik dan perpecahan."},
     {no:5,pertanyaan:"Bahasa Indonesia ditetapkan sebagai bahasa persatuan dalam Sumpah Pemuda tahun...",opsi:{A:"1926",B:"1928",C:"1930",D:"1945"},jawaban:"B",penjelasan:"Sumpah Pemuda 28 Oktober 1928 mengikrarkan tiga satu: satu tanah air, satu bangsa, dan satu bahasa persatuan bahasa Indonesia, menjadi fondasi persatuan bangsa."},
-    {no:6,pertanyaan:"Kerukunan antar umat beragama di Indonesia dijaga salah satunya melalui...",opsi:{A:"Penyatuan semua agama",B:"Forum Kerukunan Umat Beragama (FKUB)",C:"Pelarangan ibadah tertentu",D:"Dominasi agama mayoritas"},jawaban:"B",penjelasan:"FKUB dibentuk berdasarkan Peraturan Bersama Menag dan Mendagri No. 9 dan 8 Tahun 2006. Forum ini menjadi wadah dialog antar pemuka agama untuk menjaga kerukunan."},
+    {no:6,pertanyaan:"Kerukunan antar umat beragama di Indonesia dijaga salah satunya melalui...",opsi:{A:"Penyatuan semua agama",B:"Forum Kerukunan Umat Beragama (FKUB)",C:"Pelarangan ibadah tertentu",D:"Dominasi agama mayoritas"},jawaban:"B",penjelasan:"FKUB dibentuk berdasarkan Peraturan Bersama Menag dan Mendagri No. 9 dan 8 Tahun 2006 sebagai wadah dialog antar pemuka agama untuk menjaga kerukunan."},
     {no:7,pertanyaan:"Sikap yang dapat mengancam kebhinekaan Indonesia adalah...",opsi:{A:"Toleransi antar suku",B:"Menghargai budaya daerah lain",C:"Fanatisme sempit dan diskriminasi",D:"Belajar bahasa daerah lain"},jawaban:"C",penjelasan:"Fanatisme sempit dan diskriminasi terhadap kelompok lain adalah ancaman nyata bagi kebhinekaan. Sikap ini dapat memicu konflik horizontal dan merusak persatuan bangsa."},
     {no:8,pertanyaan:"Seni tari Kecak berasal dari daerah...",opsi:{A:"Jawa Tengah",B:"Sumatera Barat",C:"Bali",D:"Nusa Tenggara Timur"},jawaban:"C",penjelasan:"Tari Kecak berasal dari Bali. Menampilkan puluhan penari yang duduk melingkar bersahutan mengucapkan 'cak' sambil menceritakan kisah Ramayana. Dikembangkan sekitar tahun 1930-an."},
     {no:9,pertanyaan:"Keberagaman di Indonesia dapat menjadi kekuatan apabila...",opsi:{A:"Dieksploitasi untuk kepentingan asing",B:"Dikelola dengan baik melalui toleransi dan persatuan",C:"Diseragamkan oleh pemerintah pusat",D:"Diabaikan dalam kehidupan bernegara"},jawaban:"B",penjelasan:"Keberagaman adalah aset dan modal sosial bangsa. Bila dikelola dengan toleransi dan persatuan, keberagaman menjadi kekuatan besar. Bila diabaikan atau dieksploitasi, menjadi sumber konflik."},
@@ -230,241 +246,217 @@ const BANK = {
   10:{pilar:"Bhinneka Tunggal Ika",topik:"Persatuan dan Kesatuan dalam Kebhinekaan",soal:[
     {no:1,pertanyaan:"Peristiwa bersejarah yang menjadi tonggak persatuan pemuda Indonesia lintas suku dan daerah adalah...",opsi:{A:"Proklamasi Kemerdekaan",B:"Sumpah Pemuda 28 Oktober 1928",C:"Kongres Perempuan Indonesia",D:"Konferensi Meja Bundar"},jawaban:"B",penjelasan:"Sumpah Pemuda 28 Oktober 1928 adalah titik balik kesadaran nasional. Para pemuda dari berbagai suku dan daerah bersatu mengikrarkan satu tanah air, satu bangsa, dan satu bahasa: Indonesia."},
     {no:2,pertanyaan:"Faktor yang memperkuat persatuan dan kesatuan bangsa Indonesia adalah...",opsi:{A:"Perbedaan kepentingan antar daerah",B:"Persamaan nasib sebagai bangsa terjajah dan Pancasila sebagai ideologi pemersatu",C:"Ketidaksetaraan ekonomi antar daerah",D:"Perbedaan sistem hukum daerah"},jawaban:"B",penjelasan:"Persamaan sejarah perjuangan melawan penjajah menumbuhkan rasa senasib. Ditambah Pancasila sebagai ideologi dan bahasa Indonesia sebagai bahasa persatuan, faktor-faktor ini memperkokoh kesatuan bangsa."},
-    {no:3,pertanyaan:"Dalam konteks kebhinekaan, 'Unity in Diversity' berarti...",opsi:{A:"Menyeragamkan semua perbedaan",B:"Bersatu hanya karena persamaan",C:"Membangun persatuan di atas keberagaman yang ada",D:"Mengabaikan perbedaan"},jawaban:"C",penjelasan:"'Unity in Diversity' atau Bhinneka Tunggal Ika mengajarkan bahwa persatuan tidak membutuhkan keseragaman. Keberagaman justru menjadi fondasi membangun persatuan yang kuat dan autentik."},
+    {no:3,pertanyaan:"Dalam konteks kebhinekaan, 'Unity in Diversity' berarti...",opsi:{A:"Menyeragamkan semua perbedaan",B:"Bersatu hanya karena persamaan",C:"Membangun persatuan di atas keberagaman yang ada",D:"Mengabaikan perbedaan"},jawaban:"C",penjelasan:"'Unity in Diversity' mengajarkan bahwa persatuan tidak membutuhkan keseragaman. Keberagaman justru menjadi fondasi membangun persatuan yang kuat dan autentik."},
     {no:4,pertanyaan:"Peran pemuda dalam menjaga persatuan bangsa dapat diwujudkan melalui...",opsi:{A:"Menyebarkan berita bohong (hoaks)",B:"Aktif dalam organisasi kemasyarakatan lintas suku dan agama",C:"Mempersoalkan perbedaan SARA",D:"Menutup diri dari pergaulan antar daerah"},jawaban:"B",penjelasan:"Pemuda dapat menjadi perekat persatuan dengan aktif bergabung dalam organisasi lintas suku dan agama, membangun pertemanan yang beragam, serta menjadi agen perdamaian di masyarakat."},
     {no:5,pertanyaan:"Konflik horizontal antar kelompok masyarakat dapat dicegah dengan...",opsi:{A:"Mengisolasi kelompok yang berbeda",B:"Dialog, mediasi, dan mengedepankan nilai toleransi",C:"Pemaksaan kehendak mayoritas",D:"Mengabaikan kelompok minoritas"},jawaban:"B",penjelasan:"Konflik horizontal bisa dicegah dengan komunikasi terbuka antar kelompok, mediasi dalam menyelesaikan perbedaan, serta mengedepankan toleransi dan saling menghormati."},
     {no:6,pertanyaan:"Globalisasi dapat mengancam persatuan bangsa jika...",opsi:{A:"Meningkatkan pertukaran budaya yang positif",B:"Memperkuat identitas nasional",C:"Membawa ideologi asing yang bertentangan dengan Pancasila",D:"Membuka peluang ekonomi baru"},jawaban:"C",penjelasan:"Ancaman globalisasi terhadap persatuan muncul ketika ideologi asing seperti radikalisme atau separatisme masuk dan bertentangan dengan nilai-nilai Pancasila serta merusak kohesi sosial."},
-    {no:7,pertanyaan:"Sila Ketiga Pancasila dalam kehidupan bermasyarakat diwujudkan dengan...",opsi:{A:"Mengutamakan kepentingan golongan",B:"Mendahulukan kepentingan bangsa dan negara di atas kepentingan pribadi",C:"Hanya bergaul dengan sesuku",D:"Menolak budaya daerah lain"},jawaban:"B",penjelasan:"Sila Ketiga 'Persatuan Indonesia' mengamanatkan setiap warga rela berkorban untuk kepentingan bangsa, mendahulukan kepentingan nasional di atas kepentingan pribadi atau golongan."},
+    {no:7,pertanyaan:"Sila Ketiga Pancasila dalam kehidupan bermasyarakat diwujudkan dengan...",opsi:{A:"Mengutamakan kepentingan golongan",B:"Mendahulukan kepentingan bangsa dan negara di atas kepentingan pribadi",C:"Hanya bergaul dengan sesuku",D:"Menolak budaya daerah lain"},jawaban:"B",penjelasan:"Sila Ketiga mengamanatkan setiap warga rela berkorban untuk kepentingan bangsa, mendahulukan kepentingan nasional di atas kepentingan pribadi atau golongan."},
     {no:8,pertanyaan:"Peran media sosial dalam konteks kebhinekaan sebaiknya digunakan untuk...",opsi:{A:"Menyebarkan ujaran kebencian",B:"Memprovokasi antar kelompok",C:"Memperkuat solidaritas dan kampanye keberagaman positif",D:"Menyebarkan informasi pemecah belah"},jawaban:"C",penjelasan:"Media sosial sebaiknya digunakan untuk menyebarkan konten positif tentang keberagaman, membangun solidaritas, dan melawan hoaks serta ujaran kebencian yang merusak persatuan."},
     {no:9,pertanyaan:"Tokoh yang menjadi ketua Kongres Pemuda II (Sumpah Pemuda) adalah...",opsi:{A:"Soekarno",B:"Soegondo Djojopuspito",C:"Mohammad Hatta",D:"Wahid Hasjim"},jawaban:"B",penjelasan:"Soegondo Djojopuspito dari PPPI (Perhimpunan Pelajar-Pelajar Indonesia) menjadi ketua Kongres Pemuda II pada 27–28 Oktober 1928 yang menghasilkan Sumpah Pemuda."},
     {no:10,pertanyaan:"Implementasi Bhinneka Tunggal Ika paling tepat diwujudkan melalui...",opsi:{A:"Penyeragaman budaya dan bahasa",B:"Diskriminasi terhadap kelompok minoritas",C:"Jaminan kesetaraan hak semua warga negara tanpa memandang suku, agama, dan ras",D:"Pemberlakuan hukum berbeda untuk tiap suku"},jawaban:"C",penjelasan:"Bhinneka Tunggal Ika paling nyata terwujud ketika negara menjamin kesetaraan hak bagi semua warga tanpa diskriminasi, selaras dengan amanat UUD 1945 Pasal 28 tentang persamaan kedudukan di hadapan hukum."}
   ]}
 };
 
+// ── State ──
 const state = { shown:[], current:null, answers:{}, scores:{}, timers:{} };
+let wheelAngle = 0, spinning = false;
 
-// --- Timer helpers ---
-function startTimer(paket, soalIdx) {
-  const key = `${paket}-${soalIdx}`;
-  if (state.timers[key]) return; // already running or done
-  let remaining = TIMER_SEC;
-  updateTimerUI(paket, soalIdx, remaining);
-  state.timers[key] = setInterval(() => {
-    remaining--;
-    updateTimerUI(paket, soalIdx, remaining);
-    if (remaining <= 0) {
-      clearInterval(state.timers[key]);
-      state.timers[key] = 'done';
-      timeOut(paket, soalIdx);
-    }
-  }, 1000);
-}
+// ── Wheel ──
+function getAvailable(){ return Array.from({length:10},(_,i)=>i+1).filter(i=>!state.shown.includes(i)); }
 
-function stopTimer(paket, soalIdx) {
-  const key = `${paket}-${soalIdx}`;
-  if (state.timers[key] && state.timers[key] !== 'done') {
-    clearInterval(state.timers[key]);
-    state.timers[key] = 'done';
+function drawWheel(){
+  const c = document.getElementById('wheelCanvas');
+  if(!c) return;
+  const ctx = c.getContext('2d'), cx=130, cy=130, r=124;
+  const arc = (2*Math.PI)/10;
+  ctx.clearRect(0,0,260,260);
+  for(let idx=0;idx<10;idx++){
+    const num = idx+1;
+    const startA = wheelAngle + idx*arc - Math.PI/2;
+    const endA = startA + arc;
+    const done = state.shown.includes(num);
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,startA,endA); ctx.closePath();
+    ctx.fillStyle = done ? 'rgba(253,246,236,.07)' : COLORS[idx%COLORS.length];
+    ctx.fill(); ctx.strokeStyle='#1a0a05'; ctx.lineWidth=2; ctx.stroke();
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(startA+arc/2);
+    ctx.textAlign='right';
+    ctx.fillStyle = done ? 'rgba(253,246,236,.25)' : 'white';
+    ctx.font = `bold ${done?'11':'13'}px "DM Sans", sans-serif`;
+    ctx.fillText(done?`P${num} ✓`:`Paket ${num}`, r-10, 5);
+    ctx.restore();
   }
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,2*Math.PI);
+  ctx.strokeStyle='rgba(201,168,76,.5)'; ctx.lineWidth=3; ctx.stroke();
 }
 
-function updateTimerUI(paket, soalIdx, sec) {
-  const ring = document.getElementById(`tring-${paket}-${soalIdx}`);
-  const num = document.getElementById(`tnum-${paket}-${soalIdx}`);
-  if (!ring || !num) return;
-  const prog = ring.querySelector('.prog');
-  const offset = CIRC * (1 - sec / TIMER_SEC);
-  prog.style.strokeDashoffset = offset;
-  num.textContent = sec;
-  const warn = sec <= 15 && sec > 5;
-  const danger = sec <= 5;
-  prog.className = 'prog' + (danger?' danger':warn?' warn':'');
-  num.className = 'timer-num' + (danger?' danger':warn?' warn':'');
-}
-
-function timeOut(paket, soalIdx) {
-  if (state.answers[paket][soalIdx] !== undefined) return;
-  state.answers[paket][soalIdx] = null; // null = timeout
-  const s = BANK[paket].soal[soalIdx];
-
-  const btns = document.querySelectorAll(`.opt-btn[data-paket="${paket}"][data-soal="${soalIdx}"]`);
-  btns.forEach(btn => {
-    btn.disabled = true;
-    if (btn.dataset.key === s.jawaban) btn.classList.add('reveal');
-    else btn.classList.add('timeout');
-  });
-
-  const fb = document.getElementById(`fb-${paket}-${soalIdx}`);
-  if (fb) {
-    fb.className = 'feedback show timeout-fb';
-    fb.innerHTML = `<div class="feedback-title">⏱ Waktu habis! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div>
-      <div class="feedback-explain">💡 ${s.penjelasan}</div>`;
-  }
-  const numEl = document.getElementById(`num-${paket}-${soalIdx}`);
-  if (numEl) numEl.classList.add('wrong');
-
-  // hide timer row
-  const tr = document.getElementById(`tr-${paket}-${soalIdx}`);
-  if (tr) tr.style.display = 'none';
-
-  updateScore(paket);
-  updateHistory();
-
-  // auto-start next soal timer
-  const nextIdx = soalIdx + 1;
-  if (nextIdx < BANK[paket].soal.length && state.answers[paket][nextIdx] === undefined) {
-    startTimer(paket, nextIdx);
-  }
-}
-
-// --- Answer ---
-function answer(paket, soalIdx, key) {
-  const s = BANK[paket].soal[soalIdx];
-  if (state.answers[paket][soalIdx] !== undefined) return;
-  stopTimer(paket, soalIdx);
-
-  state.answers[paket][soalIdx] = key;
-  const isCorrect = key === s.jawaban;
-  if (isCorrect) state.scores[paket] = (state.scores[paket] || 0) + 1;
-
-  const btns = document.querySelectorAll(`.opt-btn[data-paket="${paket}"][data-soal="${soalIdx}"]`);
-  btns.forEach(btn => {
-    btn.disabled = true;
-    const k = btn.dataset.key;
-    if (k === s.jawaban) btn.classList.add(isCorrect && k === key ? 'correct' : 'reveal');
-    if (k === key && !isCorrect) btn.classList.add('wrong');
-  });
-
-  const fb = document.getElementById(`fb-${paket}-${soalIdx}`);
-  if (fb) {
-    fb.classList.add('show', isCorrect ? 'ok' : 'bad');
-    if (isCorrect) {
-      fb.innerHTML = `<div class="feedback-title">✓ Benar!</div>`;
-    } else {
-      fb.innerHTML = `<div class="feedback-title">✗ Salah! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div>
-        <div class="feedback-explain">💡 ${s.penjelasan}</div>`;
+function spinWheel(){
+  const avail = getAvailable();
+  if(!avail.length){ showToast('Semua paket sudah diundi!'); return; }
+  if(spinning) return;
+  spinning=true;
+  document.getElementById('btnSpin').disabled=true;
+  const arc=(2*Math.PI)/10;
+  const picked = avail[Math.floor(Math.random()*avail.length)];
+  const targetIdx = picked-1;
+  const targetOffset = -(targetIdx*arc + arc/2);
+  const fullSpins = (5+Math.floor(Math.random()*4))*2*Math.PI;
+  const targetAngle = targetOffset-(wheelAngle%(2*Math.PI))+fullSpins;
+  const duration=4000, start=performance.now(), startAngle=wheelAngle;
+  function ease(t){ return 1-Math.pow(1-t,3); }
+  function frame(now){
+    const t=Math.min((now-start)/duration,1);
+    wheelAngle = startAngle+targetAngle*ease(t);
+    drawWheel();
+    if(t<1){ requestAnimationFrame(frame); }
+    else{
+      wheelAngle = startAngle+targetAngle;
+      spinning=false;
+      document.getElementById('btnSpin').disabled=false;
+      drawWheel();
+      showToast(`Paket ${picked} terpilih!`);
+      setTimeout(()=>loadPacket(picked),400);
     }
   }
-
-  const numEl = document.getElementById(`num-${paket}-${soalIdx}`);
-  if (numEl) numEl.classList.add(isCorrect ? 'correct' : 'wrong');
-
-  const tr = document.getElementById(`tr-${paket}-${soalIdx}`);
-  if (tr) tr.style.display = 'none';
-
-  updateScore(paket);
-  updateHistory();
-
-  // auto-start next
-  const nextIdx = soalIdx + 1;
-  if (nextIdx < BANK[paket].soal.length && state.answers[paket][nextIdx] === undefined) {
-    startTimer(paket, nextIdx);
-  }
+  requestAnimationFrame(frame);
 }
 
-function updateScore(paket) {
-  const answered = Object.values(state.answers[paket]).filter(v => v !== undefined).length;
-  document.getElementById('scoreText').textContent = `${state.scores[paket]||0} / ${answered}`;
-}
-
-// --- Render ---
-function drawPacket() {
-  const rem = [];
-  for (let i = 1; i <= 10; i++) if (!state.shown.includes(i)) rem.push(i);
-  if (!rem.length) { showToast('Semua paket sudah diundi!'); return; }
-  const picked = rem[Math.floor(Math.random() * rem.length)];
-  state.current = picked;
-  if (!state.shown.includes(picked)) state.shown.push(picked);
-  if (!state.answers[picked]) state.answers[picked] = {};
-  if (state.scores[picked] === undefined) state.scores[picked] = 0;
+function loadPacket(picked){
+  state.current=picked;
+  if(!state.shown.includes(picked)) state.shown.push(picked);
+  if(!state.answers[picked]) state.answers[picked]={};
+  if(state.scores[picked]===undefined) state.scores[picked]=0;
   renderSoal(picked);
   updateHistory();
-  // start timer for first unanswered
-  const firstUnanswered = BANK[picked].soal.findIndex((_, i) => state.answers[picked][i] === undefined);
-  if (firstUnanswered >= 0) setTimeout(() => startTimer(picked, firstUnanswered), 400);
+  const first=BANK[picked].soal.findIndex((_,i)=>state.answers[picked][i]===undefined);
+  if(first>=0) setTimeout(()=>startTimer(picked,first),400);
 }
 
-function renderSoal(n) {
-  const d = BANK[n];
-  document.getElementById('resultTitle').textContent = `Paket ${n} [${d.pilar}] — ${d.topik}`;
-  document.getElementById('resultMeta').textContent = `4 Pilar Kebangsaan · SMA · ${d.soal.length} Soal Pilihan Ganda`;
-  const ans = state.answers[n];
-  const sc = state.scores[n]||0;
-  const answered = Object.values(ans).filter(v=>v!==undefined).length;
-  document.getElementById('scoreText').textContent = `${sc} / ${answered}`;
+// ── Timer ──
+function startTimer(paket,soalIdx){
+  const key=`${paket}-${soalIdx}`;
+  if(state.timers[key]) return;
+  let rem=TIMER_SEC;
+  updateTimerUI(paket,soalIdx,rem);
+  state.timers[key]=setInterval(()=>{
+    rem--;
+    updateTimerUI(paket,soalIdx,rem);
+    if(rem<=0){ clearInterval(state.timers[key]); state.timers[key]='done'; timeOut(paket,soalIdx); }
+  },1000);
+}
 
-  document.getElementById('soalList').innerHTML = d.soal.map((s, i) => {
-    const chosen = ans[i];
-    const answered = chosen !== undefined;
-    const isCorrect = chosen === s.jawaban;
-    const isTimeout = chosen === null;
+function stopTimer(paket,soalIdx){
+  const key=`${paket}-${soalIdx}`;
+  if(state.timers[key]&&state.timers[key]!=='done'){ clearInterval(state.timers[key]); state.timers[key]='done'; }
+}
 
-    const optHTML = Object.entries(s.opsi).map(([k, v]) => {
-      let cls = 'opt-btn';
-      if (answered) {
-        if (isTimeout) {
-          cls += k === s.jawaban ? ' reveal' : ' timeout';
-        } else {
-          if (k === s.jawaban) cls += isCorrect && k === chosen ? ' correct' : ' reveal';
-          if (k === chosen && !isCorrect) cls += ' wrong';
-        }
-      }
+function updateTimerUI(paket,soalIdx,sec){
+  const ring=document.getElementById(`tring-${paket}-${soalIdx}`);
+  const num=document.getElementById(`tnum-${paket}-${soalIdx}`);
+  if(!ring||!num) return;
+  const prog=ring.querySelector('.prog');
+  prog.style.strokeDashoffset=CIRC*(1-sec/TIMER_SEC);
+  num.textContent=sec;
+  const warn=sec<=15&&sec>5, danger=sec<=5;
+  prog.className='prog'+(danger?' danger':warn?' warn':'');
+  num.className='timer-num'+(danger?' danger':warn?' warn':'');
+}
+
+function timeOut(paket,soalIdx){
+  if(state.answers[paket][soalIdx]!==undefined) return;
+  state.answers[paket][soalIdx]=null;
+  const s=BANK[paket].soal[soalIdx];
+  document.querySelectorAll(`.opt-btn[data-paket="${paket}"][data-soal="${soalIdx}"]`).forEach(btn=>{
+    btn.disabled=true;
+    if(btn.dataset.key===s.jawaban) btn.classList.add('reveal'); else btn.classList.add('timeout');
+  });
+  const fb=document.getElementById(`fb-${paket}-${soalIdx}`);
+  if(fb){ fb.className='feedback show timeout-fb';
+    fb.innerHTML=`<div class="feedback-title">⏱ Waktu habis! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div>
+      <div class="feedback-explain">💡 ${s.penjelasan}</div>`; }
+  const numEl=document.getElementById(`num-${paket}-${soalIdx}`);
+  if(numEl) numEl.classList.add('wrong');
+  const tr=document.getElementById(`tr-${paket}-${soalIdx}`);
+  if(tr) tr.style.display='none';
+  updateScore(paket); updateHistory();
+  const next=soalIdx+1;
+  if(next<BANK[paket].soal.length&&state.answers[paket][next]===undefined) startTimer(paket,next);
+}
+
+// ── Answer ──
+function answer(paket,soalIdx,key){
+  const s=BANK[paket].soal[soalIdx];
+  if(state.answers[paket][soalIdx]!==undefined) return;
+  stopTimer(paket,soalIdx);
+  state.answers[paket][soalIdx]=key;
+  const ok=key===s.jawaban;
+  if(ok) state.scores[paket]=(state.scores[paket]||0)+1;
+  document.querySelectorAll(`.opt-btn[data-paket="${paket}"][data-soal="${soalIdx}"]`).forEach(btn=>{
+    btn.disabled=true; const k=btn.dataset.key;
+    if(k===s.jawaban) btn.classList.add(ok&&k===key?'correct':'reveal');
+    if(k===key&&!ok) btn.classList.add('wrong');
+  });
+  const fb=document.getElementById(`fb-${paket}-${soalIdx}`);
+  if(fb){ fb.classList.add('show',ok?'ok':'bad');
+    fb.innerHTML=ok?`<div class="feedback-title">✓ Benar!</div>`:
+      `<div class="feedback-title">✗ Salah! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div>
+       <div class="feedback-explain">💡 ${s.penjelasan}</div>`; }
+  const numEl=document.getElementById(`num-${paket}-${soalIdx}`);
+  if(numEl) numEl.classList.add(ok?'correct':'wrong');
+  const tr=document.getElementById(`tr-${paket}-${soalIdx}`);
+  if(tr) tr.style.display='none';
+  updateScore(paket); updateHistory();
+  const next=soalIdx+1;
+  if(next<BANK[paket].soal.length&&state.answers[paket][next]===undefined) startTimer(paket,next);
+}
+
+function updateScore(paket){
+  const cnt=Object.values(state.answers[paket]).filter(v=>v!==undefined).length;
+  document.getElementById('scoreText').textContent=`${state.scores[paket]||0} / ${cnt}`;
+}
+
+// ── Render ──
+function renderSoal(n){
+  const d=BANK[n];
+  document.getElementById('resultTitle').textContent=`Paket ${n} [${d.pilar}] — ${d.topik}`;
+  document.getElementById('resultMeta').textContent=`4 Pilar Kebangsaan · SMA · ${d.soal.length} Soal Pilihan Ganda`;
+  const ans=state.answers[n];
+  document.getElementById('scoreText').textContent=`${state.scores[n]||0} / ${Object.values(ans).filter(v=>v!==undefined).length}`;
+  document.getElementById('soalList').innerHTML=d.soal.map((s,i)=>{
+    const chosen=ans[i], answered=chosen!==undefined, isOk=chosen===s.jawaban, isTO=chosen===null;
+    const optHTML=Object.entries(s.opsi).map(([k,v])=>{
+      let cls='opt-btn';
+      if(answered){ if(isTO){ cls+=k===s.jawaban?' reveal':' timeout'; }
+        else{ if(k===s.jawaban) cls+=isOk&&k===chosen?' correct':' reveal'; if(k===chosen&&!isOk) cls+=' wrong'; } }
       return `<button class="${cls}" data-paket="${n}" data-soal="${i}" data-key="${k}"
         ${answered?'disabled':''} onclick="answer(${n},${i},'${k}')">
         <span class="opt-key">${k}</span><span>${v}</span></button>`;
     }).join('');
-
-    let fbHTML = `<div class="feedback" id="fb-${n}-${i}"></div>`;
-    if (answered) {
-      if (isTimeout) {
-        fbHTML = `<div class="feedback show timeout-fb" id="fb-${n}-${i}">
-          <div class="feedback-title">⏱ Waktu habis! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div>
-          <div class="feedback-explain">💡 ${s.penjelasan}</div></div>`;
-      } else if (isCorrect) {
-        fbHTML = `<div class="feedback show ok" id="fb-${n}-${i}"><div class="feedback-title">✓ Benar!</div></div>`;
-      } else {
-        fbHTML = `<div class="feedback show bad" id="fb-${n}-${i}">
-          <div class="feedback-title">✗ Salah! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div>
-          <div class="feedback-explain">💡 ${s.penjelasan}</div></div>`;
-      }
-    }
-
-    const numCls = answered ? (isCorrect && !isTimeout ? 'soal-num correct' : 'soal-num wrong') : 'soal-num';
-    const timerDisplay = answered ? 'display:none' : '';
-
+    let fbHTML=`<div class="feedback" id="fb-${n}-${i}"></div>`;
+    if(answered){ if(isTO) fbHTML=`<div class="feedback show timeout-fb" id="fb-${n}-${i}"><div class="feedback-title">⏱ Waktu habis! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div><div class="feedback-explain">💡 ${s.penjelasan}</div></div>`;
+      else if(isOk) fbHTML=`<div class="feedback show ok" id="fb-${n}-${i}"><div class="feedback-title">✓ Benar!</div></div>`;
+      else fbHTML=`<div class="feedback show bad" id="fb-${n}-${i}"><div class="feedback-title">✗ Salah! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div><div class="feedback-explain">💡 ${s.penjelasan}</div></div>`; }
+    const numCls=answered?(isOk&&!isTO?'soal-num correct':'soal-num wrong'):'soal-num';
     return `<div class="soal-item" style="animation-delay:${i*.04}s">
-      <div class="soal-header">
-        <div class="${numCls}" id="num-${n}-${i}">${s.no}</div>
-        <div class="soal-text">${s.pertanyaan}</div>
-      </div>
-      <div class="timer-row" id="tr-${n}-${i}" style="${timerDisplay}">
+      <div class="soal-header"><div class="${numCls}" id="num-${n}-${i}">${s.no}</div><div class="soal-text">${s.pertanyaan}</div></div>
+      <div class="timer-row" id="tr-${n}-${i}" style="${answered?'display:none':''}">
         <div class="timer-ring" id="tring-${n}-${i}">
-          <svg width="36" height="36" viewBox="0 0 36 36">
-            <circle class="bg" cx="18" cy="18" r="15"/>
-            <circle class="prog" cx="18" cy="18" r="15" style="stroke-dasharray:${CIRC};stroke-dashoffset:0;"/>
-          </svg>
-          <div class="timer-num" id="tnum-${n}-${i}">${TIMER_SEC}</div>
-        </div>
-        <span class="timer-label">detik tersisa</span>
-      </div>
-      <div class="soal-options">${optHTML}</div>
-      ${fbHTML}
-    </div>`;
+          <svg width="36" height="36" viewBox="0 0 36 36"><circle class="bg" cx="18" cy="18" r="15"/>
+          <circle class="prog" cx="18" cy="18" r="15" style="stroke-dasharray:${CIRC};stroke-dashoffset:0;"/></svg>
+          <div class="timer-num" id="tnum-${n}-${i}">${TIMER_SEC}</div></div>
+        <span class="timer-label">detik tersisa</span></div>
+      <div class="soal-options">${optHTML}</div>${fbHTML}</div>`;
   }).join('');
-
   document.getElementById('resultCard').classList.add('visible');
   document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function updateHistory() {
-  const sec = document.getElementById('historySection');
-  const g = document.getElementById('historyGrid');
-  if (!state.shown.length) { sec.style.display='none'; return; }
+function updateHistory(){
+  const sec=document.getElementById('historySection'), g=document.getElementById('historyGrid');
+  if(!state.shown.length){ sec.style.display='none'; return; }
   sec.style.display='block';
-  g.innerHTML = state.shown.map(k => {
-    const ans = state.answers[k]||{};
-    const sc = state.scores[k]||0;
-    const cnt = Object.values(ans).filter(v=>v!==undefined).length;
+  g.innerHTML=state.shown.map(k=>{
+    const ans=state.answers[k]||{}, sc=state.scores[k]||0, cnt=Object.values(ans).filter(v=>v!==undefined).length;
     return `<div class="history-item" onclick="selectPaket(${k})">
       <div><div class="history-item-title">Paket ${k} [${BANK[k].pilar}] — ${BANK[k].topik}</div>
       <div class="history-item-meta">${BANK[k].soal.length} soal · Dijawab: ${cnt}</div></div>
@@ -472,32 +464,24 @@ function updateHistory() {
   }).join('');
 }
 
-function selectPaket(n) {
-  state.current = n;
-  renderSoal(n);
-  // restart active timers if any unanswered
-  BANK[n].soal.forEach((_, i) => {
-    if (state.answers[n][i] === undefined && !state.timers[`${n}-${i}`]) {
-      // only start the first unanswered to keep sequential flow
-    }
-  });
-}
+function selectPaket(n){ state.current=n; renderSoal(n); }
 
-function resetAll() {
-  if (!confirm('Reset semua paket?')) return;
-  // clear all intervals
-  Object.values(state.timers).forEach(t => { if (t && t !== 'done') clearInterval(t); });
+function resetAll(){
+  if(!confirm('Reset semua paket?')) return;
+  Object.values(state.timers).forEach(t=>{if(t&&t!=='done') clearInterval(t);});
   state.shown=[]; state.current=null; state.answers={}; state.scores={}; state.timers={};
+  wheelAngle=0; drawWheel();
   document.getElementById('resultCard').classList.remove('visible');
   document.getElementById('historySection').style.display='none';
   showToast('Semua paket direset');
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
+
+window.addEventListener('DOMContentLoaded',()=>setTimeout(drawWheel,100));
 </script>
 </body>
 </html>
