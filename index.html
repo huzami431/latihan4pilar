@@ -18,7 +18,6 @@
   .divider{display:flex;align-items:center;gap:12px;margin:32px 0;opacity:.3;}
   .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--gold);}
   .divider-icon{color:var(--gold);font-size:18px;}
-  /* spin wheel */
   .draw-section{display:flex;flex-direction:column;align-items:center;gap:20px;margin-bottom:40px;}
   .wheel-wrap{position:relative;width:260px;height:260px;}
   .wheel-wrap canvas{border-radius:50%;box-shadow:0 0 40px rgba(201,168,76,.2);}
@@ -29,7 +28,6 @@
   .btn-draw:disabled{opacity:.5;cursor:not-allowed;}
   .btn-secondary{background:transparent;border:1px solid rgba(201,168,76,.4);color:var(--gold);font-size:13px;padding:10px 24px;border-radius:4px;cursor:pointer;transition:all .2s;}
   .btn-secondary:hover{background:rgba(201,168,76,.1);border-color:var(--gold);}
-  /* result */
   .result-card{background:rgba(253,246,236,.03);border:1px solid rgba(201,168,76,.25);border-radius:12px;padding:36px;display:none;animation:fadeUp .4s ease;}
   .result-card.visible{display:block;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -46,7 +44,6 @@
   .soal-num.correct{background:var(--green);}
   .soal-num.wrong{background:#7f1d1d;}
   .soal-text{font-size:15px;line-height:1.7;color:var(--cream);padding-top:4px;flex:1;}
-  /* timer */
   .timer-row{display:flex;align-items:center;gap:10px;margin:0 0 10px 46px;}
   .timer-ring{position:relative;width:36px;height:36px;flex-shrink:0;}
   .timer-ring svg{transform:rotate(-90deg);}
@@ -58,7 +55,6 @@
   .timer-num.warn{color:#e67e22;}
   .timer-num.danger{color:var(--red);}
   .timer-label{font-size:11px;color:rgba(253,246,236,.4);letter-spacing:.5px;}
-  /* options */
   .soal-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-left:46px;}
   .opt-btn{background:rgba(253,246,236,.05);border:1px solid rgba(253,246,236,.12);border-radius:8px;padding:10px 14px;cursor:pointer;text-align:left;font-size:13px;color:rgba(253,246,236,.8);transition:all .2s;display:flex;gap:10px;align-items:flex-start;}
   .opt-btn:hover:not(:disabled){background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.4);color:var(--cream);}
@@ -70,7 +66,6 @@
   .opt-key{font-weight:700;min-width:18px;color:var(--gold);opacity:.8;}
   .opt-btn.correct .opt-key,.opt-btn.reveal .opt-key{color:#6ee7a0;}
   .opt-btn.wrong .opt-key{color:#fca5a5;}
-  /* feedback */
   .feedback{margin-left:46px;margin-top:10px;border-radius:8px;padding:12px 14px;display:none;font-size:13px;line-height:1.6;}
   .feedback.show{display:block;}
   .feedback.ok{background:rgba(39,174,96,.12);border:1px solid rgba(39,174,96,.3);color:#6ee7a0;}
@@ -78,7 +73,6 @@
   .feedback.timeout-fb{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);color:rgba(253,246,236,.6);}
   .feedback-title{font-weight:700;margin-bottom:4px;font-size:13px;}
   .feedback-explain{color:rgba(253,246,236,.7);font-size:12.5px;margin-top:6px;line-height:1.65;border-top:1px solid rgba(253,246,236,.1);padding-top:6px;}
-  /* history */
   .history-section{margin-top:48px;border-top:1px solid rgba(201,168,76,.15);padding-top:32px;}
   .section-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:600;}
   .history-grid{display:flex;flex-direction:column;gap:8px;}
@@ -99,7 +93,6 @@
     <p class="subtitle">4 Pilar Kebangsaan · SMA Kelas 10–12 · 10 Paket</p>
   </header>
   <div class="divider"><span class="divider-icon">❖</span></div>
-
   <div class="draw-section">
     <div class="wheel-wrap">
       <div class="wheel-pointer"></div>
@@ -109,307 +102,352 @@
     <button class="btn-draw" id="btnSpin" onclick="spinWheel()">🌀 Putar Roda</button>
     <button class="btn-secondary" onclick="resetAll()">↺ Reset Semua</button>
   </div>
-
   <div class="result-card" id="resultCard">
     <div class="result-header">
       <div class="result-title" id="resultTitle"></div>
       <div class="result-meta" id="resultMeta"></div>
     </div>
-    <div class="score-bar">
-      <span class="score-label">Skor</span>
-      <span id="scoreText" class="score-val">0 / 0</span>
-    </div>
+    <div class="score-bar"><span class="score-label">Skor</span><span id="scoreText" class="score-val">0 / 0</span></div>
     <div class="soal-list" id="soalList"></div>
   </div>
-
   <div class="history-section" id="historySection" style="display:none">
     <div class="section-label">Riwayat Paket</div>
     <div class="history-grid" id="historyGrid"></div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
-
 <script>
-const TIMER_SEC = 45;
-const CIRC = 2 * Math.PI * 15;
-const COLORS = ['#c0392b','#c9a84c','#922b21','#a07830','#7f1d1d','#8b6914','#e74c3c','#d4a017','#6b1a1a','#b8952a'];
+const TIMER_SEC=45, CIRC=2*Math.PI*15;
+const COLORS=['#c0392b','#c9a84c','#922b21','#a07830','#7f1d1d','#8b6914','#e74c3c','#d4a017','#6b1a1a','#b8952a'];
 
-const BANK = {
+const BANK={
   1:{pilar:"Pancasila",topik:"Pancasila sebagai Dasar Negara dan Ideologi Bangsa",soal:[
-    {no:1,pertanyaan:"Pancasila secara resmi ditetapkan sebagai dasar negara Indonesia pada tanggal...",opsi:{A:"1 Juni 1945",B:"17 Agustus 1945",C:"18 Agustus 1945",D:"22 Juni 1945"},jawaban:"C",penjelasan:"Pada 18 Agustus 1945, PPKI bersidang dan mengesahkan UUD 1945 sekaligus menetapkan Pancasila sebagai dasar negara. Tanggal 1 Juni diperingati sebagai hari lahirnya Pancasila, sedangkan 17 Agustus adalah hari proklamasi kemerdekaan."},
-    {no:2,pertanyaan:"Rumusan Pancasila yang sah dan resmi terdapat dalam...",opsi:{A:"Piagam Jakarta",B:"Pembukaan UUD 1945 alinea keempat",C:"Batang Tubuh UUD 1945",D:"Dekret Presiden 5 Juli 1959"},jawaban:"B",penjelasan:"Rumusan Pancasila yang resmi dan mengikat secara hukum tercantum dalam Pembukaan UUD 1945 alinea keempat. Piagam Jakarta memuat rumusan awal yang kemudian diubah sebelum disahkan."},
-    {no:3,pertanyaan:"Pancasila sebagai ideologi terbuka artinya...",opsi:{A:"Nilai-nilainya dapat diganti sewaktu-waktu",B:"Terbuka terhadap pengaruh ideologi asing sepenuhnya",C:"Nilai dasarnya tetap namun penjabarannya dapat berkembang sesuai zaman",D:"Siapa saja boleh menafsirkan Pancasila sesuai kepentingan"},jawaban:"C",penjelasan:"Ideologi terbuka berarti nilai-nilai dasar Pancasila bersifat tetap dan tidak berubah, tetapi penerapan dan penjabarannya dapat disesuaikan dengan perkembangan zaman dan kebutuhan masyarakat."},
-    {no:4,pertanyaan:"Sidang BPUPKI pertama yang membahas dasar negara berlangsung pada...",opsi:{A:"29 Mei – 1 Juni 1945",B:"10–16 Juli 1945",C:"17–18 Agustus 1945",D:"1–5 Maret 1945"},jawaban:"A",penjelasan:"Sidang BPUPKI pertama berlangsung 29 Mei – 1 Juni 1945 dan membahas dasar negara. Pada sesi inilah Soekarno menyampaikan pidato 'Lahirnya Pancasila' pada 1 Juni 1945."},
-    {no:5,pertanyaan:"Tokoh yang menyampaikan pidato 'Lahirnya Pancasila' pada 1 Juni 1945 adalah...",opsi:{A:"Mohammad Hatta",B:"Soepomo",C:"Soekarno",D:"Muhammad Yamin"},jawaban:"C",penjelasan:"Soekarno menyampaikan pidato berjudul 'Lahirnya Pancasila' pada 1 Juni 1945 dalam sidang BPUPKI, mengusulkan lima sila sebagai dasar negara Indonesia merdeka."},
-    {no:6,pertanyaan:"Fungsi Pancasila sebagai Norma Dasar (Grundnorm) berarti...",opsi:{A:"Pancasila menjadi sumber dari segala sumber hukum negara",B:"Pancasila hanya berlaku di bidang hukum",C:"Norma hukum di bawah Pancasila boleh bertentangan dengannya",D:"Pancasila sama kedudukannya dengan UUD 1945"},jawaban:"A",penjelasan:"Pancasila sebagai Grundnorm berarti semua peraturan hukum di Indonesia harus bersumber dan tidak boleh bertentangan dengan Pancasila. Ini menempatkan Pancasila di atas UUD 1945 sekalipun."},
-    {no:7,pertanyaan:"Perbedaan antara ideologi terbuka dan ideologi tertutup terletak pada...",opsi:{A:"Jumlah silanya",B:"Sumber nilai dan kemampuan beradaptasi terhadap perubahan zaman",C:"Tingkat kekuatan militer suatu negara",D:"Bentuk pemerintahan yang dianut"},jawaban:"B",penjelasan:"Ideologi terbuka bersumber dari nilai-nilai hidup masyarakat itu sendiri dan mampu beradaptasi dengan zaman. Ideologi tertutup sebaliknya, bersifat dogmatis, kaku, dan dipaksakan dari luar."},
-    {no:8,pertanyaan:"Pancasila digali dari nilai-nilai yang telah ada dalam masyarakat Indonesia, sehingga Pancasila bersifat...",opsi:{A:"Impor dari luar negeri",B:"Ciptaan para pendiri negara semata",C:"Kepribadian dan pandangan hidup bangsa Indonesia",D:"Ideologi sementara yang bisa diubah"},jawaban:"C",penjelasan:"Pancasila bukanlah ideologi yang diimpor dari luar, melainkan digali dari nilai-nilai luhur yang sudah lama hidup dalam masyarakat Indonesia seperti gotong royong, toleransi, dan musyawarah."},
-    {no:9,pertanyaan:"Konsep Trisila yang diusulkan Soekarno pada sidang BPUPKI mencakup...",opsi:{A:"Nasionalisme, Humanisme, Theisme",B:"Sosionasionalisme, Sosiodemokrasi, Ketuhanan",C:"Persatuan, Keadilan, Ketuhanan",D:"Demokrasi, Kebangsaan, Kesejahteraan"},jawaban:"B",penjelasan:"Trisila adalah penyederhanaan Pancasila oleh Soekarno menjadi tiga prinsip: Sosionasionalisme, Sosiodemokrasi, dan Ketuhanan Yang Berkebudayaan."},
-    {no:10,pertanyaan:"Alasan utama Piagam Jakarta tidak langsung dijadikan Pembukaan UUD 1945 adalah...",opsi:{A:"Piagam Jakarta terlalu panjang",B:"Sila pertama dianggap memaksakan agama tertentu dan mengancam persatuan bangsa",C:"Para pendiri negara tidak menyukai isi Piagam Jakarta",D:"Piagam Jakarta tidak memuat sila keadilan sosial"},jawaban:"B",penjelasan:"Tujuh kata dalam sila pertama Piagam Jakarta dinilai dapat memecah persatuan karena memaksa kewajiban agama tertentu, sehingga dihapus demi keutuhan bangsa."}
+    {no:1,pertanyaan:"Pancasila secara resmi ditetapkan sebagai dasar negara Indonesia pada tanggal...",opsi:{A:"1 Juni 1945",B:"17 Agustus 1945",C:"18 Agustus 1945",D:"22 Juni 1945"},jawaban:"C",penjelasan:"Pada 18 Agustus 1945, PPKI bersidang dan mengesahkan UUD 1945 sekaligus menetapkan Pancasila sebagai dasar negara."},
+    {no:2,pertanyaan:"Rumusan Pancasila yang sah dan resmi terdapat dalam...",opsi:{A:"Piagam Jakarta",B:"Pembukaan UUD 1945 alinea keempat",C:"Batang Tubuh UUD 1945",D:"Dekret Presiden 5 Juli 1959"},jawaban:"B",penjelasan:"Rumusan resmi Pancasila tercantum dalam Pembukaan UUD 1945 alinea keempat yang mengikat secara hukum."},
+    {no:3,pertanyaan:"Pancasila sebagai ideologi terbuka artinya...",opsi:{A:"Nilai-nilainya dapat diganti sewaktu-waktu",B:"Terbuka terhadap pengaruh ideologi asing sepenuhnya",C:"Nilai dasarnya tetap namun penjabarannya dapat berkembang sesuai zaman",D:"Siapa saja boleh menafsirkan Pancasila sesuai kepentingan"},jawaban:"C",penjelasan:"Ideologi terbuka berarti nilai dasar tetap, namun penjabarannya bisa berkembang mengikuti kebutuhan zaman."},
+    {no:4,pertanyaan:"Sidang BPUPKI pertama yang membahas dasar negara berlangsung pada...",opsi:{A:"29 Mei – 1 Juni 1945",B:"10–16 Juli 1945",C:"17–18 Agustus 1945",D:"1–5 Maret 1945"},jawaban:"A",penjelasan:"Sidang BPUPKI pertama (29 Mei–1 Juni 1945) membahas dasar negara, puncaknya pidato Soekarno pada 1 Juni 1945."},
+    {no:5,pertanyaan:"Tokoh yang menyampaikan pidato 'Lahirnya Pancasila' pada 1 Juni 1945 adalah...",opsi:{A:"Mohammad Hatta",B:"Soepomo",C:"Soekarno",D:"Muhammad Yamin"},jawaban:"C",penjelasan:"Soekarno menyampaikan pidato 'Lahirnya Pancasila' dalam sidang BPUPKI, mengusulkan lima sila sebagai dasar negara."},
+    {no:6,pertanyaan:"Fungsi Pancasila sebagai Norma Dasar (Grundnorm) berarti...",opsi:{A:"Pancasila menjadi sumber dari segala sumber hukum negara",B:"Pancasila hanya berlaku di bidang hukum",C:"Norma hukum di bawah Pancasila boleh bertentangan dengannya",D:"Pancasila sama kedudukannya dengan UUD 1945"},jawaban:"A",penjelasan:"Sebagai Grundnorm, Pancasila menjadi sumber dari segala sumber hukum; seluruh peraturan harus selaras dengannya."},
+    {no:7,pertanyaan:"Perbedaan ideologi terbuka dan ideologi tertutup terletak pada...",opsi:{A:"Jumlah silanya",B:"Sumber nilai dan kemampuan beradaptasi terhadap perubahan zaman",C:"Tingkat kekuatan militer suatu negara",D:"Bentuk pemerintahan yang dianut"},jawaban:"B",penjelasan:"Ideologi terbuka bersumber dari nilai hidup rakyat dan mampu beradaptasi; ideologi tertutup dogmatis dan dipaksakan."},
+    {no:8,pertanyaan:"Pancasila digali dari nilai masyarakat Indonesia, sehingga Pancasila bersifat...",opsi:{A:"Impor dari luar negeri",B:"Ciptaan para pendiri negara semata",C:"Kepribadian dan pandangan hidup bangsa Indonesia",D:"Ideologi sementara yang bisa diubah"},jawaban:"C",penjelasan:"Pancasila merupakan kepribadian dan pandangan hidup bangsa yang digali dari nilai-nilai luhur yang sudah lama ada."},
+    {no:9,pertanyaan:"Konsep Trisila yang diusulkan Soekarno mencakup...",opsi:{A:"Nasionalisme, Humanisme, Theisme",B:"Sosionasionalisme, Sosiodemokrasi, Ketuhanan",C:"Persatuan, Keadilan, Ketuhanan",D:"Demokrasi, Kebangsaan, Kesejahteraan"},jawaban:"B",penjelasan:"Trisila adalah penyederhanaan Pancasila: Sosionasionalisme, Sosiodemokrasi, dan Ketuhanan Yang Berkebudayaan."},
+    {no:10,pertanyaan:"Alasan utama Piagam Jakarta tidak langsung dijadikan Pembukaan UUD 1945 adalah...",opsi:{A:"Piagam Jakarta terlalu panjang",B:"Sila pertama dianggap memaksakan agama tertentu dan mengancam persatuan",C:"Para pendiri negara tidak menyukai isinya",D:"Tidak memuat sila keadilan sosial"},jawaban:"B",penjelasan:"Tujuh kata sila pertama Piagam Jakarta dihapus karena dinilai memaksakan agama tertentu dan berpotensi memecah persatuan."},
+    {no:11,pertanyaan:"Pancasila sebagai 'Weltanschauung' berarti Pancasila merupakan...",opsi:{A:"Hukum tertinggi negara",B:"Pandangan dunia/pandangan hidup bangsa",C:"Peraturan perundang-undangan",D:"Sistem ekonomi negara"},jawaban:"B",penjelasan:"Weltanschauung (Jerman) berarti pandangan dunia. Pancasila adalah pandangan hidup yang menjadi pedoman bangsa Indonesia."},
+    {no:12,pertanyaan:"PPKI mengesahkan Pancasila sebagai dasar negara bersama dengan...",opsi:{A:"Proklamasi kemerdekaan",B:"Pengesahan UUD 1945",C:"Pembentukan TNI",D:"Pemilihan umum pertama"},jawaban:"B",penjelasan:"Pada 18 Agustus 1945, PPKI mengesahkan UUD 1945 sekaligus menetapkan Pancasila yang termuat dalam Pembukaan UUD 1945."},
+    {no:13,pertanyaan:"Yang dimaksud nilai instrumental Pancasila adalah...",opsi:{A:"Nilai dasar yang bersifat abstrak dan umum",B:"Penjabaran nilai dasar dalam bentuk kebijakan dan peraturan konkret",C:"Nilai yang langsung diterapkan dalam kehidupan sehari-hari",D:"Nilai yang hanya berlaku untuk penyelenggara negara"},jawaban:"B",penjelasan:"Nilai instrumental adalah penjabaran nilai dasar Pancasila dalam bentuk kebijakan, peraturan, dan lembaga-lembaga negara yang konkret."},
+    {no:14,pertanyaan:"Pancasila sebagai sumber dari segala sumber hukum diatur dalam...",opsi:{A:"UU No. 10 Tahun 2004",B:"UU No. 12 Tahun 2011",C:"Perpres No. 7 Tahun 2018",D:"TAP MPR No. III/MPR/2000"},jawaban:"B",penjelasan:"UU No. 12 Tahun 2011 tentang Pembentukan Peraturan Perundang-undangan menegaskan Pancasila sebagai sumber dari segala sumber hukum negara."},
+    {no:15,pertanyaan:"Tokoh yang mengusulkan nama 'Pancasila' untuk dasar negara adalah...",opsi:{A:"Muhammad Yamin",B:"Soepomo",C:"Soekarno",D:"Mohammad Hatta"},jawaban:"C",penjelasan:"Soekarno yang pertama kali menyebut istilah 'Pancasila' dalam pidatonya 1 Juni 1945 sebagai nama bagi lima dasar negara."},
+    {no:16,pertanyaan:"Nilai praksis Pancasila adalah...",opsi:{A:"Nilai dasar yang termuat dalam Pembukaan UUD 1945",B:"Nilai penjabaran dalam peraturan perundang-undangan",C:"Nilai yang diwujudkan dalam sikap dan perilaku nyata sehari-hari",D:"Nilai yang bersifat abstrak dan filosofis"},jawaban:"C",penjelasan:"Nilai praksis adalah pengamalan nyata Pancasila dalam kehidupan sehari-hari oleh setiap warga negara dan penyelenggara negara."},
+    {no:17,pertanyaan:"Apa yang dimaksud dengan Pancasila sebagai 'jiwa bangsa Indonesia'?",opsi:{A:"Pancasila hanya untuk pemerintah",B:"Pancasila lahir bersama kelahiran bangsa Indonesia dan menjiwai seluruh aspek kehidupan",C:"Pancasila bersifat sementara",D:"Pancasila berasal dari luar negeri"},jawaban:"B",penjelasan:"Pancasila sebagai jiwa bangsa berarti Pancasila telah ada sejak bangsa Indonesia ada dan menjiwai seluruh aspek kehidupan bermasyarakat, berbangsa, dan bernegara."},
+    {no:18,pertanyaan:"Sidang BPUPKI kedua membahas...",opsi:{A:"Dasar negara Indonesia",B:"Rancangan UUD dan batang tubuh negara",C:"Proklamasi kemerdekaan",D:"Pembentukan kabinet"},jawaban:"B",penjelasan:"Sidang BPUPKI kedua (10–17 Juli 1945) membahas rancangan UUD, batang tubuh, dan wilayah negara Indonesia merdeka."},
+    {no:19,pertanyaan:"Pernyataan yang TEPAT tentang hubungan Pancasila dengan UUD 1945 adalah...",opsi:{A:"UUD 1945 lebih tinggi dari Pancasila",B:"Pancasila adalah jiwa dan sumber dari UUD 1945",C:"Keduanya memiliki kedudukan yang sama",D:"Pancasila tidak memiliki hubungan dengan UUD 1945"},jawaban:"B",penjelasan:"Pancasila merupakan norma dasar (Grundnorm) yang menjadi jiwa dan sumber dari UUD 1945; semua pasal UUD harus selaras dengan Pancasila."},
+    {no:20,pertanyaan:"Konsep 'Ekasila' yang pernah diusulkan Soekarno merupakan penyederhanaan Pancasila menjadi satu prinsip, yaitu...",opsi:{A:"Keadilan",B:"Persatuan",C:"Gotong Royong",D:"Ketuhanan"},jawaban:"C",penjelasan:"Soekarno menyederhanakan Pancasila menjadi Ekasila (satu sila) yaitu Gotong Royong, yang dianggap mencerminkan jiwa asli bangsa Indonesia."}
   ]},
   2:{pilar:"Pancasila",topik:"Nilai-Nilai dan Pengamalan Sila-Sila Pancasila",soal:[
-    {no:1,pertanyaan:"Sikap yang mencerminkan pengamalan Sila Pertama Pancasila adalah...",opsi:{A:"Memaksakan agama kepada orang lain",B:"Menghormati pemeluk agama lain dalam menjalankan ibadahnya",C:"Mengikuti semua upacara keagamaan tanpa pilih",D:"Tidak peduli terhadap kegiatan keagamaan"},jawaban:"B",penjelasan:"Sila Pertama menekankan Ketuhanan Yang Maha Esa dengan nilai toleransi beragama. Menghormati ibadah pemeluk agama lain adalah wujud nyata pengamalannya."},
-    {no:2,pertanyaan:"Nilai yang terkandung dalam Sila Kedua 'Kemanusiaan yang Adil dan Beradab' adalah...",opsi:{A:"Cinta tanah air",B:"Pengakuan harkat dan martabat manusia sebagai makhluk Tuhan",C:"Musyawarah untuk mufakat",D:"Pemerataan kesejahteraan"},jawaban:"B",penjelasan:"Sila Kedua mengandung nilai pengakuan bahwa setiap manusia memiliki harkat, martabat, dan hak asasi yang sama sebagai ciptaan Tuhan, sehingga harus diperlakukan secara adil dan beradab."},
-    {no:3,pertanyaan:"Simbol bintang emas dalam lambang Garuda Pancasila melambangkan sila ke...",opsi:{A:"1",B:"2",C:"3",D:"4"},jawaban:"A",penjelasan:"Bintang emas melambangkan Sila Pertama 'Ketuhanan Yang Maha Esa'. Bintang menggambarkan cahaya ketuhanan yang menerangi dasar negara Indonesia."},
-    {no:4,pertanyaan:"Contoh pengamalan Sila Ketiga di lingkungan sekolah adalah...",opsi:{A:"Membeda-bedakan teman berdasarkan suku",B:"Mengutamakan kepentingan kelompok tertentu",C:"Menjaga kerukunan antar teman tanpa memandang latar belakang",D:"Hanya berteman dengan yang seagama"},jawaban:"C",penjelasan:"Sila Ketiga 'Persatuan Indonesia' diamalkan dengan menjaga kerukunan. Di sekolah, ini diwujudkan dengan berteman dan bekerja sama tanpa memandang suku, agama, maupun latar belakang."},
-    {no:5,pertanyaan:"Sila Keempat Pancasila mengandung prinsip bahwa keputusan bersama diambil melalui...",opsi:{A:"Voting mutlak",B:"Keputusan sepihak pemimpin",C:"Musyawarah untuk mufakat",D:"Suara terbanyak tanpa musyawarah"},jawaban:"C",penjelasan:"Sila Keempat menekankan demokrasi yang dipimpin oleh hikmat kebijaksanaan. Keputusan diutamakan dicapai melalui musyawarah untuk mufakat, bukan sekadar suara terbanyak."},
-    {no:6,pertanyaan:"Perwujudan Sila Kelima dalam kebijakan ekonomi adalah...",opsi:{A:"Hanya mengutamakan investor asing",B:"Program pemerataan pembangunan ke seluruh wilayah Indonesia",C:"Kebebasan pasar tanpa regulasi",D:"Memusatkan kekayaan pada golongan tertentu"},jawaban:"B",penjelasan:"Sila Kelima 'Keadilan Sosial bagi Seluruh Rakyat Indonesia' menuntut pemerataan hasil pembangunan ke seluruh wilayah, tidak hanya terpusat di satu daerah."},
-    {no:7,pertanyaan:"Hubungan antara sila-sila Pancasila bersifat...",opsi:{A:"Saling bertentangan",B:"Terpisah satu sama lain",C:"Hierarkis piramidal dan organis",D:"Tidak memiliki keterkaitan"},jawaban:"C",penjelasan:"Sila-sila Pancasila membentuk satu kesatuan organis yang hierarkis piramidal — sila pertama mendasari sila-sila berikutnya, dan setiap sila saling mengandaikan serta menguatkan satu sama lain."},
-    {no:8,pertanyaan:"Sikap yang BERTENTANGAN dengan nilai Sila Keempat Pancasila adalah...",opsi:{A:"Mengikuti hasil musyawarah meskipun berbeda pendapat",B:"Menghargai pendapat orang lain",C:"Memaksakan kehendak pribadi dalam rapat",D:"Mengutamakan kepentingan bersama"},jawaban:"C",penjelasan:"Sila Keempat mengamanatkan musyawarah dan menghargai pendapat orang lain. Memaksakan kehendak pribadi jelas bertentangan dengan semangat musyawarah mufakat."},
-    {no:9,pertanyaan:"Kepala banteng dalam lambang Garuda Pancasila merupakan simbol sila ke...",opsi:{A:"3",B:"4",C:"5",D:"2"},jawaban:"B",penjelasan:"Kepala banteng melambangkan Sila Keempat. Banteng adalah hewan sosial yang menggambarkan semangat musyawarah, kebersamaan, dan kerakyatan."},
-    {no:10,pertanyaan:"'Dengan iktikad yang baik menerima dan melaksanakan hasil keputusan musyawarah' adalah pengamalan sila ke...",opsi:{A:"2",B:"3",C:"4",D:"5"},jawaban:"C",penjelasan:"Menerima dan melaksanakan hasil musyawarah dengan iktikad baik adalah butir pengamalan Sila Keempat, menekankan tanggung jawab bersama atas keputusan yang telah disepakati."}
+    {no:1,pertanyaan:"Sikap yang mencerminkan pengamalan Sila Pertama Pancasila adalah...",opsi:{A:"Memaksakan agama kepada orang lain",B:"Menghormati pemeluk agama lain dalam menjalankan ibadahnya",C:"Mengikuti semua upacara keagamaan tanpa pilih",D:"Tidak peduli terhadap kegiatan keagamaan"},jawaban:"B",penjelasan:"Sila Pertama mengedepankan toleransi beragama. Menghormati ibadah agama lain adalah pengamalan nyatanya."},
+    {no:2,pertanyaan:"Simbol bintang emas dalam lambang Garuda melambangkan sila ke...",opsi:{A:"1",B:"2",C:"3",D:"4"},jawaban:"A",penjelasan:"Bintang emas melambangkan Sila Pertama 'Ketuhanan Yang Maha Esa' sebagai cahaya ketuhanan yang menerangi bangsa."},
+    {no:3,pertanyaan:"Nilai utama Sila Kedua 'Kemanusiaan yang Adil dan Beradab' adalah...",opsi:{A:"Cinta tanah air",B:"Pengakuan harkat dan martabat manusia sebagai makhluk Tuhan",C:"Musyawarah untuk mufakat",D:"Pemerataan kesejahteraan"},jawaban:"B",penjelasan:"Sila Kedua mengakui bahwa setiap manusia memiliki harkat, martabat, dan hak asasi yang harus diperlakukan secara adil dan beradab."},
+    {no:4,pertanyaan:"Contoh pengamalan Sila Ketiga di lingkungan sekolah adalah...",opsi:{A:"Membeda-bedakan teman berdasarkan suku",B:"Mengutamakan kepentingan kelompok tertentu",C:"Menjaga kerukunan antar teman tanpa memandang latar belakang",D:"Hanya berteman dengan yang seagama"},jawaban:"C",penjelasan:"Sila Ketiga diamalkan dengan menjaga kerukunan dan persatuan tanpa memandang suku, agama, maupun latar belakang."},
+    {no:5,pertanyaan:"Sila Keempat mengandung prinsip pengambilan keputusan melalui...",opsi:{A:"Voting mutlak",B:"Keputusan sepihak pemimpin",C:"Musyawarah untuk mufakat",D:"Suara terbanyak tanpa musyawarah"},jawaban:"C",penjelasan:"Sila Keempat menekankan demokrasi musyawarah mufakat, mengutamakan hikmat kebijaksanaan di atas sekadar suara terbanyak."},
+    {no:6,pertanyaan:"Perwujudan Sila Kelima dalam kebijakan ekonomi adalah...",opsi:{A:"Hanya mengutamakan investor asing",B:"Program pemerataan pembangunan ke seluruh wilayah Indonesia",C:"Kebebasan pasar tanpa regulasi",D:"Memusatkan kekayaan pada golongan tertentu"},jawaban:"B",penjelasan:"Sila Kelima menuntut keadilan sosial dan pemerataan pembangunan ke seluruh wilayah Indonesia, bukan hanya pusat."},
+    {no:7,pertanyaan:"Hubungan antara sila-sila Pancasila bersifat...",opsi:{A:"Saling bertentangan",B:"Terpisah satu sama lain",C:"Hierarkis piramidal dan organis",D:"Tidak memiliki keterkaitan"},jawaban:"C",penjelasan:"Sila-sila Pancasila membentuk satu kesatuan organis hierarkis piramidal, saling mengandaikan dan menguatkan."},
+    {no:8,pertanyaan:"Kepala banteng dalam lambang Garuda melambangkan sila ke...",opsi:{A:"3",B:"4",C:"5",D:"2"},jawaban:"B",penjelasan:"Kepala banteng melambangkan Sila Keempat. Banteng adalah hewan sosial yang menggambarkan semangat musyawarah dan kerakyatan."},
+    {no:9,pertanyaan:"Sikap BERTENTANGAN dengan Sila Keempat Pancasila adalah...",opsi:{A:"Mengikuti hasil musyawarah",B:"Menghargai pendapat orang lain",C:"Memaksakan kehendak pribadi dalam rapat",D:"Mengutamakan kepentingan bersama"},jawaban:"C",penjelasan:"Memaksakan kehendak pribadi bertentangan dengan Sila Keempat yang mengamanatkan musyawarah mufakat."},
+    {no:10,pertanyaan:"'Dengan iktikad yang baik menerima dan melaksanakan hasil keputusan musyawarah' merupakan pengamalan sila ke...",opsi:{A:"2",B:"3",C:"4",D:"5"},jawaban:"C",penjelasan:"Menerima dan melaksanakan hasil musyawarah dengan iktikad baik adalah butir pengamalan Sila Keempat."},
+    {no:11,pertanyaan:"Rantai emas dalam lambang Garuda Pancasila melambangkan sila ke...",opsi:{A:"1",B:"2",C:"3",D:"4"},jawaban:"B",penjelasan:"Rantai emas melambangkan Sila Kedua 'Kemanusiaan yang Adil dan Beradab'. Rantai menggambarkan ikatan kemanusiaan yang kuat."},
+    {no:12,pertanyaan:"Pohon beringin dalam lambang Garuda Pancasila melambangkan sila ke...",opsi:{A:"2",B:"3",C:"4",D:"5"},jawaban:"B",penjelasan:"Pohon beringin melambangkan Sila Ketiga 'Persatuan Indonesia'. Pohon besar dengan akar kuat melambangkan persatuan bangsa."},
+    {no:13,pertanyaan:"Padi dan kapas dalam lambang Garuda Pancasila melambangkan sila ke...",opsi:{A:"3",B:"4",C:"5",D:"1"},jawaban:"C",penjelasan:"Padi dan kapas melambangkan Sila Kelima 'Keadilan Sosial bagi Seluruh Rakyat Indonesia', yaitu kemakmuran dan kesejahteraan."},
+    {no:14,pertanyaan:"Saling menghormati perbedaan pendapat dalam forum diskusi merupakan pengamalan sila ke...",opsi:{A:"2",B:"3",C:"4",D:"5"},jawaban:"C",penjelasan:"Menghormati perbedaan pendapat dalam forum diskusi merupakan pengamalan Sila Keempat yang menekankan musyawarah demokratis."},
+    {no:15,pertanyaan:"Memberikan bantuan kepada korban bencana tanpa memandang suku dan agama merupakan pengamalan sila ke...",opsi:{A:"1",B:"2",C:"3",D:"5"},jawaban:"B",penjelasan:"Membantu sesama tanpa diskriminasi adalah wujud pengamalan Sila Kedua 'Kemanusiaan yang Adil dan Beradab'."},
+    {no:16,pertanyaan:"Cinta produk dalam negeri dan memakai batik merupakan pengamalan sila ke...",opsi:{A:"2",B:"3",C:"4",D:"5"},jawaban:"B",penjelasan:"Mencintai produk dalam negeri dan batik sebagai warisan budaya merupakan pengamalan Sila Ketiga 'Persatuan Indonesia'."},
+    {no:17,pertanyaan:"Taat membayar pajak tepat waktu merupakan pengamalan sila ke...",opsi:{A:"3",B:"4",C:"5",D:"1"},jawaban:"C",penjelasan:"Membayar pajak merupakan bentuk tanggung jawab warga negara untuk mewujudkan keadilan sosial, yang merupakan pengamalan Sila Kelima."},
+    {no:18,pertanyaan:"Nilai dasar Pancasila bersifat...",opsi:{A:"Relatif dan dapat berubah",B:"Absolut, tetap, dan tidak dapat diubah",C:"Hanya berlaku untuk penguasa",D:"Disesuaikan dengan kepentingan politik"},jawaban:"B",penjelasan:"Nilai dasar Pancasila bersifat absolut dan tetap, tidak dapat diubah karena merupakan fondasi bangsa yang digali dari nilai luhur masyarakat Indonesia."},
+    {no:19,pertanyaan:"Mendahulukan kepentingan umum di atas kepentingan pribadi merupakan pengamalan sila ke...",opsi:{A:"2",B:"3",C:"4",D:"5"},jawaban:"B",penjelasan:"Mendahulukan kepentingan umum adalah pengamalan Sila Ketiga yang mengutamakan persatuan dan kepentingan bangsa di atas kepentingan pribadi."},
+    {no:20,pertanyaan:"Beribadah sesuai keyakinan tanpa mengganggu orang lain adalah pengamalan sila ke...",opsi:{A:"1",B:"2",C:"3",D:"4"},jawaban:"A",penjelasan:"Beribadah sesuai keyakinan sendiri tanpa mengganggu orang lain merupakan pengamalan Sila Pertama 'Ketuhanan Yang Maha Esa'."}
   ]},
   3:{pilar:"UUD 1945",topik:"Sejarah Perumusan dan Penetapan UUD 1945",soal:[
-    {no:1,pertanyaan:"Badan yang bertugas merumuskan UUD 1945 sebelum kemerdekaan adalah...",opsi:{A:"KNIP",B:"BPUPKI",C:"PPKI",D:"DPR"},jawaban:"B",penjelasan:"BPUPKI bertugas menyelidiki dan mempersiapkan kemerdekaan, termasuk merumuskan dasar negara dan rancangan UUD."},
-    {no:2,pertanyaan:"UUD 1945 disahkan oleh PPKI pada tanggal...",opsi:{A:"17 Agustus 1945",B:"18 Agustus 1945",C:"19 Agustus 1945",D:"1 Juni 1945"},jawaban:"B",penjelasan:"Sehari setelah proklamasi, PPKI bersidang 18 Agustus 1945, mengesahkan UUD 1945, dan memilih Soekarno-Hatta sebagai presiden dan wakil presiden pertama RI."},
+    {no:1,pertanyaan:"Badan yang bertugas merumuskan UUD 1945 sebelum kemerdekaan adalah...",opsi:{A:"KNIP",B:"BPUPKI",C:"PPKI",D:"DPR"},jawaban:"B",penjelasan:"BPUPKI (Badan Penyelidik Usaha-Usaha Persiapan Kemerdekaan Indonesia) bertugas mempersiapkan kemerdekaan termasuk merumuskan UUD."},
+    {no:2,pertanyaan:"UUD 1945 disahkan oleh PPKI pada tanggal...",opsi:{A:"17 Agustus 1945",B:"18 Agustus 1945",C:"19 Agustus 1945",D:"1 Juni 1945"},jawaban:"B",penjelasan:"PPKI mengesahkan UUD 1945 pada 18 Agustus 1945, sehari setelah proklamasi, sekaligus memilih Soekarno-Hatta sebagai presiden dan wapres."},
     {no:3,pertanyaan:"Sidang BPUPKI kedua yang membahas rancangan UUD berlangsung pada...",opsi:{A:"29 Mei – 1 Juni 1945",B:"10–17 Juli 1945",C:"18–20 Agustus 1945",D:"1–7 September 1945"},jawaban:"B",penjelasan:"Sidang BPUPKI kedua (10–17 Juli 1945) membahas rancangan UUD, batang tubuh, dan wilayah negara Indonesia merdeka."},
-    {no:4,pertanyaan:"Dekret Presiden 5 Juli 1959 menyatakan berlakunya kembali UUD 1945 karena...",opsi:{A:"Konstituante berhasil merumuskan UUD baru",B:"Konstituante gagal merumuskan UUD baru dalam waktu yang ditentukan",C:"Permintaan rakyat melalui referendum",D:"Keputusan MPR"},jawaban:"B",penjelasan:"Konstituante terus berdebat tanpa hasil. Soekarno mengeluarkan dekret untuk kembali ke UUD 1945 demi mengatasi kebuntuan politik."},
-    {no:5,pertanyaan:"UUD 1945 pernah tidak berlaku digantikan Konstitusi RIS pada periode...",opsi:{A:"1945–1949",B:"1949–1950",C:"1950–1959",D:"1959–1966"},jawaban:"B",penjelasan:"Konstitusi RIS berlaku sejak 27 Desember 1949 hingga 17 Agustus 1950 saat Indonesia kembali menjadi negara kesatuan dengan UUDS 1950."},
-    {no:6,pertanyaan:"Amandemen UUD 1945 dilakukan sebanyak berapa kali pada era reformasi?",opsi:{A:"2 kali",B:"3 kali",C:"4 kali",D:"5 kali"},jawaban:"C",penjelasan:"UUD 1945 diamandemen empat kali: amandemen I (1999), II (2000), III (2001), dan IV (2002). Perubahan ini menghasilkan reformasi kelembagaan negara yang signifikan."},
-    {no:7,pertanyaan:"Amandemen pertama UUD 1945 dilakukan pada tahun...",opsi:{A:"1998",B:"1999",C:"2000",D:"2001"},jawaban:"B",penjelasan:"Amandemen pertama dilakukan Oktober 1999 dalam Sidang Umum MPR. Fokusnya adalah pembatasan kekuasaan presiden."},
-    {no:8,pertanyaan:"Salah satu perubahan penting dalam amandemen UUD 1945 adalah...",opsi:{A:"Penghapusan pasal tentang HAM",B:"Penambahan lembaga MPR",C:"Pembatasan masa jabatan presiden maksimal dua periode",D:"Penghapusan Mahkamah Agung"},jawaban:"C",penjelasan:"Amandemen membatasi masa jabatan presiden menjadi paling banyak dua periode (5 tahun/periode) untuk mencegah kekuasaan yang terlalu lama seperti era Orde Baru."},
-    {no:9,pertanyaan:"UUDS 1950 berlaku pada periode...",opsi:{A:"17 Agustus – 27 Desember 1949",B:"27 Desember 1949 – 17 Agustus 1950",C:"17 Agustus 1950 – 5 Juli 1959",D:"5 Juli 1959 – 1966"},jawaban:"C",penjelasan:"UUDS 1950 mulai berlaku 17 Agustus 1950 saat RIS dibubarkan hingga Dekret Presiden 5 Juli 1959 yang mengembalikan UUD 1945."},
-    {no:10,pertanyaan:"Lembaga yang berwenang mengubah UUD 1945 adalah...",opsi:{A:"DPR",B:"Presiden",C:"MPR",D:"Mahkamah Konstitusi"},jawaban:"C",penjelasan:"Pasal 37 UUD 1945 menyatakan MPR adalah satu-satunya lembaga yang berwenang mengubah UUD 1945 dengan syarat kuorum dan persetujuan minimal 50%+1 anggota."}
+    {no:4,pertanyaan:"Dekret Presiden 5 Juli 1959 menyatakan berlakunya kembali UUD 1945 karena...",opsi:{A:"Konstituante berhasil merumuskan UUD baru",B:"Konstituante gagal merumuskan UUD baru dalam waktu yang ditentukan",C:"Permintaan rakyat melalui referendum",D:"Keputusan MPR"},jawaban:"B",penjelasan:"Konstituante gagal merumuskan UUD baru. Soekarno mengeluarkan Dekret 5 Juli 1959 untuk kembali ke UUD 1945 demi mengatasi kebuntuan."},
+    {no:5,pertanyaan:"UUD 1945 pernah digantikan Konstitusi RIS pada periode...",opsi:{A:"1945–1949",B:"1949–1950",C:"1950–1959",D:"1959–1966"},jawaban:"B",penjelasan:"Konstitusi RIS berlaku 27 Desember 1949–17 Agustus 1950, saat Indonesia berbentuk negara federal Republik Indonesia Serikat."},
+    {no:6,pertanyaan:"Amandemen UUD 1945 dilakukan berapa kali pada era reformasi?",opsi:{A:"2 kali",B:"3 kali",C:"4 kali",D:"5 kali"},jawaban:"C",penjelasan:"UUD 1945 diamandemen empat kali: I (1999), II (2000), III (2001), IV (2002), menghasilkan reformasi kelembagaan signifikan."},
+    {no:7,pertanyaan:"Amandemen pertama UUD 1945 dilakukan pada tahun...",opsi:{A:"1998",B:"1999",C:"2000",D:"2001"},jawaban:"B",penjelasan:"Amandemen pertama UUD 1945 dilakukan Oktober 1999 dalam Sidang Umum MPR, fokus pada pembatasan kekuasaan presiden."},
+    {no:8,pertanyaan:"Perubahan penting dalam amandemen UUD 1945 adalah...",opsi:{A:"Penghapusan pasal tentang HAM",B:"Penambahan lembaga MPR",C:"Pembatasan masa jabatan presiden maksimal dua periode",D:"Penghapusan Mahkamah Agung"},jawaban:"C",penjelasan:"Amandemen membatasi masa jabatan presiden maksimal dua periode (5 tahun/periode) untuk mencegah kekuasaan yang terlalu lama."},
+    {no:9,pertanyaan:"UUDS 1950 berlaku pada periode...",opsi:{A:"17 Agustus – 27 Desember 1949",B:"27 Desember 1949 – 17 Agustus 1950",C:"17 Agustus 1950 – 5 Juli 1959",D:"5 Juli 1959 – 1966"},jawaban:"C",penjelasan:"UUDS 1950 berlaku 17 Agustus 1950 – 5 Juli 1959, menandai kembalinya Indonesia menjadi negara kesatuan dari bentuk RIS."},
+    {no:10,pertanyaan:"Lembaga yang berwenang mengubah UUD 1945 adalah...",opsi:{A:"DPR",B:"Presiden",C:"MPR",D:"Mahkamah Konstitusi"},jawaban:"C",penjelasan:"Pasal 37 UUD 1945 menetapkan MPR sebagai satu-satunya lembaga yang berwenang mengubah UUD 1945 dengan syarat quorum tertentu."},
+    {no:11,pertanyaan:"Panitia Sembilan yang merumuskan Piagam Jakarta diketuai oleh...",opsi:{A:"Mohammad Hatta",B:"Soepomo",C:"Soekarno",D:"Muhammad Yamin"},jawaban:"C",penjelasan:"Panitia Sembilan dibentuk BPUPKI dengan ketua Soekarno. Panitia ini menghasilkan Piagam Jakarta pada 22 Juni 1945."},
+    {no:12,pertanyaan:"Piagam Jakarta ditandatangani pada tanggal...",opsi:{A:"1 Juni 1945",B:"22 Juni 1945",C:"17 Agustus 1945",D:"18 Agustus 1945"},jawaban:"B",penjelasan:"Piagam Jakarta ditandatangani oleh Panitia Sembilan pada 22 Juni 1945 sebagai kompromi antara kelompok nasionalis dan Islam."},
+    {no:13,pertanyaan:"Berapa jumlah anggota PPKI yang mengesahkan UUD 1945?",opsi:{A:"9 orang",B:"12 orang",C:"21 orang",D:"27 orang"},jawaban:"C",penjelasan:"PPKI memiliki 21 anggota yang mewakili berbagai daerah dan golongan di Indonesia. Sidangnya pada 18 Agustus 1945 mengesahkan UUD 1945."},
+    {no:14,pertanyaan:"Sistem pemerintahan yang dianut UUDS 1950 adalah...",opsi:{A:"Presidensial",B:"Parlementer",C:"Semi presidensial",D:"Monarki konstitusional"},jawaban:"B",penjelasan:"UUDS 1950 menerapkan sistem parlementer, di mana kabinet bertanggung jawab kepada parlemen sehingga sering terjadi pergantian kabinet."},
+    {no:15,pertanyaan:"Amandemen keempat UUD 1945 dilaksanakan pada tahun...",opsi:{A:"2000",B:"2001",C:"2002",D:"2003"},jawaban:"C",penjelasan:"Amandemen keempat UUD 1945 dilakukan pada Sidang Tahunan MPR tahun 2002, melengkapi tiga amandemen sebelumnya."},
+    {no:16,pertanyaan:"Sebelum amandemen, berapa pasal yang dimiliki UUD 1945?",opsi:{A:"27 pasal",B:"37 pasal",C:"45 pasal",D:"55 pasal"},jawaban:"B",penjelasan:"UUD 1945 sebelum amandemen memiliki 37 pasal, ditambah Pembukaan dan Penjelasan. Setelah amandemen menjadi 73 pasal."},
+    {no:17,pertanyaan:"Latar belakang utama amandemen UUD 1945 pada era reformasi adalah...",opsi:{A:"Desakan negara asing",B:"Keinginan membangun sistem yang lebih demokratis dan mencegah penyalahgunaan kekuasaan",C:"Keputusan Mahkamah Agung",D:"Hasil pemilihan umum"},jawaban:"B",penjelasan:"Amandemen UUD 1945 pada era reformasi didorong keinginan membangun sistem yang lebih demokratis dan mencegah penyalahgunaan kekuasaan seperti pada era Orde Baru."},
+    {no:18,pertanyaan:"Konstitusi mana yang pernah berlaku di Indonesia namun paling singkat?",opsi:{A:"UUD 1945",B:"Konstitusi RIS",C:"UUDS 1950",D:"Amandemen UUD 1945"},jawaban:"B",penjelasan:"Konstitusi RIS hanya berlaku sekitar 8 bulan (27 Desember 1949 – 17 Agustus 1950), merupakan konstitusi dengan masa berlaku paling singkat."},
+    {no:19,pertanyaan:"Panitia Perancang UUD yang dibentuk pada sidang BPUPKI kedua diketuai oleh...",opsi:{A:"Mohammad Hatta",B:"Soepomo",C:"Soekarno",D:"Muhammad Yamin"},jawaban:"C",penjelasan:"Panitia Perancang UUD dibentuk dalam sidang BPUPKI kedua dengan ketua Soekarno untuk menyusun rancangan UUD secara lebih detail."},
+    {no:20,pertanyaan:"Periode berlakunya UUD 1945 untuk pertama kalinya (sebelum RIS) adalah...",opsi:{A:"1945–1949",B:"1945–1950",C:"1945–1959",D:"1945–1966"},jawaban:"A",penjelasan:"UUD 1945 pertama kali berlaku dari 18 Agustus 1945 hingga 27 Desember 1949, ketika digantikan Konstitusi RIS setelah pengakuan kedaulatan."}
   ]},
   4:{pilar:"UUD 1945",topik:"Hak dan Kewajiban Warga Negara dalam UUD 1945",soal:[
-    {no:1,pertanyaan:"Pasal UUD 1945 yang mengatur hak atas pendidikan adalah...",opsi:{A:"Pasal 27",B:"Pasal 28C",C:"Pasal 31",D:"Pasal 34"},jawaban:"C",penjelasan:"Pasal 31 mengatur hak dan kewajiban di bidang pendidikan: ayat (1) setiap warga negara berhak mendapat pendidikan, ayat (2) mewajibkan mengikuti pendidikan dasar."},
-    {no:2,pertanyaan:"Hak setiap warga negara untuk mendapat pekerjaan dan penghidupan yang layak diatur dalam...",opsi:{A:"Pasal 26",B:"Pasal 27 ayat 2",C:"Pasal 28",D:"Pasal 30"},jawaban:"B",penjelasan:"Pasal 27 ayat (2): 'Tiap-tiap warga negara berhak atas pekerjaan dan penghidupan yang layak bagi kemanusiaan.' Ini adalah hak ekonomi warga negara."},
-    {no:3,pertanyaan:"Kewajiban membela negara bagi setiap warga negara diatur dalam Pasal...",opsi:{A:"27 ayat 1",B:"27 ayat 3",C:"28J",D:"30 ayat 1"},jawaban:"D",penjelasan:"Pasal 30 ayat (1): 'Tiap-tiap warga negara berhak dan wajib ikut serta dalam usaha pertahanan dan keamanan negara.'"},
-    {no:4,pertanyaan:"Pasal 28A UUD 1945 menjamin hak...",opsi:{A:"Berserikat dan berkumpul",B:"Hidup dan mempertahankan kehidupan",C:"Mendapat pendidikan",D:"Mendapat pekerjaan"},jawaban:"B",penjelasan:"Pasal 28A menjamin hak untuk hidup serta berhak mempertahankan hidup dan kehidupannya. Ini adalah hak paling dasar yang tidak dapat diganggu gugat."},
-    {no:5,pertanyaan:"Hak asasi yang tidak dapat dikurangi dalam keadaan apapun (non-derogable rights) meliputi...",opsi:{A:"Hak berpendapat dan hak bekerja",B:"Hak hidup, hak bebas dari penyiksaan, hak beragama",C:"Hak memilih dan hak dipilih",D:"Hak mendapat gaji dan hak cuti"},jawaban:"B",penjelasan:"Non-derogable rights tidak boleh dikurangi dalam kondisi apapun termasuk keadaan darurat. Meliputi hak hidup, bebas dari penyiksaan, bebas dari perbudakan, dan hak beragama."},
-    {no:6,pertanyaan:"Kewajiban warga negara membayar pajak diatur dalam Pasal...",opsi:{A:"23A",B:"27 ayat 1",C:"30",D:"31"},jawaban:"A",penjelasan:"Pasal 23A menyatakan bahwa pajak dan pungutan lain yang bersifat memaksa untuk keperluan negara diatur dengan undang-undang, menjadi landasan kewajiban membayar pajak."},
-    {no:7,pertanyaan:"Pasal 28J ayat 1 UUD 1945 menyatakan bahwa setiap orang wajib...",opsi:{A:"Membayar pajak",B:"Menghormati hak asasi manusia orang lain",C:"Mengikuti wajib militer",D:"Mendukung pemerintah"},jawaban:"B",penjelasan:"Pasal 28J ayat (1) menegaskan kewajiban setiap orang untuk menghormati HAM orang lain dalam tertib kehidupan bermasyarakat, berbangsa, dan bernegara."},
-    {no:8,pertanyaan:"Hak yang dijamin Pasal 28E UUD 1945 meliputi...",opsi:{A:"Hak mendapat pengajaran",B:"Hak atas pekerjaan",C:"Hak memilih agama, kewarganegaraan, dan berpendapat",D:"Hak atas jaminan sosial"},jawaban:"C",penjelasan:"Pasal 28E menjamin kebebasan memilih agama, kewarganegaraan, tempat tinggal, serta kebebasan berserikat, berkumpul, dan berpendapat."},
-    {no:9,pertanyaan:"Persamaan kedudukan warga negara di hadapan hukum diatur dalam Pasal...",opsi:{A:"26",B:"27 ayat 1",C:"28D ayat 1",D:"30"},jawaban:"B",penjelasan:"Pasal 27 ayat (1): 'Segala warga negara bersamaan kedudukannya di dalam hukum dan pemerintahan dan wajib menjunjung hukum dan pemerintahan itu dengan tidak ada kecualinya.'"},
-    {no:10,pertanyaan:"Perbedaan antara hak asasi manusia dan hak warga negara terletak pada...",opsi:{A:"HAM berlaku untuk semua manusia, hak warga negara hanya untuk warga negara tertentu",B:"HAM bisa dicabut, hak warga negara tidak bisa dicabut",C:"Hak warga negara lebih tinggi dari HAM",D:"Tidak ada perbedaan"},jawaban:"A",penjelasan:"HAM melekat pada setiap manusia sejak lahir tanpa memandang kewarganegaraan. Hak warga negara bersifat khusus, hanya berlaku bagi orang yang memiliki status warga negara tertentu."}
+    {no:1,pertanyaan:"Pasal UUD 1945 yang mengatur hak atas pendidikan adalah...",opsi:{A:"Pasal 27",B:"Pasal 28C",C:"Pasal 31",D:"Pasal 34"},jawaban:"C",penjelasan:"Pasal 31 mengatur hak dan kewajiban warga negara di bidang pendidikan, termasuk kewajiban mengikuti pendidikan dasar."},
+    {no:2,pertanyaan:"Hak warga negara mendapat pekerjaan dan penghidupan yang layak diatur dalam...",opsi:{A:"Pasal 26",B:"Pasal 27 ayat 2",C:"Pasal 28",D:"Pasal 30"},jawaban:"B",penjelasan:"Pasal 27 ayat (2) menjamin setiap warga negara berhak atas pekerjaan dan penghidupan yang layak bagi kemanusiaan."},
+    {no:3,pertanyaan:"Kewajiban membela negara diatur dalam Pasal...",opsi:{A:"27 ayat 1",B:"27 ayat 3",C:"28J",D:"30 ayat 1"},jawaban:"D",penjelasan:"Pasal 30 ayat (1) menyatakan tiap-tiap warga negara berhak dan wajib ikut serta dalam usaha pertahanan dan keamanan negara."},
+    {no:4,pertanyaan:"Pasal 28A UUD 1945 menjamin hak...",opsi:{A:"Berserikat dan berkumpul",B:"Hidup dan mempertahankan kehidupan",C:"Mendapat pendidikan",D:"Mendapat pekerjaan"},jawaban:"B",penjelasan:"Pasal 28A menjamin hak paling mendasar yaitu hak untuk hidup serta berhak mempertahankan hidup dan kehidupannya."},
+    {no:5,pertanyaan:"Hak yang tidak dapat dikurangi dalam keadaan apapun (non-derogable rights) meliputi...",opsi:{A:"Hak berpendapat dan hak bekerja",B:"Hak hidup, hak bebas dari penyiksaan, hak beragama",C:"Hak memilih dan hak dipilih",D:"Hak mendapat gaji dan hak cuti"},jawaban:"B",penjelasan:"Non-derogable rights tidak boleh dikurangi dalam kondisi apapun, termasuk keadaan darurat, meliputi hak hidup, bebas dari penyiksaan, dan hak beragama."},
+    {no:6,pertanyaan:"Kewajiban membayar pajak diatur dalam Pasal...",opsi:{A:"23A",B:"27 ayat 1",C:"30",D:"31"},jawaban:"A",penjelasan:"Pasal 23A UUD 1945 menjadi landasan konstitusional kewajiban membayar pajak yang diatur lebih lanjut dengan undang-undang."},
+    {no:7,pertanyaan:"Pasal 28J ayat 1 menyatakan setiap orang wajib...",opsi:{A:"Membayar pajak",B:"Menghormati hak asasi manusia orang lain",C:"Mengikuti wajib militer",D:"Mendukung pemerintah"},jawaban:"B",penjelasan:"Pasal 28J ayat (1) mewajibkan setiap orang menghormati HAM orang lain dalam tertib kehidupan bermasyarakat, berbangsa, dan bernegara."},
+    {no:8,pertanyaan:"Pasal 28E UUD 1945 menjamin hak...",opsi:{A:"Hak mendapat pengajaran",B:"Hak atas pekerjaan",C:"Hak memilih agama, kewarganegaraan, dan berpendapat",D:"Hak atas jaminan sosial"},jawaban:"C",penjelasan:"Pasal 28E menjamin kebebasan memilih agama, kewarganegaraan, tempat tinggal, serta kebebasan berserikat, berkumpul, dan berpendapat."},
+    {no:9,pertanyaan:"Persamaan kedudukan warga negara di hadapan hukum diatur dalam Pasal...",opsi:{A:"26",B:"27 ayat 1",C:"28D ayat 1",D:"30"},jawaban:"B",penjelasan:"Pasal 27 ayat (1) menjamin persamaan kedudukan semua warga negara di hadapan hukum dan pemerintahan tanpa pengecualian."},
+    {no:10,pertanyaan:"Perbedaan HAM dan hak warga negara terletak pada...",opsi:{A:"HAM berlaku untuk semua manusia, hak warga negara hanya untuk warga negara tertentu",B:"HAM bisa dicabut, hak warga negara tidak",C:"Hak warga negara lebih tinggi dari HAM",D:"Tidak ada perbedaan"},jawaban:"A",penjelasan:"HAM melekat pada setiap manusia sejak lahir tanpa memandang kewarganegaraan, sedangkan hak warga negara hanya untuk warga negara tertentu."},
+    {no:11,pertanyaan:"Hak memperoleh jaminan sosial diatur dalam Pasal...",opsi:{A:"28B",B:"28H",C:"28I",D:"28J"},jawaban:"B",penjelasan:"Pasal 28H ayat (3) menyatakan setiap orang berhak atas jaminan sosial yang memungkinkan pengembangan dirinya secara utuh."},
+    {no:12,pertanyaan:"Hak atas pengakuan, jaminan, perlindungan, dan kepastian hukum yang adil diatur dalam Pasal...",opsi:{A:"28C",B:"28D",C:"28E",D:"28F"},jawaban:"B",penjelasan:"Pasal 28D ayat (1) menjamin hak setiap orang atas pengakuan, jaminan, perlindungan, dan kepastian hukum yang adil serta perlakuan yang sama di hadapan hukum."},
+    {no:13,pertanyaan:"Kewajiban mengikuti pendidikan dasar diatur dalam Pasal...",opsi:{A:"31 ayat 1",B:"31 ayat 2",C:"28C",D:"27 ayat 2"},jawaban:"B",penjelasan:"Pasal 31 ayat (2) mewajibkan setiap warga negara mengikuti pendidikan dasar, dan pemerintah wajib membiayainya."},
+    {no:14,pertanyaan:"Hak warga negara untuk memperoleh kesempatan yang sama dalam pemerintahan diatur dalam...",opsi:{A:"Pasal 27 ayat 1",B:"Pasal 28D ayat 3",C:"Pasal 28E",D:"Pasal 30"},jawaban:"B",penjelasan:"Pasal 28D ayat (3) menjamin setiap warga negara berhak memperoleh kesempatan yang sama dalam pemerintahan."},
+    {no:15,pertanyaan:"Hak bebas dari perlakuan diskriminatif dijamin oleh Pasal...",opsi:{A:"28A",B:"28C",C:"28I ayat 2",D:"28J"},jawaban:"C",penjelasan:"Pasal 28I ayat (2) menyatakan setiap orang berhak bebas dari perlakuan yang bersifat diskriminatif atas dasar apapun."},
+    {no:16,pertanyaan:"Kewajiban menjunjung tinggi hukum dan pemerintahan diatur dalam...",opsi:{A:"Pasal 26",B:"Pasal 27 ayat 1",C:"Pasal 28J",D:"Pasal 30"},jawaban:"B",penjelasan:"Pasal 27 ayat (1) menyatakan setiap warga negara wajib menjunjung hukum dan pemerintahan dengan tidak ada kecualinya."},
+    {no:17,pertanyaan:"Hak atas identitas budaya dan hak masyarakat tradisional dijamin oleh Pasal...",opsi:{A:"28B",B:"28C",C:"28I ayat 3",D:"28H"},jawaban:"C",penjelasan:"Pasal 28I ayat (3) menjamin identitas budaya dan hak masyarakat tradisional dihormati selaras dengan perkembangan zaman dan peradaban."},
+    {no:18,pertanyaan:"Hak anak untuk kelangsungan hidup, tumbuh, dan berkembang dijamin oleh Pasal...",opsi:{A:"28B ayat 2",B:"28C",C:"28D",D:"28E"},jawaban:"A",penjelasan:"Pasal 28B ayat (2) menyatakan setiap anak berhak atas kelangsungan hidup, tumbuh, dan berkembang serta perlindungan dari kekerasan dan diskriminasi."},
+    {no:19,pertanyaan:"Hak setiap warga negara untuk memilih tempat tinggal di wilayah Indonesia dijamin dalam Pasal...",opsi:{A:"28A",B:"28E ayat 1",C:"28G",D:"28H"},jawaban:"B",penjelasan:"Pasal 28E ayat (1) menjamin hak setiap orang untuk memilih tempat tinggal di wilayah negara dan meninggalkannya, serta berhak kembali."},
+    {no:20,pertanyaan:"Kewajiban negara dalam bidang pendidikan adalah...",opsi:{A:"Menyelenggarakan pendidikan hanya untuk golongan tertentu",B:"Membiayai pendidikan dasar bagi seluruh warga negara",C:"Mewajibkan pendidikan tinggi bagi semua warga",D:"Menyerahkan pendidikan sepenuhnya kepada swasta"},jawaban:"B",penjelasan:"Pasal 31 ayat (2) mewajibkan pemerintah membiayai pendidikan dasar. Negara bertanggung jawab memastikan akses pendidikan dasar bagi seluruh warga."}
   ]},
   5:{pilar:"UUD 1945",topik:"Lembaga-Lembaga Negara berdasarkan UUD 1945",soal:[
-    {no:1,pertanyaan:"Setelah amandemen UUD 1945, presiden dan wakil presiden dipilih oleh...",opsi:{A:"MPR",B:"DPR",C:"Rakyat secara langsung",D:"Mahkamah Agung"},jawaban:"C",penjelasan:"Amandemen ketiga mengubah pemilihan presiden dari MPR menjadi pemilihan langsung oleh rakyat, pertama kali dilaksanakan pada Pemilu 2004."},
-    {no:2,pertanyaan:"Lembaga negara yang berwenang menguji undang-undang terhadap UUD 1945 adalah...",opsi:{A:"Mahkamah Agung",B:"Komisi Yudisial",C:"Mahkamah Konstitusi",D:"DPR"},jawaban:"C",penjelasan:"Mahkamah Konstitusi dibentuk melalui amandemen ketiga. Salah satu wewenang utamanya adalah judicial review: menguji undang-undang terhadap UUD 1945."},
-    {no:3,pertanyaan:"Badan Pemeriksa Keuangan (BPK) bertugas...",opsi:{A:"Menetapkan APBN",B:"Memeriksa pengelolaan dan tanggung jawab keuangan negara",C:"Mengadili sengketa pemilu",D:"Memberikan pertimbangan kepada presiden"},jawaban:"B",penjelasan:"BPK adalah lembaga independen yang memeriksa pengelolaan dan tanggung jawab keuangan negara. Hasil pemeriksaannya diserahkan kepada DPR, DPD, dan DPRD."},
-    {no:4,pertanyaan:"Berdasarkan UUD 1945 hasil amandemen, MPR terdiri dari...",opsi:{A:"DPR dan DPD",B:"DPR dan utusan golongan",C:"DPR, DPD, dan utusan daerah",D:"DPR saja"},jawaban:"A",penjelasan:"Setelah amandemen, MPR terdiri dari anggota DPR dan DPD. Utusan golongan dihapus sehingga semua anggota MPR dipilih langsung oleh rakyat."},
-    {no:5,pertanyaan:"Komisi Yudisial memiliki wewenang untuk...",opsi:{A:"Membuat undang-undang",B:"Mengusulkan pengangkatan hakim agung dan menjaga kehormatan hakim",C:"Mengadili perkara pidana",D:"Menguji peraturan daerah"},jawaban:"B",penjelasan:"Komisi Yudisial berwenang mengusulkan pengangkatan hakim agung kepada DPR dan menjaga kehormatan, keluhuran martabat, serta perilaku hakim agar peradilan tetap bersih."},
-    {no:6,pertanyaan:"DPD (Dewan Perwakilan Daerah) dibentuk melalui amandemen UUD 1945 yang ke...",opsi:{A:"Pertama",B:"Kedua",C:"Ketiga",D:"Keempat"},jawaban:"C",penjelasan:"DPD dibentuk melalui amandemen ketiga (2001). Anggotanya dipilih langsung dari setiap provinsi untuk mewakili kepentingan daerah di tingkat nasional."},
-    {no:7,pertanyaan:"Kewenangan DPR dalam bidang legislasi adalah...",opsi:{A:"Menetapkan peraturan pemerintah",B:"Membentuk undang-undang bersama presiden",C:"Membuat peraturan daerah",D:"Mengeluarkan dekret"},jawaban:"B",penjelasan:"Pasal 20 UUD 1945 menyatakan DPR memegang kekuasaan membentuk undang-undang. Setiap RUU dibahas bersama presiden dan disahkan atas persetujuan bersama."},
-    {no:8,pertanyaan:"Presiden dalam sistem pemerintahan Indonesia memegang kekuasaan...",opsi:{A:"Legislatif",B:"Yudikatif",C:"Eksekutif",D:"Legislatif dan Eksekutif"},jawaban:"C",penjelasan:"Dalam sistem presidensial Indonesia, presiden memegang kekuasaan eksekutif (pemerintahan). Meskipun ikut membahas UU, kekuasaan legislatif utamanya berada di DPR."},
-    {no:9,pertanyaan:"Berapa jumlah hakim Mahkamah Konstitusi berdasarkan UUD 1945?",opsi:{A:"5 orang",B:"7 orang",C:"9 orang",D:"11 orang"},jawaban:"C",penjelasan:"MK terdiri dari 9 hakim konstitusi: 3 diajukan DPR, 3 diajukan presiden, dan 3 diajukan Mahkamah Agung. Ketua dan wakil ketua dipilih dari dan oleh hakim konstitusi."},
-    {no:10,pertanyaan:"DPR dapat memberhentikan presiden melalui mekanisme...",opsi:{A:"Interpelasi",B:"Hak angket",C:"Pemakzulan (impeachment)",D:"Mosi tidak percaya"},jawaban:"C",penjelasan:"Pemakzulan adalah proses pemberhentian presiden. DPR mengajukan usul ke MK untuk diperiksa, setelah itu MPR memutuskan. Interpelasi adalah hak bertanya, angket adalah hak penyelidikan."}
+    {no:1,pertanyaan:"Setelah amandemen, presiden dan wakil presiden dipilih oleh...",opsi:{A:"MPR",B:"DPR",C:"Rakyat secara langsung",D:"Mahkamah Agung"},jawaban:"C",penjelasan:"Amandemen ketiga mengubah pemilihan presiden menjadi langsung oleh rakyat, pertama kali dilaksanakan pada Pemilu 2004."},
+    {no:2,pertanyaan:"Lembaga yang berwenang menguji undang-undang terhadap UUD 1945 adalah...",opsi:{A:"Mahkamah Agung",B:"Komisi Yudisial",C:"Mahkamah Konstitusi",D:"DPR"},jawaban:"C",penjelasan:"Mahkamah Konstitusi (MK) berwenang melakukan judicial review, yaitu menguji undang-undang terhadap UUD 1945."},
+    {no:3,pertanyaan:"BPK bertugas...",opsi:{A:"Menetapkan APBN",B:"Memeriksa pengelolaan dan tanggung jawab keuangan negara",C:"Mengadili sengketa pemilu",D:"Memberikan pertimbangan kepada presiden"},jawaban:"B",penjelasan:"BPK (Badan Pemeriksa Keuangan) adalah lembaga independen yang memeriksa pengelolaan dan tanggung jawab keuangan negara."},
+    {no:4,pertanyaan:"Setelah amandemen, MPR terdiri dari...",opsi:{A:"DPR dan DPD",B:"DPR dan utusan golongan",C:"DPR, DPD, dan utusan daerah",D:"DPR saja"},jawaban:"A",penjelasan:"Setelah amandemen, MPR terdiri dari DPR dan DPD. Utusan golongan dihapus sehingga semua anggota MPR merupakan hasil pemilihan rakyat."},
+    {no:5,pertanyaan:"Komisi Yudisial berwenang untuk...",opsi:{A:"Membuat undang-undang",B:"Mengusulkan pengangkatan hakim agung dan menjaga kehormatan hakim",C:"Mengadili perkara pidana",D:"Menguji peraturan daerah"},jawaban:"B",penjelasan:"Komisi Yudisial berwenang mengusulkan pengangkatan hakim agung dan menjaga kehormatan, keluhuran martabat, serta perilaku hakim."},
+    {no:6,pertanyaan:"DPD dibentuk melalui amandemen UUD 1945 yang ke...",opsi:{A:"Pertama",B:"Kedua",C:"Ketiga",D:"Keempat"},jawaban:"C",penjelasan:"DPD dibentuk melalui amandemen ketiga UUD 1945 (2001). Anggotanya dipilih langsung dari setiap provinsi untuk mewakili kepentingan daerah."},
+    {no:7,pertanyaan:"Kewenangan DPR dalam bidang legislasi adalah...",opsi:{A:"Menetapkan peraturan pemerintah",B:"Membentuk undang-undang bersama presiden",C:"Membuat peraturan daerah",D:"Mengeluarkan dekret"},jawaban:"B",penjelasan:"Pasal 20 UUD 1945 menyatakan DPR memegang kekuasaan membentuk undang-undang bersama presiden."},
+    {no:8,pertanyaan:"Presiden memegang kekuasaan...",opsi:{A:"Legislatif",B:"Yudikatif",C:"Eksekutif",D:"Legislatif dan Eksekutif"},jawaban:"C",penjelasan:"Presiden memegang kekuasaan eksekutif dalam sistem presidensial Indonesia sebagaimana diatur UUD 1945."},
+    {no:9,pertanyaan:"Jumlah hakim Mahkamah Konstitusi adalah...",opsi:{A:"5 orang",B:"7 orang",C:"9 orang",D:"11 orang"},jawaban:"C",penjelasan:"MK terdiri dari 9 hakim konstitusi: 3 diajukan DPR, 3 diajukan presiden, dan 3 diajukan Mahkamah Agung."},
+    {no:10,pertanyaan:"DPR dapat memberhentikan presiden melalui mekanisme...",opsi:{A:"Interpelasi",B:"Hak angket",C:"Pemakzulan (impeachment)",D:"Mosi tidak percaya"},jawaban:"C",penjelasan:"Pemakzulan adalah proses pemberhentian presiden melalui DPR, kemudian MK memeriksa, dan MPR yang memutuskan."},
+    {no:11,pertanyaan:"Lembaga negara yang bertugas mengawasi perilaku hakim adalah...",opsi:{A:"Mahkamah Agung",B:"Mahkamah Konstitusi",C:"Komisi Yudisial",D:"DPR"},jawaban:"C",penjelasan:"Komisi Yudisial bertugas menjaga kehormatan, keluhuran martabat, dan perilaku hakim agar peradilan tetap bersih dan berwibawa."},
+    {no:12,pertanyaan:"Fungsi DPR yang berkaitan dengan pengawasan pemerintah adalah...",opsi:{A:"Fungsi legislasi",B:"Fungsi anggaran",C:"Fungsi pengawasan",D:"Fungsi yudisial"},jawaban:"C",penjelasan:"DPR memiliki tiga fungsi utama: legislasi (membuat UU), anggaran (menetapkan APBN), dan pengawasan (mengawasi pelaksanaan UU dan kebijakan pemerintah)."},
+    {no:13,pertanyaan:"Kewenangan MK selain judicial review adalah...",opsi:{A:"Membubarkan partai politik dan memutus sengketa pemilu",B:"Membuat undang-undang",C:"Mengangkat hakim agung",D:"Mengawasi keuangan negara"},jawaban:"A",penjelasan:"MK berwenang: menguji UU terhadap UUD, memutus sengketa kewenangan lembaga negara, membubarkan partai politik, dan memutus perselisihan hasil pemilu."},
+    {no:14,pertanyaan:"Lembaga negara yang berfungsi sebagai penyalur aspirasi daerah di tingkat nasional adalah...",opsi:{A:"DPR",B:"MPR",C:"DPD",D:"DPRD"},jawaban:"C",penjelasan:"DPD (Dewan Perwakilan Daerah) dibentuk khusus untuk menyalurkan aspirasi dan kepentingan daerah dalam kebijakan nasional."},
+    {no:15,pertanyaan:"Presiden sebagai kepala negara berwenang menerima...",opsi:{A:"Anggaran negara",B:"Duta besar dan konsul negara asing",C:"Laporan BPK",D:"Rancangan undang-undang dari DPD"},jawaban:"B",penjelasan:"Sebagai kepala negara, presiden berwenang menerima penempatan duta besar negara lain setelah memperhatikan pertimbangan DPR."},
+    {no:16,pertanyaan:"Lembaga peradilan tertinggi dalam perkara kasasi di Indonesia adalah...",opsi:{A:"Mahkamah Konstitusi",B:"Komisi Yudisial",C:"Mahkamah Agung",D:"Pengadilan Tinggi"},jawaban:"C",penjelasan:"Mahkamah Agung (MA) adalah lembaga peradilan tertinggi yang berwenang mengadili perkara kasasi dan menguji peraturan di bawah undang-undang."},
+    {no:17,pertanyaan:"Siapa yang berwenang menetapkan APBN?",opsi:{A:"Presiden bersama DPR",B:"DPR saja",C:"Presiden saja",D:"MPR"},jawaban:"A",penjelasan:"Pasal 23 UUD 1945 menyatakan APBN ditetapkan setiap tahun dengan undang-undang bersama antara presiden dan DPR."},
+    {no:18,pertanyaan:"Hak DPR untuk meminta keterangan kepada pemerintah terkait kebijakan penting disebut hak...",opsi:{A:"Angket",B:"Interpelasi",C:"Menyatakan pendapat",D:"Imunitas"},jawaban:"B",penjelasan:"Hak interpelasi adalah hak DPR untuk meminta keterangan kepada pemerintah mengenai kebijakan penting yang berdampak luas."},
+    {no:19,pertanyaan:"Lembaga negara mana yang berwenang mengangkat dan memberhentikan menteri?",opsi:{A:"DPR",B:"MPR",C:"Presiden",D:"Mahkamah Agung"},jawaban:"C",penjelasan:"Berdasarkan Pasal 17 UUD 1945, presiden berwenang mengangkat dan memberhentikan menteri-menteri negara yang membantunya."},
+    {no:20,pertanyaan:"Kewenangan DPD terbatas pada hal-hal yang berkaitan dengan...",opsi:{A:"Semua undang-undang",B:"Otonomi daerah, hubungan pusat dan daerah, SDA, dan perimbangan keuangan",C:"Kebijakan luar negeri",D:"Pertahanan dan keamanan"},jawaban:"B",penjelasan:"DPD berwenang mengajukan RUU dan memberi pertimbangan terkait otonomi daerah, hubungan pusat-daerah, SDA, dan perimbangan keuangan pusat-daerah."}
   ]},
   6:{pilar:"NKRI",topik:"Konsep dan Hakikat Negara Kesatuan Republik Indonesia",soal:[
-    {no:1,pertanyaan:"Bentuk negara Indonesia berdasarkan Pasal 1 ayat 1 UUD 1945 adalah...",opsi:{A:"Negara serikat",B:"Negara konfederasi",C:"Negara kesatuan",D:"Negara federal"},jawaban:"C",penjelasan:"Pasal 1 ayat (1) UUD 1945: 'Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik.' Ini merupakan salah satu pasal yang tidak dapat diubah."},
-    {no:2,pertanyaan:"Ciri utama negara kesatuan yang membedakannya dari negara federal adalah...",opsi:{A:"Memiliki konstitusi",B:"Hanya ada satu pemerintahan pusat yang berdaulat",C:"Memiliki parlemen",D:"Menggunakan sistem presidensial"},jawaban:"B",penjelasan:"Dalam negara kesatuan, kedaulatan penuh berada di pemerintah pusat. Berbeda dengan negara federal di mana negara-negara bagian memiliki kedaulatan sendiri."},
-    {no:3,pertanyaan:"NKRI diproklamasikan pada tanggal...",opsi:{A:"1 Juni 1945",B:"18 Agustus 1945",C:"17 Agustus 1945",D:"27 Desember 1949"},jawaban:"C",penjelasan:"Proklamasi Kemerdekaan Indonesia dibacakan Soekarno-Hatta pada 17 Agustus 1945 di Jakarta, menandai lahirnya NKRI."},
-    {no:4,pertanyaan:"Sistem pemerintahan yang dianut Indonesia berdasarkan UUD 1945 adalah...",opsi:{A:"Parlementer",B:"Presidensial",C:"Monarki konstitusional",D:"Semi presidensial"},jawaban:"B",penjelasan:"Indonesia menganut sistem presidensial, di mana presiden adalah kepala negara sekaligus kepala pemerintahan, dan tidak bertanggung jawab kepada parlemen."},
-    {no:5,pertanyaan:"Kedaulatan NKRI berada di tangan...",opsi:{A:"Presiden",B:"MPR",C:"Rakyat dan dilaksanakan menurut UUD",D:"DPR"},jawaban:"C",penjelasan:"Pasal 1 ayat (2) UUD 1945 (setelah amandemen): 'Kedaulatan berada di tangan rakyat dan dilaksanakan menurut Undang-Undang Dasar.'"},
-    {no:6,pertanyaan:"Negara Indonesia pernah berbentuk negara federal, yaitu pada saat berlakunya...",opsi:{A:"UUD 1945 periode pertama",B:"Konstitusi RIS",C:"UUDS 1950",D:"Amandemen UUD 1945"},jawaban:"B",penjelasan:"Konstitusi RIS berlaku 27 Desember 1949–17 Agustus 1950. Pada masa ini Indonesia berbentuk federal dengan beberapa negara bagian."},
-    {no:7,pertanyaan:"Ancaman terhadap keutuhan NKRI yang bersifat nirmiliter antara lain...",opsi:{A:"Invasi militer asing",B:"Pemberontakan bersenjata",C:"Radikalisme dan separatisme melalui propaganda",D:"Serangan udara"},jawaban:"C",penjelasan:"Ancaman nirmiliter tidak menggunakan senjata, melainkan melalui ideologi, propaganda, atau gerakan separatisme. Ini sering lebih berbahaya karena sulit terdeteksi."},
-    {no:8,pertanyaan:"Wilayah NKRI mencakup...",opsi:{A:"Hanya daratan",B:"Daratan dan lautan saja",C:"Daratan, lautan, dan udara di atasnya",D:"Daratan sesuai perjanjian kolonial saja"},jawaban:"C",penjelasan:"Wilayah negara secara hukum internasional mencakup tiga dimensi: daratan (termasuk pulau-pulau), lautan (perairan teritorial dan ZEE), dan ruang udara di atasnya."},
-    {no:9,pertanyaan:"Integrasi nasional berarti...",opsi:{A:"Penyeragaman semua suku dan budaya",B:"Proses menyatukan perbedaan menjadi satu kesatuan yang utuh",C:"Penghapusan bahasa daerah",D:"Dominasi satu kelompok atas kelompok lain"},jawaban:"B",penjelasan:"Integrasi nasional adalah proses mempersatukan berbagai perbedaan menjadi satu kesatuan bangsa yang utuh, bukan dengan menyeragamkan atau menghapus keberagaman."},
-    {no:10,pertanyaan:"Warga negara dapat berperan menjaga keutuhan NKRI dengan cara...",opsi:{A:"Memisahkan diri dari kelompok lain",B:"Menolak semua budaya daerah",C:"Menghargai perbedaan dan aktif dalam bela negara",D:"Hanya mematuhi hukum adat"},jawaban:"C",penjelasan:"Bela negara tidak hanya berarti angkat senjata. Setiap warga dapat berkontribusi dengan menghargai perbedaan, menjaga persatuan, dan berpartisipasi aktif dalam pembangunan."}
+    {no:1,pertanyaan:"Bentuk negara Indonesia berdasarkan Pasal 1 ayat 1 UUD 1945 adalah...",opsi:{A:"Negara serikat",B:"Negara konfederasi",C:"Negara kesatuan",D:"Negara federal"},jawaban:"C",penjelasan:"Pasal 1 ayat (1) UUD 1945 secara tegas menyatakan Indonesia adalah negara kesatuan yang berbentuk republik."},
+    {no:2,pertanyaan:"Ciri utama negara kesatuan yang membedakannya dari negara federal adalah...",opsi:{A:"Memiliki konstitusi",B:"Hanya ada satu pemerintahan pusat yang berdaulat",C:"Memiliki parlemen",D:"Menggunakan sistem presidensial"},jawaban:"B",penjelasan:"Dalam negara kesatuan hanya ada satu pemerintahan pusat yang berdaulat, berbeda dengan negara federal yang membagi kedaulatan."},
+    {no:3,pertanyaan:"NKRI diproklamasikan pada tanggal...",opsi:{A:"1 Juni 1945",B:"18 Agustus 1945",C:"17 Agustus 1945",D:"27 Desember 1949"},jawaban:"C",penjelasan:"Proklamasi Kemerdekaan Indonesia dibacakan Soekarno-Hatta pada 17 Agustus 1945, menandai lahirnya NKRI."},
+    {no:4,pertanyaan:"Sistem pemerintahan yang dianut Indonesia adalah...",opsi:{A:"Parlementer",B:"Presidensial",C:"Monarki konstitusional",D:"Semi presidensial"},jawaban:"B",penjelasan:"Indonesia menganut sistem presidensial di mana presiden adalah kepala negara sekaligus kepala pemerintahan, tidak bertanggung jawab kepada parlemen."},
+    {no:5,pertanyaan:"Kedaulatan NKRI berada di tangan...",opsi:{A:"Presiden",B:"MPR",C:"Rakyat dan dilaksanakan menurut UUD",D:"DPR"},jawaban:"C",penjelasan:"Pasal 1 ayat (2) UUD 1945 hasil amandemen: 'Kedaulatan berada di tangan rakyat dan dilaksanakan menurut Undang-Undang Dasar.'"},
+    {no:6,pertanyaan:"Indonesia pernah berbentuk negara federal saat berlakunya...",opsi:{A:"UUD 1945 periode pertama",B:"Konstitusi RIS",C:"UUDS 1950",D:"Amandemen UUD 1945"},jawaban:"B",penjelasan:"Konstitusi RIS (27 Desember 1949–17 Agustus 1950) mengatur Indonesia sebagai negara federal dengan beberapa negara bagian."},
+    {no:7,pertanyaan:"Ancaman nirmiliter terhadap keutuhan NKRI antara lain...",opsi:{A:"Invasi militer asing",B:"Pemberontakan bersenjata",C:"Radikalisme dan separatisme melalui propaganda",D:"Serangan udara"},jawaban:"C",penjelasan:"Ancaman nirmiliter tidak menggunakan senjata namun melalui ideologi, propaganda, atau gerakan separatisme yang dapat merusak persatuan."},
+    {no:8,pertanyaan:"Wilayah NKRI mencakup...",opsi:{A:"Hanya daratan",B:"Daratan dan lautan saja",C:"Daratan, lautan, dan udara di atasnya",D:"Daratan sesuai perjanjian kolonial saja"},jawaban:"C",penjelasan:"Wilayah NKRI mencakup tiga dimensi: daratan, lautan (perairan teritorial dan ZEE), dan ruang udara di atasnya."},
+    {no:9,pertanyaan:"Integrasi nasional berarti...",opsi:{A:"Penyeragaman semua suku dan budaya",B:"Proses menyatukan perbedaan menjadi satu kesatuan yang utuh",C:"Penghapusan bahasa daerah",D:"Dominasi satu kelompok atas kelompok lain"},jawaban:"B",penjelasan:"Integrasi nasional adalah proses mempersatukan berbagai perbedaan menjadi satu kesatuan bangsa yang utuh tanpa menghapus keberagaman."},
+    {no:10,pertanyaan:"Warga negara dapat menjaga keutuhan NKRI dengan cara...",opsi:{A:"Memisahkan diri dari kelompok lain",B:"Menolak semua budaya daerah",C:"Menghargai perbedaan dan aktif dalam bela negara",D:"Hanya mematuhi hukum adat"},jawaban:"C",penjelasan:"Bela negara tidak hanya angkat senjata. Menghargai perbedaan, menjaga persatuan, dan berpartisipasi aktif dalam pembangunan juga merupakan bela negara."},
+    {no:11,pertanyaan:"Salah satu faktor penghambat integrasi nasional adalah...",opsi:{A:"Rasa cinta tanah air yang tinggi",B:"Semangat gotong royong",C:"Fanatisme sempit dan primordialisme berlebihan",D:"Penggunaan bahasa Indonesia"},jawaban:"C",penjelasan:"Fanatisme sempit dan primordialisme berlebihan (mengutamakan kelompok sendiri secara berlebihan) menghambat terwujudnya integrasi nasional."},
+    {no:12,pertanyaan:"Konsep wawasan nusantara dalam konteks NKRI memandang Indonesia sebagai...",opsi:{A:"Kumpulan daerah yang terpisah",B:"Satu kesatuan wilayah yang utuh",C:"Negara kepulauan yang masing-masing otonom",D:"Federasi pulau-pulau besar"},jawaban:"B",penjelasan:"Wawasan nusantara memandang Indonesia sebagai satu kesatuan wilayah yang utuh dalam aspek politik, ekonomi, sosial-budaya, dan pertahanan-keamanan."},
+    {no:13,pertanyaan:"Semboyan NKRI yang terdapat dalam lambang negara Garuda Pancasila adalah...",opsi:{A:"Pancasila",B:"Bhinneka Tunggal Ika",C:"Bhineka Nusantara",D:"NKRI Harga Mati"},jawaban:"B",penjelasan:"Semboyan 'Bhinneka Tunggal Ika' terdapat pada pita yang dicengkeram Garuda Pancasila, merupakan semboyan resmi NKRI."},
+    {no:14,pertanyaan:"Salah satu tantangan terbesar NKRI di era globalisasi adalah...",opsi:{A:"Terlalu banyak sumber daya alam",B:"Masuknya paham radikal dan separatisme melalui teknologi informasi",C:"Kurangnya jumlah penduduk",D:"Terlalu banyak pulau"},jawaban:"B",penjelasan:"Di era globalisasi, masuknya paham radikal dan gerakan separatisme melalui internet dan media sosial menjadi tantangan serius bagi keutuhan NKRI."},
+    {no:15,pertanyaan:"Pasal UUD 1945 yang secara eksplisit menyebut bentuk negara kesatuan adalah...",opsi:{A:"Pasal 1 ayat 1",B:"Pasal 1 ayat 2",C:"Pasal 18",D:"Pasal 37"},jawaban:"A",penjelasan:"Pasal 1 ayat (1) UUD 1945 menyatakan: 'Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik.'"},
+    {no:16,pertanyaan:"Bela negara dapat dilakukan oleh warga sipil melalui...",opsi:{A:"Hanya dengan menjadi tentara",B:"Pendidikan kewarganegaraan, menjaga ketertiban, dan cinta produk dalam negeri",C:"Hanya dengan membayar pajak",D:"Tidak perlu, cukup tentara saja"},jawaban:"B",penjelasan:"Bela negara dapat dilakukan warga sipil melalui pendidikan kewarganegaraan, menjaga ketertiban masyarakat, mencintai produk dalam negeri, dan menjaga persatuan bangsa."},
+    {no:17,pertanyaan:"Pasal berapa UUD 1945 yang mengatur tentang lambang negara?",opsi:{A:"Pasal 35",B:"Pasal 36A",C:"Pasal 36B",D:"Pasal 36C"},jawaban:"B",penjelasan:"Pasal 36A UUD 1945 menyatakan lambang negara ialah Garuda Pancasila dengan semboyan Bhinneka Tunggal Ika."},
+    {no:18,pertanyaan:"NKRI menganut asas desentralisasi yang berarti...",opsi:{A:"Semua urusan ditangani pusat",B:"Penyerahan sebagian urusan pemerintahan kepada daerah",C:"Daerah sepenuhnya mandiri",D:"Pusat tidak ikut campur urusan daerah"},jawaban:"B",penjelasan:"Desentralisasi berarti penyerahan sebagian urusan pemerintahan dari pusat kepada daerah untuk meningkatkan efektivitas pelayanan publik."},
+    {no:19,pertanyaan:"Negara kepulauan (archipelagic state) Indonesia diakui secara internasional melalui...",opsi:{A:"Deklarasi Djuanda 1957 dan UNCLOS 1982",B:"Proklamasi 1945",C:"Konstitusi RIS 1949",D:"Amandemen UUD 1945"},jawaban:"A",penjelasan:"Konsep negara kepulauan Indonesia diawali Deklarasi Djuanda 1957 dan diakui secara internasional melalui UNCLOS 1982."},
+    {no:20,pertanyaan:"Makna NKRI sebagai 'harga mati' menunjukkan bahwa...",opsi:{A:"Bentuk negara dapat berubah menjadi federal",B:"Keutuhan wilayah dan bentuk negara kesatuan tidak dapat ditawar",C:"NKRI hanya untuk sementara",D:"Daerah boleh memisahkan diri jika tidak puas"},jawaban:"B",penjelasan:"NKRI 'harga mati' berarti keutuhan wilayah dan bentuk negara kesatuan adalah sesuatu yang tidak dapat dikompromikan atau diganti dengan bentuk negara lain."}
   ]},
   7:{pilar:"NKRI",topik:"Wawasan Nusantara dan Ketahanan Nasional",soal:[
-    {no:1,pertanyaan:"Wawasan Nusantara adalah cara pandang bangsa Indonesia yang berpijak pada...",opsi:{A:"Hukum internasional",B:"Pancasila dan UUD 1945",C:"Hukum adat",D:"Perjanjian bilateral"},jawaban:"B",penjelasan:"Wawasan Nusantara berlandaskan Pancasila sebagai falsafah dan UUD 1945 sebagai konstitusi. Cara pandang ini memandang Indonesia sebagai satu kesatuan wilayah, bangsa, ekonomi, sosial-budaya, dan pertahanan-keamanan."},
-    {no:2,pertanyaan:"Deklarasi Djuanda 1957 menyatakan bahwa laut di antara pulau-pulau Indonesia adalah...",opsi:{A:"Laut internasional",B:"Bagian wilayah perairan asing",C:"Bagian wilayah kedaulatan Indonesia",D:"Zona ekonomi eksklusif"},jawaban:"C",penjelasan:"Deklarasi Djuanda (13 Desember 1957) menyatakan laut di antara pulau-pulau Indonesia adalah bagian NKRI, menjadi tonggak konsep negara kepulauan (archipelago state)."},
-    {no:3,pertanyaan:"UNCLOS 1982 memberikan hak Indonesia atas zona ekonomi eksklusif sejauh...",opsi:{A:"12 mil laut",B:"24 mil laut",C:"200 mil laut",D:"500 mil laut"},jawaban:"C",penjelasan:"UNCLOS menetapkan ZEE sejauh 200 mil laut dari garis pangkal. Di ZEE ini Indonesia berhak atas sumber daya alam laut meskipun kapal asing boleh melintas."},
-    {no:4,pertanyaan:"Ketahanan nasional dalam konteks Indonesia mencakup aspek...",opsi:{A:"Militer saja",B:"Ekonomi saja",C:"IPOLEKSOSBUD-HANKAM secara menyeluruh",D:"Sosial dan budaya saja"},jawaban:"C",penjelasan:"Ketahanan nasional Indonesia bersifat komprehensif, mencakup Ideologi, Politik, Ekonomi, Sosial, Budaya, Pertahanan, dan Keamanan (IPOLEKSOSBUD-HANKAM) sebagai satu kesatuan utuh."},
-    {no:5,pertanyaan:"Yang termasuk gatra alamiah dalam konsep Asta Gatra ketahanan nasional adalah...",opsi:{A:"Politik, ekonomi, sosial",B:"Geografi, demografi, sumber daya alam",C:"Ideologi, budaya, hankam",D:"IPTEK, ekonomi, hukum"},jawaban:"B",penjelasan:"Asta Gatra terdiri dari Tri Gatra (alamiah: geografi, demografi, SDA) dan Panca Gatra (sosial: ideologi, politik, ekonomi, sosial-budaya, hankam)."},
-    {no:6,pertanyaan:"Ketahanan nasional bersifat dinamis artinya...",opsi:{A:"Tidak pernah berubah",B:"Dapat ditingkatkan dan disesuaikan dengan perkembangan zaman",C:"Bergantung pada kekuatan militer",D:"Hanya berlaku saat perang"},jawaban:"B",penjelasan:"Ketahanan nasional dinamis karena tingkatannya bisa naik-turun sesuai kondisi dan tantangan bangsa. Perlu terus dibina dan ditingkatkan menghadapi berbagai ancaman yang terus berkembang."},
-    {no:7,pertanyaan:"Wawasan nusantara bertujuan mewujudkan nasionalisme yang mengutamakan...",opsi:{A:"Kepentingan pribadi",B:"Kepentingan daerah",C:"Kepentingan nasional",D:"Kepentingan golongan"},jawaban:"C",penjelasan:"Wawasan nusantara mendorong setiap warga negara mendahulukan kepentingan nasional di atas kepentingan pribadi, daerah, maupun golongan demi kemajuan bangsa."},
-    {no:8,pertanyaan:"Implementasi wawasan nusantara di bidang ekonomi adalah...",opsi:{A:"Mengutamakan produk asing",B:"Meratakan pembangunan ke seluruh pelosok nusantara",C:"Hanya membangun Pulau Jawa",D:"Mengeksploitasi SDA untuk kepentingan asing"},jawaban:"B",penjelasan:"Wawasan nusantara di bidang ekonomi berarti memandang seluruh wilayah sebagai satu kesatuan ekonomi, sehingga pembangunan dan pemerataan harus menjangkau seluruh pelosok nusantara."},
-    {no:9,pertanyaan:"Ancaman terhadap ketahanan nasional yang berasal dari luar negeri disebut ancaman...",opsi:{A:"Nirmiliter",B:"Eksternal",C:"Internal",D:"Hibrida"},jawaban:"B",penjelasan:"Ancaman eksternal berasal dari luar negeri (agresi militer, spionase, tekanan diplomatik). Ancaman internal berasal dari dalam negeri seperti separatisme, korupsi, dan konflik sosial."},
-    {no:10,pertanyaan:"Konsep geopolitik Indonesia dalam wawasan nusantara berbeda dari geopolitik Barat karena...",opsi:{A:"Indonesia tidak memiliki wilayah laut",B:"Indonesia berfokus pada ekspansi wilayah",C:"Indonesia mengutamakan persatuan dan perdamaian bukan ekspansionisme",D:"Indonesia meniru konsep Lebensraum"},jawaban:"C",penjelasan:"Geopolitik Barat (Lebensraum) mendorong ekspansi wilayah. Wawasan nusantara justru bertujuan mempertahankan keutuhan wilayah yang sudah ada dan mendorong perdamaian regional."}
+    {no:1,pertanyaan:"Wawasan Nusantara berlandaskan...",opsi:{A:"Hukum internasional",B:"Pancasila dan UUD 1945",C:"Hukum adat",D:"Perjanjian bilateral"},jawaban:"B",penjelasan:"Wawasan Nusantara berlandaskan Pancasila sebagai falsafah dan UUD 1945 sebagai konstitusi, memandang Indonesia sebagai satu kesatuan utuh."},
+    {no:2,pertanyaan:"Deklarasi Djuanda 1957 menyatakan laut di antara pulau-pulau Indonesia adalah...",opsi:{A:"Laut internasional",B:"Bagian wilayah perairan asing",C:"Bagian wilayah kedaulatan Indonesia",D:"Zona ekonomi eksklusif"},jawaban:"C",penjelasan:"Deklarasi Djuanda menyatakan laut di antara pulau-pulau Indonesia adalah wilayah NKRI, menjadi tonggak konsep negara kepulauan."},
+    {no:3,pertanyaan:"UNCLOS 1982 memberikan hak ZEE Indonesia sejauh...",opsi:{A:"12 mil laut",B:"24 mil laut",C:"200 mil laut",D:"500 mil laut"},jawaban:"C",penjelasan:"UNCLOS menetapkan ZEE sejauh 200 mil laut dari garis pangkal. Indonesia berhak atas sumber daya alam di ZEE tersebut."},
+    {no:4,pertanyaan:"Ketahanan nasional Indonesia mencakup aspek...",opsi:{A:"Militer saja",B:"Ekonomi saja",C:"IPOLEKSOSBUD-HANKAM secara menyeluruh",D:"Sosial dan budaya saja"},jawaban:"C",penjelasan:"Ketahanan nasional Indonesia bersifat komprehensif mencakup Ideologi, Politik, Ekonomi, Sosial, Budaya, Pertahanan, dan Keamanan."},
+    {no:5,pertanyaan:"Yang termasuk gatra alamiah dalam Asta Gatra adalah...",opsi:{A:"Politik, ekonomi, sosial",B:"Geografi, demografi, sumber daya alam",C:"Ideologi, budaya, hankam",D:"IPTEK, ekonomi, hukum"},jawaban:"B",penjelasan:"Tri Gatra (gatra alamiah) terdiri dari geografi, demografi, dan SDA. Panca Gatra (sosial) meliputi ideologi, politik, ekonomi, sosial-budaya, hankam."},
+    {no:6,pertanyaan:"Ketahanan nasional bersifat dinamis artinya...",opsi:{A:"Tidak pernah berubah",B:"Dapat ditingkatkan dan disesuaikan dengan perkembangan zaman",C:"Bergantung pada kekuatan militer",D:"Hanya berlaku saat perang"},jawaban:"B",penjelasan:"Ketahanan nasional dinamis karena tingkatannya bisa naik-turun sesuai kondisi dan tantangan yang dihadapi bangsa."},
+    {no:7,pertanyaan:"Wawasan nusantara mengutamakan kepentingan...",opsi:{A:"Pribadi",B:"Daerah",C:"Nasional",D:"Golongan"},jawaban:"C",penjelasan:"Wawasan nusantara mendorong mendahulukan kepentingan nasional di atas kepentingan pribadi, daerah, maupun golongan."},
+    {no:8,pertanyaan:"Implementasi wawasan nusantara di bidang ekonomi adalah...",opsi:{A:"Mengutamakan produk asing",B:"Meratakan pembangunan ke seluruh pelosok nusantara",C:"Hanya membangun Pulau Jawa",D:"Mengeksploitasi SDA untuk kepentingan asing"},jawaban:"B",penjelasan:"Wawasan nusantara di bidang ekonomi berarti pemerataan pembangunan dan hasil-hasilnya ke seluruh pelosok nusantara."},
+    {no:9,pertanyaan:"Ancaman dari luar negeri terhadap ketahanan nasional disebut...",opsi:{A:"Nirmiliter",B:"Eksternal",C:"Internal",D:"Hibrida"},jawaban:"B",penjelasan:"Ancaman eksternal berasal dari luar negeri seperti agresi militer, spionase, atau tekanan diplomatik yang mengancam kedaulatan."},
+    {no:10,pertanyaan:"Konsep geopolitik Indonesia berbeda dari Barat karena...",opsi:{A:"Indonesia tidak memiliki wilayah laut",B:"Indonesia berfokus pada ekspansi wilayah",C:"Indonesia mengutamakan persatuan dan perdamaian bukan ekspansionisme",D:"Indonesia meniru konsep Lebensraum"},jawaban:"C",penjelasan:"Wawasan nusantara bertujuan mempertahankan keutuhan wilayah yang sudah ada dan mendorong perdamaian, bukan ekspansi seperti geopolitik Barat."},
+    {no:11,pertanyaan:"Konsep 'ketahanan nasional' Indonesia pertama kali dikembangkan oleh lembaga...",opsi:{A:"Kementerian Pertahanan",B:"TNI",C:"Lemhanas (Lembaga Ketahanan Nasional)",D:"DPR"},jawaban:"C",penjelasan:"Lemhanas (Lembaga Ketahanan Nasional) mengembangkan konsep ketahanan nasional Indonesia sebagai landasan pertahanan yang komprehensif."},
+    {no:12,pertanyaan:"Laut teritorial Indonesia berdasarkan UNCLOS adalah sejauh...",opsi:{A:"3 mil laut",B:"6 mil laut",C:"12 mil laut",D:"24 mil laut"},jawaban:"C",penjelasan:"UNCLOS 1982 menetapkan laut teritorial sejauh 12 mil laut dari garis pangkal. Di wilayah ini negara memiliki kedaulatan penuh."},
+    {no:13,pertanyaan:"Asas wawasan nusantara yang berkaitan dengan keserasian tujuan dan cara mencapainya adalah...",opsi:{A:"Solidaritas",B:"Kejujuran",C:"Keselarasan",D:"Kesetiaan"},jawaban:"C",penjelasan:"Asas keselarasan dalam wawasan nusantara menekankan adanya keserasian dan keseimbangan antara tujuan yang ingin dicapai dan cara mencapainya."},
+    {no:14,pertanyaan:"Panca Gatra dalam konsep Asta Gatra ketahanan nasional meliputi...",opsi:{A:"Geografi, demografi, SDA, ideologi, politik",B:"Ideologi, politik, ekonomi, sosial-budaya, hankam",C:"Militer, ekonomi, politik, hukum, budaya",D:"Teknologi, sumber daya, manusia, wilayah, pemerintah"},jawaban:"B",penjelasan:"Panca Gatra (gatra sosial) meliputi ideologi, politik, ekonomi, sosial-budaya, dan hankam (pertahanan dan keamanan)."},
+    {no:15,pertanyaan:"Pengaruh negatif globalisasi terhadap ketahanan nasional di bidang budaya adalah...",opsi:{A:"Meningkatnya pertukaran pelajar",B:"Masuknya budaya asing yang bertentangan dengan nilai lokal",C:"Peningkatan pariwisata",D:"Kerja sama ekonomi internasional"},jawaban:"B",penjelasan:"Globalisasi membawa risiko masuknya budaya asing yang bertentangan dengan nilai-nilai lokal, melemahkan identitas dan ketahanan budaya nasional."},
+    {no:16,pertanyaan:"Zona tambahan (contiguous zone) Indonesia berdasarkan UNCLOS adalah sejauh...",opsi:{A:"12 mil laut",B:"24 mil laut",C:"200 mil laut",D:"350 mil laut"},jawaban:"B",penjelasan:"Zona tambahan (contiguous zone) adalah 24 mil laut dari garis pangkal. Di zona ini negara berhak menegakkan hukum bea cukai, imigrasi, dan kesehatan."},
+    {no:17,pertanyaan:"Deklarasi Djuanda dikeluarkan pada masa kepemimpinan Perdana Menteri...",opsi:{A:"Soekarno",B:"Mohammad Hatta",C:"Djuanda Kartawidjaja",D:"Ali Sastroamidjojo"},jawaban:"C",penjelasan:"Deklarasi Djuanda dikeluarkan pada 13 Desember 1957 oleh PM Djuanda Kartawidjaja, menyatakan bahwa laut di antara pulau-pulau Indonesia adalah wilayah NKRI."},
+    {no:18,pertanyaan:"Konsep 'total war' dalam ketahanan nasional berarti...",opsi:{A:"Perang militer skala besar",B:"Pertahanan yang melibatkan seluruh komponen bangsa secara terpadu",C:"Serangan mendadak ke negara musuh",D:"Perang yang menggunakan senjata nuklir"},jawaban:"B",penjelasan:"Konsep pertahanan total (total defence) berarti seluruh komponen bangsa — militer, sipil, sumber daya alam, dan teknologi — terlibat dalam pertahanan negara."},
+    {no:19,pertanyaan:"Implementasi wawasan nusantara di bidang politik adalah...",opsi:{A:"Mengutamakan kepentingan partai",B:"Mewujudkan persatuan dan kesatuan dalam kehidupan politik nasional",C:"Membatasi partisipasi rakyat",D:"Mendukung satu partai politik saja"},jawaban:"B",penjelasan:"Wawasan nusantara di bidang politik berarti mewujudkan persatuan dan kesatuan dalam kehidupan politik nasional yang demokratis berdasarkan Pancasila dan UUD 1945."},
+    {no:20,pertanyaan:"Ancaman hibrida (hybrid threat) terhadap ketahanan nasional adalah...",opsi:{A:"Hanya ancaman militer konvensional",B:"Kombinasi ancaman militer, nirmiliter, siber, dan propaganda sekaligus",C:"Hanya ancaman terorisme",D:"Hanya ancaman ekonomi"},jawaban:"B",penjelasan:"Ancaman hibrida adalah kombinasi berbagai jenis ancaman (militer, nirmiliter, siber, propaganda) yang dilakukan secara bersamaan untuk melemahkan ketahanan nasional."}
   ]},
   8:{pilar:"NKRI",topik:"Otonomi Daerah dalam Bingkai NKRI",soal:[
-    {no:1,pertanyaan:"Undang-undang yang menjadi dasar hukum otonomi daerah yang berlaku saat ini adalah...",opsi:{A:"UU No. 5 Tahun 1974",B:"UU No. 22 Tahun 1999",C:"UU No. 23 Tahun 2014",D:"UU No. 32 Tahun 2004"},jawaban:"C",penjelasan:"UU No. 23 Tahun 2014 tentang Pemerintahan Daerah adalah regulasi terkini otonomi daerah, lebih mempertegas pembagian urusan antara pusat, provinsi, dan kabupaten/kota."},
-    {no:2,pertanyaan:"Tujuan utama pelaksanaan otonomi daerah adalah...",opsi:{A:"Melemahkan pemerintah pusat",B:"Mempercepat kesejahteraan masyarakat dan peningkatan pelayanan publik",C:"Membentuk negara federal",D:"Memisahkan kekuasaan pusat dan daerah sepenuhnya"},jawaban:"B",penjelasan:"Otonomi daerah bertujuan mendekatkan pelayanan kepada masyarakat sehingga lebih efektif dan efisien, serta mempercepat kesejahteraan melalui pemberdayaan potensi daerah."},
-    {no:3,pertanyaan:"Urusan yang TIDAK dapat diserahkan kepada daerah karena merupakan urusan absolut pemerintah pusat adalah...",opsi:{A:"Pendidikan dasar",B:"Kesehatan",C:"Pertahanan dan keamanan",D:"Pariwisata"},jawaban:"C",penjelasan:"Enam urusan absolut pusat: politik luar negeri, pertahanan, keamanan, yustisi, moneter dan fiskal nasional, serta agama. Ini menyangkut kedaulatan dan tidak bisa didesentralisasi."},
-    {no:4,pertanyaan:"Dana yang diberikan pemerintah pusat kepada daerah untuk mendanai kebutuhan umum daerah disebut...",opsi:{A:"APBN",B:"Dana Alokasi Umum (DAU)",C:"Anggaran belanja rutin",D:"Dana hibah internasional"},jawaban:"B",penjelasan:"DAU adalah dana dari APBN yang dialokasikan untuk pemerataan kemampuan keuangan antar daerah. Berbeda dengan DAK yang ditujukan untuk keperluan khusus tertentu."},
-    {no:5,pertanyaan:"Peraturan daerah (Perda) harus sesuai dengan peraturan yang lebih tinggi berdasarkan asas...",opsi:{A:"Desentralisasi",B:"Lex Specialis",C:"Hierarki peraturan perundang-undangan",D:"Lex Posterior"},jawaban:"C",penjelasan:"Hierarki peraturan perundang-undangan (UU No.12/2011): UUD → Tap MPR → UU/Perppu → PP → Perpres → Perda Provinsi → Perda Kab/Kota. Perda tidak boleh bertentangan dengan yang di atasnya."},
-    {no:6,pertanyaan:"Daerah Istimewa Yogyakarta mendapat status istimewa berdasarkan...",opsi:{A:"Perjanjian internasional",B:"UU No. 13 Tahun 2012 tentang Keistimewaan DIY",C:"Keputusan presiden",D:"Dekret sultan"},jawaban:"B",penjelasan:"Status istimewa DIY diatur melalui UU No. 13 Tahun 2012, mencakup tata cara pengisian jabatan gubernur dan wakil gubernur yang merupakan Sultan dan Adipati Paku Alam."},
-    {no:7,pertanyaan:"Kepala daerah di tingkat kabupaten/kota disebut...",opsi:{A:"Gubernur",B:"Bupati/Walikota",C:"Camat",D:"Lurah"},jawaban:"B",penjelasan:"Gubernur memimpin provinsi, bupati memimpin kabupaten, walikota memimpin kota. Camat dan lurah bukan kepala daerah otonom, melainkan perangkat pemerintah daerah."},
-    {no:8,pertanyaan:"Salah satu dampak negatif otonomi daerah yang perlu diwaspadai adalah...",opsi:{A:"Peningkatan pelayanan publik",B:"Munculnya korupsi di tingkat daerah dan primordialisme sempit",C:"Pemerataan pembangunan",D:"Penguatan demokrasi lokal"},jawaban:"B",penjelasan:"Otonomi daerah membuka peluang korupsi anggaran daerah jika pengawasan lemah. Primordialisme (mengutamakan suku/daerah sendiri) dalam rekrutmen jabatan juga menjadi tantangan serius."},
-    {no:9,pertanyaan:"Prinsip otonomi seluas-luasnya berarti...",opsi:{A:"Daerah bebas membuat hukum yang bertentangan dengan pusat",B:"Daerah mendapat kewenangan luas kecuali yang ditentukan sebagai urusan pusat",C:"Pusat tidak boleh campur tangan sama sekali",D:"Daerah boleh memisahkan diri"},jawaban:"B",penjelasan:"Otonomi seluas-luasnya berarti daerah mendapat kewenangan mengurus hampir semua urusan, kecuali enam urusan absolut pusat. Ini bukan berarti daerah bebas tanpa batas."},
-    {no:10,pertanyaan:"Dalam sistem otonomi daerah Indonesia, hubungan antara pemerintah pusat dan daerah bersifat...",opsi:{A:"Terputus sama sekali",B:"Hirarkis dan koordinatif",C:"Setara penuh tanpa koordinasi",D:"Daerah menentukan pusat"},jawaban:"B",penjelasan:"Hubungan pusat-daerah bersifat hirarkis (pusat di atas dalam kebijakan nasional) sekaligus koordinatif (keduanya bekerja sama mencapai tujuan pembangunan nasional)."}
+    {no:1,pertanyaan:"UU dasar hukum otonomi daerah yang berlaku saat ini adalah...",opsi:{A:"UU No. 5 Tahun 1974",B:"UU No. 22 Tahun 1999",C:"UU No. 23 Tahun 2014",D:"UU No. 32 Tahun 2004"},jawaban:"C",penjelasan:"UU No. 23 Tahun 2014 tentang Pemerintahan Daerah adalah dasar hukum otonomi daerah terkini yang mempertegas pembagian urusan."},
+    {no:2,pertanyaan:"Tujuan utama otonomi daerah adalah...",opsi:{A:"Melemahkan pemerintah pusat",B:"Mempercepat kesejahteraan masyarakat dan peningkatan pelayanan publik",C:"Membentuk negara federal",D:"Memisahkan kekuasaan pusat dan daerah sepenuhnya"},jawaban:"B",penjelasan:"Otonomi daerah bertujuan mendekatkan pelayanan kepada masyarakat dan mempercepat kesejahteraan melalui pemberdayaan potensi daerah."},
+    {no:3,pertanyaan:"Urusan absolut pemerintah pusat yang tidak dapat diserahkan ke daerah adalah...",opsi:{A:"Pendidikan dasar",B:"Kesehatan",C:"Pertahanan dan keamanan",D:"Pariwisata"},jawaban:"C",penjelasan:"Enam urusan absolut pusat meliputi: politik luar negeri, pertahanan, keamanan, yustisi, moneter dan fiskal nasional, serta agama."},
+    {no:4,pertanyaan:"Dana dari APBN untuk pemerataan kemampuan keuangan antar daerah disebut...",opsi:{A:"APBN",B:"Dana Alokasi Umum (DAU)",C:"Anggaran belanja rutin",D:"Dana hibah internasional"},jawaban:"B",penjelasan:"DAU (Dana Alokasi Umum) dialokasikan dari APBN untuk pemerataan kemampuan keuangan antar daerah dalam mendanai pemerintahan."},
+    {no:5,pertanyaan:"Perda harus sesuai peraturan yang lebih tinggi berdasarkan asas...",opsi:{A:"Desentralisasi",B:"Lex Specialis",C:"Hierarki peraturan perundang-undangan",D:"Lex Posterior"},jawaban:"C",penjelasan:"Asas hierarki peraturan perundang-undangan mengatur bahwa perda tidak boleh bertentangan dengan peraturan yang lebih tinggi (UU, PP, Perpres)."},
+    {no:6,pertanyaan:"DIY mendapat status istimewa berdasarkan...",opsi:{A:"Perjanjian internasional",B:"UU No. 13 Tahun 2012 tentang Keistimewaan DIY",C:"Keputusan presiden",D:"Dekret sultan"},jawaban:"B",penjelasan:"UU No. 13 Tahun 2012 secara resmi mengatur keistimewaan DIY, termasuk tata cara pengisian jabatan gubernur dan wagub."},
+    {no:7,pertanyaan:"Kepala daerah di tingkat kabupaten/kota disebut...",opsi:{A:"Gubernur",B:"Bupati/Walikota",C:"Camat",D:"Lurah"},jawaban:"B",penjelasan:"Bupati memimpin kabupaten dan walikota memimpin kota. Gubernur memimpin provinsi. Camat dan lurah adalah perangkat, bukan kepala daerah otonom."},
+    {no:8,pertanyaan:"Dampak negatif otonomi daerah yang perlu diwaspadai adalah...",opsi:{A:"Peningkatan pelayanan publik",B:"Munculnya korupsi di tingkat daerah dan primordialisme sempit",C:"Pemerataan pembangunan",D:"Penguatan demokrasi lokal"},jawaban:"B",penjelasan:"Korupsi anggaran daerah dan primordialisme (mengutamakan suku/daerah sendiri) dalam rekrutmen jabatan adalah dampak negatif yang perlu diwaspadai."},
+    {no:9,pertanyaan:"Prinsip otonomi seluas-luasnya berarti...",opsi:{A:"Daerah bebas membuat hukum bertentangan dengan pusat",B:"Daerah mendapat kewenangan luas kecuali urusan pusat",C:"Pusat tidak boleh campur tangan",D:"Daerah boleh memisahkan diri"},jawaban:"B",penjelasan:"Otonomi seluas-luasnya berarti daerah mendapat kewenangan luas mengurus hampir semua urusan, kecuali enam urusan absolut pusat."},
+    {no:10,pertanyaan:"Hubungan pemerintah pusat dan daerah dalam otonomi bersifat...",opsi:{A:"Terputus sama sekali",B:"Hirarkis dan koordinatif",C:"Setara penuh tanpa koordinasi",D:"Daerah menentukan pusat"},jawaban:"B",penjelasan:"Hubungan pusat-daerah bersifat hirarkis dalam kebijakan nasional sekaligus koordinatif dalam pencapaian tujuan pembangunan bersama."},
+    {no:11,pertanyaan:"Dana Alokasi Khusus (DAK) berbeda dari DAU karena...",opsi:{A:"DAK lebih besar jumlahnya",B:"DAK diperuntukkan bagi kebutuhan khusus tertentu yang ditetapkan pusat",C:"DAK hanya untuk provinsi",D:"DAK berasal dari pajak daerah"},jawaban:"B",penjelasan:"DAK diperuntukkan untuk mendanai kegiatan khusus sesuai prioritas nasional yang tidak dapat dibiayai dari APBD, berbeda dengan DAU yang bersifat umum."},
+    {no:12,pertanyaan:"Asas dekonsentrasi dalam otonomi daerah berarti...",opsi:{A:"Penyerahan urusan kepada daerah otonom",B:"Pelimpahan wewenang dari pusat kepada aparatur pusat di daerah",C:"Pemberian tugas kepada daerah untuk melaksanakan kebijakan pusat",D:"Kerjasama antar daerah"},jawaban:"B",penjelasan:"Dekonsentrasi adalah pelimpahan wewenang dari pemerintah pusat kepada gubernur sebagai wakil pemerintah pusat di daerah."},
+    {no:13,pertanyaan:"Daerah otonom khusus yang memiliki status berbeda selain DIY adalah...",opsi:{A:"DKI Jakarta dan Aceh",B:"Jawa Barat dan Jawa Tengah",C:"Bali dan Nusa Tenggara",D:"Sulawesi dan Kalimantan"},jawaban:"A",penjelasan:"Selain DIY, daerah dengan status khusus/istimewa lainnya adalah DKI Jakarta (ibu kota) dan Aceh (berkaitan dengan pelaksanaan syariat Islam)."},
+    {no:14,pertanyaan:"Tugas pembantuan dalam otonomi daerah berarti...",opsi:{A:"Penyerahan urusan penuh kepada daerah",B:"Penugasan dari pemerintah pusat kepada daerah untuk melaksanakan tugas tertentu",C:"Kerja sama antar daerah",D:"Pelimpahan wewenang kepada gubernur"},jawaban:"B",penjelasan:"Tugas pembantuan (medebewind) adalah penugasan dari pemerintah pusat kepada daerah untuk melaksanakan tugas tertentu disertai pembiayaan, sarana, dan SDM."},
+    {no:15,pertanyaan:"Berapa tingkatan pemerintahan daerah di Indonesia?",opsi:{A:"1 tingkat (provinsi saja)",B:"2 tingkat (provinsi dan kabupaten/kota)",C:"3 tingkat (provinsi, kabupaten/kota, kecamatan)",D:"4 tingkat"},jawaban:"B",penjelasan:"Indonesia memiliki dua tingkatan pemerintahan daerah otonom: provinsi dan kabupaten/kota. Kecamatan dan kelurahan/desa bukan daerah otonom."},
+    {no:16,pertanyaan:"Pengawasan terhadap penyelenggaraan pemerintahan daerah dilakukan oleh...",opsi:{A:"Hanya masyarakat",B:"Kemendagri dan DPRD setempat",C:"Pemerintah asing",D:"Swasta"},jawaban:"B",penjelasan:"Pengawasan pemerintahan daerah dilakukan oleh Kementerian Dalam Negeri (pengawasan administratif) dan DPRD (pengawasan politik di daerah)."},
+    {no:17,pertanyaan:"Kepala desa dipilih melalui...",opsi:{A:"Penunjukan gubernur",B:"Pemilihan langsung oleh masyarakat desa",C:"Keputusan bupati",D:"Pemilihan oleh DPRD"},jawaban:"B",penjelasan:"Kepala desa dipilih langsung oleh masyarakat desa melalui pemilihan kepala desa (pilkades), mencerminkan demokrasi di tingkat akar rumput."},
+    {no:18,pertanyaan:"Pajak daerah merupakan sumber Pendapatan Asli Daerah (PAD). Contohnya adalah...",opsi:{A:"Pajak penghasilan",B:"Pajak kendaraan bermotor dan pajak hotel",C:"Pajak pertambahan nilai",D:"Bea cukai"},jawaban:"B",penjelasan:"Pajak kendaraan bermotor dan pajak hotel adalah contoh pajak daerah yang menjadi sumber PAD. Pajak penghasilan dan PPN adalah pajak pusat."},
+    {no:19,pertanyaan:"Fungsi DPRD di tingkat daerah adalah...",opsi:{A:"Sama persis dengan DPR pusat",B:"Legislasi daerah, penganggaran daerah, dan pengawasan pemerintah daerah",C:"Hanya membuat perda",D:"Hanya mengawasi bupati/walikota"},jawaban:"B",penjelasan:"DPRD memiliki tiga fungsi: legislasi (membuat perda), anggaran (membahas APBD), dan pengawasan (mengawasi pelaksanaan perda dan kebijakan daerah)."},
+    {no:20,pertanyaan:"Salah satu keberhasilan otonomi daerah yang dapat dilihat adalah...",opsi:{A:"Semakin terkonsentrasinya pembangunan di Jawa",B:"Munculnya daerah-daerah yang berkembang pesat berkat pengelolaan potensi lokal",C:"Berkurangnya jumlah provinsi",D:"Terhapusnya perbedaan antar daerah"},jawaban:"B",penjelasan:"Otonomi daerah berhasil mendorong munculnya daerah-daerah yang berkembang pesat dengan mengelola potensi dan sumber daya lokal secara mandiri."}
   ]},
   9:{pilar:"Bhinneka Tunggal Ika",topik:"Keberagaman Suku, Agama, dan Budaya Indonesia",soal:[
-    {no:1,pertanyaan:"Semboyan 'Bhinneka Tunggal Ika' berasal dari kakawin...",opsi:{A:"Ramayana",B:"Sutasoma karya Mpu Tantular",C:"Mahabharata",D:"Negarakertagama"},jawaban:"B",penjelasan:"Frasa 'Bhinneka Tunggal Ika' diambil dari kakawin Sutasoma karya Mpu Tantular (abad ke-14, era Majapahit). Artinya: berbeda-beda namun tetap satu, tidak ada kebenaran yang mendua."},
-    {no:2,pertanyaan:"Agama yang diakui secara resmi oleh pemerintah Indonesia berjumlah...",opsi:{A:"4",B:"5",C:"6",D:"7"},jawaban:"C",penjelasan:"Enam agama yang diakui: Islam, Kristen Protestan, Katolik, Hindu, Buddha, dan Konghucu. Konghucu kembali diakui secara resmi pada era reformasi setelah sempat dibatasi."},
-    {no:3,pertanyaan:"Batik Indonesia diakui UNESCO sebagai warisan budaya tak benda dunia pada tahun...",opsi:{A:"2005",B:"2009",C:"2012",D:"2015"},jawaban:"B",penjelasan:"UNESCO mengakui batik Indonesia sebagai Warisan Budaya Tak Benda pada 2 Oktober 2009. Tanggal ini kemudian diperingati sebagai Hari Batik Nasional setiap tahunnya."},
-    {no:4,pertanyaan:"Sikap positif dalam menghadapi keberagaman suku bangsa di Indonesia adalah...",opsi:{A:"Etnosentrisme berlebihan",B:"Menganggap suku sendiri paling unggul",C:"Primordialisme sempit",D:"Toleransi dan apresiasi terhadap budaya lain"},jawaban:"D",penjelasan:"Toleransi dan apresiasi adalah sikap tepat dalam keberagaman. Etnosentrisme, menganggap suku sendiri paling unggul, dan primordialisme sempit justru menjadi sumber konflik dan perpecahan."},
-    {no:5,pertanyaan:"Bahasa Indonesia ditetapkan sebagai bahasa persatuan dalam Sumpah Pemuda tahun...",opsi:{A:"1926",B:"1928",C:"1930",D:"1945"},jawaban:"B",penjelasan:"Sumpah Pemuda 28 Oktober 1928 mengikrarkan tiga satu: satu tanah air, satu bangsa, dan satu bahasa persatuan bahasa Indonesia, menjadi fondasi persatuan bangsa."},
-    {no:6,pertanyaan:"Kerukunan antar umat beragama di Indonesia dijaga salah satunya melalui...",opsi:{A:"Penyatuan semua agama",B:"Forum Kerukunan Umat Beragama (FKUB)",C:"Pelarangan ibadah tertentu",D:"Dominasi agama mayoritas"},jawaban:"B",penjelasan:"FKUB dibentuk berdasarkan Peraturan Bersama Menag dan Mendagri No. 9 dan 8 Tahun 2006 sebagai wadah dialog antar pemuka agama untuk menjaga kerukunan."},
-    {no:7,pertanyaan:"Sikap yang dapat mengancam kebhinekaan Indonesia adalah...",opsi:{A:"Toleransi antar suku",B:"Menghargai budaya daerah lain",C:"Fanatisme sempit dan diskriminasi",D:"Belajar bahasa daerah lain"},jawaban:"C",penjelasan:"Fanatisme sempit dan diskriminasi terhadap kelompok lain adalah ancaman nyata bagi kebhinekaan. Sikap ini dapat memicu konflik horizontal dan merusak persatuan bangsa."},
-    {no:8,pertanyaan:"Seni tari Kecak berasal dari daerah...",opsi:{A:"Jawa Tengah",B:"Sumatera Barat",C:"Bali",D:"Nusa Tenggara Timur"},jawaban:"C",penjelasan:"Tari Kecak berasal dari Bali. Menampilkan puluhan penari yang duduk melingkar bersahutan mengucapkan 'cak' sambil menceritakan kisah Ramayana. Dikembangkan sekitar tahun 1930-an."},
-    {no:9,pertanyaan:"Keberagaman di Indonesia dapat menjadi kekuatan apabila...",opsi:{A:"Dieksploitasi untuk kepentingan asing",B:"Dikelola dengan baik melalui toleransi dan persatuan",C:"Diseragamkan oleh pemerintah pusat",D:"Diabaikan dalam kehidupan bernegara"},jawaban:"B",penjelasan:"Keberagaman adalah aset dan modal sosial bangsa. Bila dikelola dengan toleransi dan persatuan, keberagaman menjadi kekuatan besar. Bila diabaikan atau dieksploitasi, menjadi sumber konflik."},
-    {no:10,pertanyaan:"Makna inti semboyan Bhinneka Tunggal Ika adalah...",opsi:{A:"Persatuan dalam perbedaan untuk kekuatan bersama",B:"Perbedaan harus dihilangkan demi kesatuan",C:"Satu suku satu budaya nasional",D:"Mayoritas menentukan arah minoritas"},jawaban:"A",penjelasan:"Bhinneka Tunggal Ika berarti berbeda-beda tetapi tetap satu. Perbedaan tidak perlu dihilangkan, melainkan dijadikan kekuatan bersama. Persatuan terbangun di atas penghargaan terhadap perbedaan."}
+    {no:1,pertanyaan:"Semboyan 'Bhinneka Tunggal Ika' berasal dari kakawin...",opsi:{A:"Ramayana",B:"Sutasoma karya Mpu Tantular",C:"Mahabharata",D:"Negarakertagama"},jawaban:"B",penjelasan:"'Bhinneka Tunggal Ika' diambil dari kakawin Sutasoma karya Mpu Tantular (abad ke-14, era Majapahit), artinya berbeda-beda namun tetap satu."},
+    {no:2,pertanyaan:"Agama yang diakui resmi pemerintah Indonesia berjumlah...",opsi:{A:"4",B:"5",C:"6",D:"7"},jawaban:"C",penjelasan:"Enam agama yang diakui: Islam, Kristen Protestan, Katolik, Hindu, Buddha, dan Konghucu yang kembali diakui pada era reformasi."},
+    {no:3,pertanyaan:"Batik Indonesia diakui UNESCO pada tahun...",opsi:{A:"2005",B:"2009",C:"2012",D:"2015"},jawaban:"B",penjelasan:"UNESCO mengakui batik Indonesia sebagai Warisan Budaya Tak Benda pada 2 Oktober 2009, kini diperingati sebagai Hari Batik Nasional."},
+    {no:4,pertanyaan:"Sikap positif menghadapi keberagaman suku bangsa adalah...",opsi:{A:"Etnosentrisme berlebihan",B:"Menganggap suku sendiri paling unggul",C:"Primordialisme sempit",D:"Toleransi dan apresiasi terhadap budaya lain"},jawaban:"D",penjelasan:"Toleransi dan apresiasi terhadap budaya lain adalah sikap tepat, sementara etnosentrisme dan primordialisme sempit justru memicu konflik."},
+    {no:5,pertanyaan:"Bahasa Indonesia ditetapkan sebagai bahasa persatuan dalam...",opsi:{A:"Proklamasi 1945",B:"Sumpah Pemuda 1928",C:"Sidang BPUPKI",D:"Amandemen UUD 1945"},jawaban:"B",penjelasan:"Sumpah Pemuda 28 Oktober 1928 mengikrarkan bahasa Indonesia sebagai bahasa persatuan, menjadi fondasi penting persatuan bangsa."},
+    {no:6,pertanyaan:"Kerukunan umat beragama dijaga melalui...",opsi:{A:"Penyatuan semua agama",B:"Forum Kerukunan Umat Beragama (FKUB)",C:"Pelarangan ibadah tertentu",D:"Dominasi agama mayoritas"},jawaban:"B",penjelasan:"FKUB dibentuk berdasarkan Peraturan Bersama Menag dan Mendagri No. 9 dan 8 Tahun 2006 sebagai forum dialog antar pemuka agama."},
+    {no:7,pertanyaan:"Sikap yang mengancam kebhinekaan Indonesia adalah...",opsi:{A:"Toleransi antar suku",B:"Menghargai budaya daerah lain",C:"Fanatisme sempit dan diskriminasi",D:"Belajar bahasa daerah lain"},jawaban:"C",penjelasan:"Fanatisme sempit dan diskriminasi dapat memicu konflik horizontal dan merusak persatuan bangsa yang majemuk."},
+    {no:8,pertanyaan:"Tari Kecak berasal dari daerah...",opsi:{A:"Jawa Tengah",B:"Sumatera Barat",C:"Bali",D:"Nusa Tenggara Timur"},jawaban:"C",penjelasan:"Tari Kecak dari Bali menampilkan puluhan penari yang duduk melingkar bersahutan 'cak' menceritakan kisah Ramayana, berkembang sejak 1930-an."},
+    {no:9,pertanyaan:"Keberagaman dapat menjadi kekuatan apabila...",opsi:{A:"Dieksploitasi untuk kepentingan asing",B:"Dikelola dengan baik melalui toleransi dan persatuan",C:"Diseragamkan oleh pemerintah pusat",D:"Diabaikan dalam kehidupan bernegara"},jawaban:"B",penjelasan:"Keberagaman adalah modal sosial bangsa. Bila dikelola dengan toleransi dan persatuan, keberagaman menjadi kekuatan besar Indonesia."},
+    {no:10,pertanyaan:"Makna inti Bhinneka Tunggal Ika adalah...",opsi:{A:"Persatuan dalam perbedaan untuk kekuatan bersama",B:"Perbedaan harus dihilangkan demi kesatuan",C:"Satu suku satu budaya nasional",D:"Mayoritas menentukan arah minoritas"},jawaban:"A",penjelasan:"Bhinneka Tunggal Ika berarti perbedaan tidak perlu dihilangkan, melainkan dijadikan kekuatan bersama dalam persatuan bangsa."},
+    {no:11,pertanyaan:"Suku yang memiliki populasi terbesar di Indonesia adalah...",opsi:{A:"Sunda",B:"Batak",C:"Jawa",D:"Bugis"},jawaban:"C",penjelasan:"Suku Jawa merupakan suku terbesar di Indonesia dengan populasi sekitar 40% dari total penduduk. Diikuti suku Sunda, Batak, Sulawesi, dan lainnya."},
+    {no:12,pertanyaan:"Keris Indonesia diakui UNESCO sebagai warisan budaya pada tahun...",opsi:{A:"2003",B:"2005",C:"2008",D:"2010"},jawaban:"B",penjelasan:"Keris Indonesia diakui UNESCO sebagai Warisan Budaya Tak Benda dunia pada tahun 2005, tiga tahun sebelum batik mendapatkan pengakuan serupa."},
+    {no:13,pertanyaan:"Sistem kepercayaan lokal seperti Sunda Wiwitan dan Kaharingan di Indonesia termasuk dalam kategori...",opsi:{A:"Agama resmi negara",B:"Kepercayaan terhadap Tuhan Yang Maha Esa",C:"Aliran sesat",D:"Budaya semata"},jawaban:"B",penjelasan:"Kepercayaan lokal seperti Sunda Wiwitan dan Kaharingan dikategorikan sebagai 'kepercayaan terhadap Tuhan Yang Maha Esa' yang dijamin UUD 1945."},
+    {no:14,pertanyaan:"Sikap etnosentrisme yang berlebihan berbahaya karena...",opsi:{A:"Meningkatkan kebanggaan budaya",B:"Mendorong inovasi lokal",C:"Menganggap budaya sendiri paling superior dan merendahkan budaya lain",D:"Memperkuat identitas nasional"},jawaban:"C",penjelasan:"Etnosentrisme berlebihan menganggap kelompok/budaya sendiri paling benar dan superior, serta merendahkan kelompok lain, sehingga memicu konflik."},
+    {no:15,pertanyaan:"Angklung dari Jawa Barat diakui UNESCO sebagai warisan budaya pada tahun...",opsi:{A:"2009",B:"2010",C:"2011",D:"2012"},jawaban:"B",penjelasan:"Angklung diakui UNESCO sebagai Warisan Budaya Tak Benda pada November 2010, setahun setelah batik mendapat pengakuan serupa."},
+    {no:16,pertanyaan:"Budaya gotong royong merupakan nilai universal yang ada pada hampir semua suku di Indonesia, menunjukkan bahwa...",opsi:{A:"Semua suku di Indonesia identik",B:"Ada nilai-nilai yang mempersatukan meski terdapat perbedaan",C:"Hanya suku tertentu yang memiliki budaya positif",D:"Budaya lokal tidak relevan lagi"},jawaban:"B",penjelasan:"Gotong royong sebagai nilai universal dalam masyarakat Indonesia menunjukkan bahwa di balik perbedaan, ada nilai-nilai yang mempersatukan dan menjadi perekat bangsa."},
+    {no:17,pertanyaan:"Pakaian adat dari Aceh disebut...",opsi:{A:"Baju Bodo",B:"Ulee Balang",C:"Ulos",D:"Kebaya"},jawaban:"B",penjelasan:"Ulee Balang adalah pakaian adat Aceh yang digunakan dalam upacara adat dan acara resmi, mencerminkan kekayaan budaya Aceh yang islami."},
+    {no:18,pertanyaan:"Sikap pluralisme yang sehat berarti...",opsi:{A:"Menganggap semua agama sama saja",B:"Mengakui dan menghormati keberagaman tanpa harus menyatukan perbedaan",C:"Menolak semua agama",D:"Mencampurkan semua ajaran agama"},jawaban:"B",penjelasan:"Pluralisme yang sehat berarti mengakui dan menghormati keberagaman keyakinan dan budaya tanpa harus menganggap semuanya sama atau mencampurnya."},
+    {no:19,pertanyaan:"Konflik SARA (Suku, Agama, Ras, dan Antargolongan) dapat dicegah dengan...",opsi:{A:"Menyeragamkan semua perbedaan",B:"Dialog, saling mengenal, dan menghormati perbedaan",C:"Mengisolasi kelompok yang berbeda",D:"Mengabaikan keberagaman"},jawaban:"B",penjelasan:"Konflik SARA dicegah melalui dialog antar kelompok, saling mengenal dan memahami perbedaan, serta mengedepankan rasa hormat dan toleransi."},
+    {no:20,pertanyaan:"Keberagaman bahasa daerah di Indonesia yang berjumlah lebih dari 700 bahasa merupakan...",opsi:{A:"Hambatan komunikasi nasional",B:"Kekayaan budaya yang harus dilestarikan",C:"Masalah yang harus diatasi dengan menghapus bahasa daerah",D:"Tanda ketidakmajuan bangsa"},jawaban:"B",penjelasan:"Lebih dari 700 bahasa daerah di Indonesia merupakan kekayaan budaya yang luar biasa dan harus dilestarikan sebagai warisan leluhur yang tak ternilai."}
   ]},
   10:{pilar:"Bhinneka Tunggal Ika",topik:"Persatuan dan Kesatuan dalam Kebhinekaan",soal:[
-    {no:1,pertanyaan:"Peristiwa bersejarah yang menjadi tonggak persatuan pemuda Indonesia lintas suku dan daerah adalah...",opsi:{A:"Proklamasi Kemerdekaan",B:"Sumpah Pemuda 28 Oktober 1928",C:"Kongres Perempuan Indonesia",D:"Konferensi Meja Bundar"},jawaban:"B",penjelasan:"Sumpah Pemuda 28 Oktober 1928 adalah titik balik kesadaran nasional. Para pemuda dari berbagai suku dan daerah bersatu mengikrarkan satu tanah air, satu bangsa, dan satu bahasa: Indonesia."},
-    {no:2,pertanyaan:"Faktor yang memperkuat persatuan dan kesatuan bangsa Indonesia adalah...",opsi:{A:"Perbedaan kepentingan antar daerah",B:"Persamaan nasib sebagai bangsa terjajah dan Pancasila sebagai ideologi pemersatu",C:"Ketidaksetaraan ekonomi antar daerah",D:"Perbedaan sistem hukum daerah"},jawaban:"B",penjelasan:"Persamaan sejarah perjuangan melawan penjajah menumbuhkan rasa senasib. Ditambah Pancasila sebagai ideologi dan bahasa Indonesia sebagai bahasa persatuan, faktor-faktor ini memperkokoh kesatuan bangsa."},
-    {no:3,pertanyaan:"Dalam konteks kebhinekaan, 'Unity in Diversity' berarti...",opsi:{A:"Menyeragamkan semua perbedaan",B:"Bersatu hanya karena persamaan",C:"Membangun persatuan di atas keberagaman yang ada",D:"Mengabaikan perbedaan"},jawaban:"C",penjelasan:"'Unity in Diversity' mengajarkan bahwa persatuan tidak membutuhkan keseragaman. Keberagaman justru menjadi fondasi membangun persatuan yang kuat dan autentik."},
-    {no:4,pertanyaan:"Peran pemuda dalam menjaga persatuan bangsa dapat diwujudkan melalui...",opsi:{A:"Menyebarkan berita bohong (hoaks)",B:"Aktif dalam organisasi kemasyarakatan lintas suku dan agama",C:"Mempersoalkan perbedaan SARA",D:"Menutup diri dari pergaulan antar daerah"},jawaban:"B",penjelasan:"Pemuda dapat menjadi perekat persatuan dengan aktif bergabung dalam organisasi lintas suku dan agama, membangun pertemanan yang beragam, serta menjadi agen perdamaian di masyarakat."},
-    {no:5,pertanyaan:"Konflik horizontal antar kelompok masyarakat dapat dicegah dengan...",opsi:{A:"Mengisolasi kelompok yang berbeda",B:"Dialog, mediasi, dan mengedepankan nilai toleransi",C:"Pemaksaan kehendak mayoritas",D:"Mengabaikan kelompok minoritas"},jawaban:"B",penjelasan:"Konflik horizontal bisa dicegah dengan komunikasi terbuka antar kelompok, mediasi dalam menyelesaikan perbedaan, serta mengedepankan toleransi dan saling menghormati."},
-    {no:6,pertanyaan:"Globalisasi dapat mengancam persatuan bangsa jika...",opsi:{A:"Meningkatkan pertukaran budaya yang positif",B:"Memperkuat identitas nasional",C:"Membawa ideologi asing yang bertentangan dengan Pancasila",D:"Membuka peluang ekonomi baru"},jawaban:"C",penjelasan:"Ancaman globalisasi terhadap persatuan muncul ketika ideologi asing seperti radikalisme atau separatisme masuk dan bertentangan dengan nilai-nilai Pancasila serta merusak kohesi sosial."},
-    {no:7,pertanyaan:"Sila Ketiga Pancasila dalam kehidupan bermasyarakat diwujudkan dengan...",opsi:{A:"Mengutamakan kepentingan golongan",B:"Mendahulukan kepentingan bangsa dan negara di atas kepentingan pribadi",C:"Hanya bergaul dengan sesuku",D:"Menolak budaya daerah lain"},jawaban:"B",penjelasan:"Sila Ketiga mengamanatkan setiap warga rela berkorban untuk kepentingan bangsa, mendahulukan kepentingan nasional di atas kepentingan pribadi atau golongan."},
-    {no:8,pertanyaan:"Peran media sosial dalam konteks kebhinekaan sebaiknya digunakan untuk...",opsi:{A:"Menyebarkan ujaran kebencian",B:"Memprovokasi antar kelompok",C:"Memperkuat solidaritas dan kampanye keberagaman positif",D:"Menyebarkan informasi pemecah belah"},jawaban:"C",penjelasan:"Media sosial sebaiknya digunakan untuk menyebarkan konten positif tentang keberagaman, membangun solidaritas, dan melawan hoaks serta ujaran kebencian yang merusak persatuan."},
-    {no:9,pertanyaan:"Tokoh yang menjadi ketua Kongres Pemuda II (Sumpah Pemuda) adalah...",opsi:{A:"Soekarno",B:"Soegondo Djojopuspito",C:"Mohammad Hatta",D:"Wahid Hasjim"},jawaban:"B",penjelasan:"Soegondo Djojopuspito dari PPPI (Perhimpunan Pelajar-Pelajar Indonesia) menjadi ketua Kongres Pemuda II pada 27–28 Oktober 1928 yang menghasilkan Sumpah Pemuda."},
-    {no:10,pertanyaan:"Implementasi Bhinneka Tunggal Ika paling tepat diwujudkan melalui...",opsi:{A:"Penyeragaman budaya dan bahasa",B:"Diskriminasi terhadap kelompok minoritas",C:"Jaminan kesetaraan hak semua warga negara tanpa memandang suku, agama, dan ras",D:"Pemberlakuan hukum berbeda untuk tiap suku"},jawaban:"C",penjelasan:"Bhinneka Tunggal Ika paling nyata terwujud ketika negara menjamin kesetaraan hak bagi semua warga tanpa diskriminasi, selaras dengan amanat UUD 1945 Pasal 28 tentang persamaan kedudukan di hadapan hukum."}
+    {no:1,pertanyaan:"Tonggak persatuan pemuda Indonesia lintas suku adalah...",opsi:{A:"Proklamasi Kemerdekaan",B:"Sumpah Pemuda 28 Oktober 1928",C:"Kongres Perempuan Indonesia",D:"Konferensi Meja Bundar"},jawaban:"B",penjelasan:"Sumpah Pemuda 28 Oktober 1928 menjadi titik balik kesadaran nasional, para pemuda bersatu mengikrarkan satu tanah air, bangsa, dan bahasa."},
+    {no:2,pertanyaan:"Faktor yang memperkuat persatuan bangsa Indonesia adalah...",opsi:{A:"Perbedaan kepentingan antar daerah",B:"Persamaan nasib sebagai bangsa terjajah dan Pancasila sebagai ideologi pemersatu",C:"Ketidaksetaraan ekonomi antar daerah",D:"Perbedaan sistem hukum daerah"},jawaban:"B",penjelasan:"Persamaan nasib terjajah dan Pancasila sebagai ideologi pemersatu adalah faktor penting yang memperkuat persatuan dan kesatuan bangsa Indonesia."},
+    {no:3,pertanyaan:"'Unity in Diversity' berarti...",opsi:{A:"Menyeragamkan semua perbedaan",B:"Bersatu hanya karena persamaan",C:"Membangun persatuan di atas keberagaman yang ada",D:"Mengabaikan perbedaan"},jawaban:"C",penjelasan:"Unity in Diversity (Bhinneka Tunggal Ika) berarti membangun persatuan di atas keberagaman, bukan dengan menyeragamkan tetapi dengan menghormati perbedaan."},
+    {no:4,pertanyaan:"Peran pemuda dalam menjaga persatuan adalah...",opsi:{A:"Menyebarkan hoaks",B:"Aktif dalam organisasi lintas suku dan agama",C:"Mempersoalkan perbedaan SARA",D:"Menutup diri dari pergaulan antar daerah"},jawaban:"B",penjelasan:"Pemuda dapat menjaga persatuan dengan aktif dalam organisasi lintas suku/agama, membangun pertemanan yang beragam, dan menjadi agen perdamaian."},
+    {no:5,pertanyaan:"Konflik horizontal dapat dicegah dengan...",opsi:{A:"Mengisolasi kelompok yang berbeda",B:"Dialog, mediasi, dan mengedepankan toleransi",C:"Pemaksaan kehendak mayoritas",D:"Mengabaikan kelompok minoritas"},jawaban:"B",penjelasan:"Konflik horizontal dicegah melalui komunikasi terbuka, mediasi, dan pengedepanan nilai toleransi serta saling menghormati antar kelompok."},
+    {no:6,pertanyaan:"Globalisasi mengancam persatuan jika...",opsi:{A:"Meningkatkan pertukaran budaya positif",B:"Memperkuat identitas nasional",C:"Membawa ideologi asing yang bertentangan dengan Pancasila",D:"Membuka peluang ekonomi baru"},jawaban:"C",penjelasan:"Ancaman globalisasi terhadap persatuan muncul ketika ideologi asing yang bertentangan dengan Pancasila masuk dan merusak kohesi sosial bangsa."},
+    {no:7,pertanyaan:"Sila Ketiga Pancasila diwujudkan dengan...",opsi:{A:"Mengutamakan kepentingan golongan",B:"Mendahulukan kepentingan bangsa di atas kepentingan pribadi",C:"Hanya bergaul dengan sesuku",D:"Menolak budaya daerah lain"},jawaban:"B",penjelasan:"Sila Ketiga mengamanatkan mendahulukan kepentingan bangsa dan negara di atas kepentingan pribadi atau golongan demi terwujudnya persatuan Indonesia."},
+    {no:8,pertanyaan:"Media sosial dalam konteks kebhinekaan sebaiknya digunakan untuk...",opsi:{A:"Menyebarkan ujaran kebencian",B:"Memprovokasi antar kelompok",C:"Memperkuat solidaritas dan kampanye keberagaman positif",D:"Menyebarkan informasi pemecah belah"},jawaban:"C",penjelasan:"Media sosial sebaiknya digunakan untuk menyebarkan konten positif, membangun solidaritas, dan melawan hoaks serta ujaran kebencian."},
+    {no:9,pertanyaan:"Ketua Kongres Pemuda II (Sumpah Pemuda) adalah...",opsi:{A:"Soekarno",B:"Soegondo Djojopuspito",C:"Mohammad Hatta",D:"Wahid Hasjim"},jawaban:"B",penjelasan:"Soegondo Djojopuspito dari PPPI menjadi ketua Kongres Pemuda II pada 27–28 Oktober 1928 yang menghasilkan Sumpah Pemuda."},
+    {no:10,pertanyaan:"Implementasi Bhinneka Tunggal Ika paling tepat diwujudkan melalui...",opsi:{A:"Penyeragaman budaya dan bahasa",B:"Diskriminasi terhadap kelompok minoritas",C:"Jaminan kesetaraan hak semua warga tanpa memandang suku, agama, dan ras",D:"Pemberlakuan hukum berbeda untuk tiap suku"},jawaban:"C",penjelasan:"Bhinneka Tunggal Ika terwujud paling nyata melalui jaminan kesetaraan hak bagi semua warga negara tanpa diskriminasi, selaras UUD 1945 Pasal 28."},
+    {no:11,pertanyaan:"Lagu 'Indonesia Raya' sebagai lagu kebangsaan pertama kali dikumandangkan pada...",opsi:{A:"Proklamasi Kemerdekaan 1945",B:"Kongres Pemuda II 1928",C:"Sidang BPUPKI 1945",D:"Sumpah Pemuda 1926"},jawaban:"B",penjelasan:"Lagu 'Indonesia Raya' ciptaan W.R. Supratman pertama kali dikumandangkan pada Kongres Pemuda II tanggal 28 Oktober 1928."},
+    {no:12,pertanyaan:"Nasionalisme yang sehat berarti...",opsi:{A:"Menutup diri dari pengaruh luar",B:"Cinta tanah air yang membangun tanpa merendahkan bangsa lain",C:"Menganggap bangsa sendiri paling unggul",D:"Menolak semua produk asing"},jawaban:"B",penjelasan:"Nasionalisme yang sehat adalah cinta tanah air yang membangun, mendorong kemajuan bangsa tanpa bersikap chauvinistik atau merendahkan bangsa lain."},
+    {no:13,pertanyaan:"Perpecahan bangsa dapat dicegah salah satunya dengan...",opsi:{A:"Memperbanyak pemberitaan negatif",B:"Menonjolkan perbedaan SARA",C:"Mengembangkan sikap empati dan saling pengertian antar kelompok",D:"Membesarkan isu separatisme"},jawaban:"C",penjelasan:"Empati dan saling pengertian antar kelompok yang berbeda adalah kunci mencegah perpecahan bangsa dan membangun harmoni sosial."},
+    {no:14,pertanyaan:"Wawasan kebangsaan yang kuat ditandai dengan...",opsi:{A:"Menolak semua pengaruh asing",B:"Rasa bangga menjadi warga negara Indonesia dan semangat menjaga persatuan",C:"Mengutamakan kepentingan daerah",D:"Tidak peduli terhadap nasib bangsa"},jawaban:"B",penjelasan:"Wawasan kebangsaan yang kuat ditandai rasa bangga sebagai warga Indonesia, semangat menjaga persatuan, dan kesediaan berkorban untuk kepentingan bangsa."},
+    {no:15,pertanyaan:"Peringatan Hari Sumpah Pemuda ditetapkan pada tanggal...",opsi:{A:"17 Agustus",B:"28 Oktober",C:"1 Juni",D:"20 Mei"},jawaban:"B",penjelasan:"Hari Sumpah Pemuda diperingati setiap 28 Oktober, mengenang ikrar Sumpah Pemuda pada Kongres Pemuda II tanggal 28 Oktober 1928."},
+    {no:16,pertanyaan:"Salah satu ancaman terhadap persatuan yang muncul dari dalam negeri (internal) adalah...",opsi:{A:"Invasi militer asing",B:"Tekanan diplomatik negara lain",C:"Gerakan separatisme dan konflik antar kelompok",D:"Embargo ekonomi"},jawaban:"C",penjelasan:"Gerakan separatisme yang ingin memisahkan diri dan konflik antar kelompok masyarakat merupakan ancaman internal terhadap persatuan NKRI."},
+    {no:17,pertanyaan:"Makna 'Bhineka' dalam Bhinneka Tunggal Ika berarti...",opsi:{A:"Satu",B:"Ika",C:"Berbeda-beda",D:"Tunggal"},jawaban:"C",penjelasan:"'Bhinneka' berasal dari bahasa Jawa Kuno yang berarti berbeda-beda atau beraneka ragam, merujuk pada keberagaman yang ada dalam masyarakat Indonesia."},
+    {no:18,pertanyaan:"Keberagaman di Indonesia sebaiknya dipandang sebagai...",opsi:{A:"Masalah yang harus diselesaikan",B:"Kekayaan dan modal sosial bangsa",C:"Hambatan pembangunan",D:"Sumber konflik abadi"},jawaban:"B",penjelasan:"Keberagaman Indonesia harus dipandang sebagai kekayaan dan modal sosial yang bila dikelola dengan baik akan menjadi kekuatan besar dalam pembangunan bangsa."},
+    {no:19,pertanyaan:"Semangat persatuan dan kesatuan pertama kali ditegaskan secara resmi dalam...",opsi:{A:"Piagam Jakarta",B:"Pembukaan UUD 1945",C:"Sumpah Pemuda",D:"Dekret Presiden"},jawaban:"C",penjelasan:"Sumpah Pemuda 1928 adalah pengikraran semangat persatuan secara resmi untuk pertama kalinya oleh pemuda Indonesia dari berbagai daerah."},
+    {no:20,pertanyaan:"Konsep 'Wawasan Kebangsaan' dalam konteks Bhinneka Tunggal Ika bertujuan untuk...",opsi:{A:"Menghapus identitas kedaerahan",B:"Memperkuat rasa persatuan dan kesatuan tanpa menghilangkan keberagaman",C:"Menyatukan semua agama",D:"Menjadikan satu suku sebagai pemimpin"},jawaban:"B",penjelasan:"Wawasan kebangsaan bertujuan memperkuat rasa persatuan dan identitas nasional tanpa menghilangkan identitas dan keberagaman budaya daerah yang ada."}
   ]}
 };
 
 // ── State ──
-const state = { shown:[], current:null, answers:{}, scores:{}, timers:{} };
-let wheelAngle = 0, spinning = false;
+const state={shown:[],current:null,answers:{},scores:{},timers:{}};
+let wheelAngle=0,spinning=false;
 
 // ── Wheel ──
-function getAvailable(){ return Array.from({length:10},(_,i)=>i+1).filter(i=>!state.shown.includes(i)); }
+function getAvail(){return Array.from({length:10},(_,i)=>i+1).filter(i=>!state.shown.includes(i));}
 
 function drawWheel(){
-  const c = document.getElementById('wheelCanvas');
-  if(!c) return;
-  const ctx = c.getContext('2d'), cx=130, cy=130, r=124;
-  const arc = (2*Math.PI)/10;
+  const c=document.getElementById('wheelCanvas');if(!c)return;
+  const ctx=c.getContext('2d'),cx=130,cy=130,r=124,arc=(2*Math.PI)/10;
   ctx.clearRect(0,0,260,260);
   for(let idx=0;idx<10;idx++){
-    const num = idx+1;
-    const startA = wheelAngle + idx*arc - Math.PI/2;
-    const endA = startA + arc;
-    const done = state.shown.includes(num);
-    ctx.beginPath(); ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,r,startA,endA); ctx.closePath();
-    ctx.fillStyle = done ? 'rgba(253,246,236,.07)' : COLORS[idx%COLORS.length];
-    ctx.fill(); ctx.strokeStyle='#1a0a05'; ctx.lineWidth=2; ctx.stroke();
-    ctx.save(); ctx.translate(cx,cy); ctx.rotate(startA+arc/2);
-    ctx.textAlign='right';
-    ctx.fillStyle = done ? 'rgba(253,246,236,.25)' : 'white';
-    ctx.font = `bold ${done?'11':'13'}px "DM Sans", sans-serif`;
-    ctx.fillText(done?`P${num} ✓`:`Paket ${num}`, r-10, 5);
-    ctx.restore();
+    const num=idx+1,startA=wheelAngle+idx*arc-Math.PI/2,endA=startA+arc,done=state.shown.includes(num);
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,startA,endA);ctx.closePath();
+    ctx.fillStyle=done?'rgba(253,246,236,.07)':COLORS[idx%COLORS.length];
+    ctx.fill();ctx.strokeStyle='#1a0a05';ctx.lineWidth=2;ctx.stroke();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(startA+arc/2);ctx.textAlign='right';
+    ctx.fillStyle=done?'rgba(253,246,236,.25)':'white';
+    ctx.font=`bold ${done?'11':'13'}px "DM Sans",sans-serif`;
+    ctx.fillText(done?`P${num}✓`:`Paket ${num}`,r-10,5);ctx.restore();
   }
-  ctx.beginPath(); ctx.arc(cx,cy,r,0,2*Math.PI);
-  ctx.strokeStyle='rgba(201,168,76,.5)'; ctx.lineWidth=3; ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,r,0,2*Math.PI);ctx.strokeStyle='rgba(201,168,76,.5)';ctx.lineWidth=3;ctx.stroke();
 }
 
 function spinWheel(){
-  const avail = getAvailable();
-  if(!avail.length){ showToast('Semua paket sudah diundi!'); return; }
-  if(spinning) return;
-  spinning=true;
-  document.getElementById('btnSpin').disabled=true;
-  const arc=(2*Math.PI)/10;
-  const picked = avail[Math.floor(Math.random()*avail.length)];
-  const targetIdx = picked-1;
-  const targetOffset = -(targetIdx*arc + arc/2);
-  const fullSpins = (5+Math.floor(Math.random()*4))*2*Math.PI;
-  const targetAngle = targetOffset-(wheelAngle%(2*Math.PI))+fullSpins;
-  const duration=4000, start=performance.now(), startAngle=wheelAngle;
-  function ease(t){ return 1-Math.pow(1-t,3); }
+  const avail=getAvail();if(!avail.length){showToast('Semua paket sudah diundi!');return;}
+  if(spinning)return;spinning=true;document.getElementById('btnSpin').disabled=true;
+  const arc=(2*Math.PI)/10,picked=avail[Math.floor(Math.random()*avail.length)],targetIdx=picked-1;
+  const targetOffset=-(targetIdx*arc+arc/2),fullSpins=(5+Math.floor(Math.random()*4))*2*Math.PI;
+  const targetAngle=targetOffset-(wheelAngle%(2*Math.PI))+fullSpins;
+  const duration=4000,start=performance.now(),startAngle=wheelAngle;
+  function ease(t){return 1-Math.pow(1-t,3);}
   function frame(now){
-    const t=Math.min((now-start)/duration,1);
-    wheelAngle = startAngle+targetAngle*ease(t);
-    drawWheel();
-    if(t<1){ requestAnimationFrame(frame); }
-    else{
-      wheelAngle = startAngle+targetAngle;
-      spinning=false;
-      document.getElementById('btnSpin').disabled=false;
-      drawWheel();
-      showToast(`Paket ${picked} terpilih!`);
-      setTimeout(()=>loadPacket(picked),400);
-    }
+    const t=Math.min((now-start)/duration,1);wheelAngle=startAngle+targetAngle*ease(t);drawWheel();
+    if(t<1){requestAnimationFrame(frame);}
+    else{wheelAngle=startAngle+targetAngle;spinning=false;document.getElementById('btnSpin').disabled=false;
+      drawWheel();showToast(`Paket ${picked} terpilih!`);setTimeout(()=>loadPacket(picked),400);}
   }
   requestAnimationFrame(frame);
 }
 
 function loadPacket(picked){
-  state.current=picked;
-  if(!state.shown.includes(picked)) state.shown.push(picked);
-  if(!state.answers[picked]) state.answers[picked]={};
-  if(state.scores[picked]===undefined) state.scores[picked]=0;
-  renderSoal(picked);
-  updateHistory();
+  state.current=picked;if(!state.shown.includes(picked))state.shown.push(picked);
+  if(!state.answers[picked])state.answers[picked]={};
+  if(state.scores[picked]===undefined)state.scores[picked]=0;
+  renderSoal(picked);updateHistory();
   const first=BANK[picked].soal.findIndex((_,i)=>state.answers[picked][i]===undefined);
-  if(first>=0) setTimeout(()=>startTimer(picked,first),400);
+  if(first>=0)setTimeout(()=>startTimer(picked,first),400);
 }
 
 // ── Timer ──
 function startTimer(paket,soalIdx){
-  const key=`${paket}-${soalIdx}`;
-  if(state.timers[key]) return;
-  let rem=TIMER_SEC;
-  updateTimerUI(paket,soalIdx,rem);
-  state.timers[key]=setInterval(()=>{
-    rem--;
-    updateTimerUI(paket,soalIdx,rem);
-    if(rem<=0){ clearInterval(state.timers[key]); state.timers[key]='done'; timeOut(paket,soalIdx); }
-  },1000);
+  const key=`${paket}-${soalIdx}`;if(state.timers[key])return;
+  let rem=TIMER_SEC;updateTimerUI(paket,soalIdx,rem);
+  state.timers[key]=setInterval(()=>{rem--;updateTimerUI(paket,soalIdx,rem);
+    if(rem<=0){clearInterval(state.timers[key]);state.timers[key]='done';timeOut(paket,soalIdx);}},1000);
 }
-
 function stopTimer(paket,soalIdx){
   const key=`${paket}-${soalIdx}`;
-  if(state.timers[key]&&state.timers[key]!=='done'){ clearInterval(state.timers[key]); state.timers[key]='done'; }
+  if(state.timers[key]&&state.timers[key]!=='done'){clearInterval(state.timers[key]);state.timers[key]='done';}
 }
-
 function updateTimerUI(paket,soalIdx,sec){
-  const ring=document.getElementById(`tring-${paket}-${soalIdx}`);
-  const num=document.getElementById(`tnum-${paket}-${soalIdx}`);
-  if(!ring||!num) return;
-  const prog=ring.querySelector('.prog');
-  prog.style.strokeDashoffset=CIRC*(1-sec/TIMER_SEC);
-  num.textContent=sec;
-  const warn=sec<=15&&sec>5, danger=sec<=5;
+  const ring=document.getElementById(`tring-${paket}-${soalIdx}`),num=document.getElementById(`tnum-${paket}-${soalIdx}`);
+  if(!ring||!num)return;const prog=ring.querySelector('.prog');
+  prog.style.strokeDashoffset=CIRC*(1-sec/TIMER_SEC);num.textContent=sec;
+  const warn=sec<=15&&sec>5,danger=sec<=5;
   prog.className='prog'+(danger?' danger':warn?' warn':'');
   num.className='timer-num'+(danger?' danger':warn?' warn':'');
 }
-
 function timeOut(paket,soalIdx){
-  if(state.answers[paket][soalIdx]!==undefined) return;
-  state.answers[paket][soalIdx]=null;
-  const s=BANK[paket].soal[soalIdx];
+  if(state.answers[paket][soalIdx]!==undefined)return;
+  state.answers[paket][soalIdx]=null;const s=BANK[paket].soal[soalIdx];
   document.querySelectorAll(`.opt-btn[data-paket="${paket}"][data-soal="${soalIdx}"]`).forEach(btn=>{
-    btn.disabled=true;
-    if(btn.dataset.key===s.jawaban) btn.classList.add('reveal'); else btn.classList.add('timeout');
-  });
+    btn.disabled=true;if(btn.dataset.key===s.jawaban)btn.classList.add('reveal');else btn.classList.add('timeout');});
   const fb=document.getElementById(`fb-${paket}-${soalIdx}`);
-  if(fb){ fb.className='feedback show timeout-fb';
-    fb.innerHTML=`<div class="feedback-title">⏱ Waktu habis! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div>
-      <div class="feedback-explain">💡 ${s.penjelasan}</div>`; }
-  const numEl=document.getElementById(`num-${paket}-${soalIdx}`);
-  if(numEl) numEl.classList.add('wrong');
-  const tr=document.getElementById(`tr-${paket}-${soalIdx}`);
-  if(tr) tr.style.display='none';
-  updateScore(paket); updateHistory();
+  if(fb){fb.className='feedback show timeout-fb';
+    fb.innerHTML=`<div class="feedback-title">⏱ Waktu habis! Jawaban: ${s.jawaban}. ${s.opsi[s.jawaban]}</div>
+      <div class="feedback-explain">💡 ${s.penjelasan}</div>`;}
+  const numEl=document.getElementById(`num-${paket}-${soalIdx}`);if(numEl)numEl.classList.add('wrong');
+  const tr=document.getElementById(`tr-${paket}-${soalIdx}`);if(tr)tr.style.display='none';
+  updateScore(paket);updateHistory();
   const next=soalIdx+1;
-  if(next<BANK[paket].soal.length&&state.answers[paket][next]===undefined) startTimer(paket,next);
+  if(next<BANK[paket].soal.length&&state.answers[paket][next]===undefined)startTimer(paket,next);
 }
 
 // ── Answer ──
 function answer(paket,soalIdx,key){
-  const s=BANK[paket].soal[soalIdx];
-  if(state.answers[paket][soalIdx]!==undefined) return;
-  stopTimer(paket,soalIdx);
-  state.answers[paket][soalIdx]=key;
-  const ok=key===s.jawaban;
-  if(ok) state.scores[paket]=(state.scores[paket]||0)+1;
+  const s=BANK[paket].soal[soalIdx];if(state.answers[paket][soalIdx]!==undefined)return;
+  stopTimer(paket,soalIdx);state.answers[paket][soalIdx]=key;
+  const ok=key===s.jawaban;if(ok)state.scores[paket]=(state.scores[paket]||0)+1;
   document.querySelectorAll(`.opt-btn[data-paket="${paket}"][data-soal="${soalIdx}"]`).forEach(btn=>{
-    btn.disabled=true; const k=btn.dataset.key;
-    if(k===s.jawaban) btn.classList.add(ok&&k===key?'correct':'reveal');
-    if(k===key&&!ok) btn.classList.add('wrong');
-  });
+    btn.disabled=true;const k=btn.dataset.key;
+    if(k===s.jawaban)btn.classList.add(ok&&k===key?'correct':'reveal');
+    if(k===key&&!ok)btn.classList.add('wrong');});
   const fb=document.getElementById(`fb-${paket}-${soalIdx}`);
-  if(fb){ fb.classList.add('show',ok?'ok':'bad');
+  if(fb){fb.classList.add('show',ok?'ok':'bad');
     fb.innerHTML=ok?`<div class="feedback-title">✓ Benar!</div>`:
-      `<div class="feedback-title">✗ Salah! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div>
-       <div class="feedback-explain">💡 ${s.penjelasan}</div>`; }
-  const numEl=document.getElementById(`num-${paket}-${soalIdx}`);
-  if(numEl) numEl.classList.add(ok?'correct':'wrong');
-  const tr=document.getElementById(`tr-${paket}-${soalIdx}`);
-  if(tr) tr.style.display='none';
-  updateScore(paket); updateHistory();
+      `<div class="feedback-title">✗ Salah! Jawaban: ${s.jawaban}. ${s.opsi[s.jawaban]}</div>
+       <div class="feedback-explain">💡 ${s.penjelasan}</div>`;}
+  const numEl=document.getElementById(`num-${paket}-${soalIdx}`);if(numEl)numEl.classList.add(ok?'correct':'wrong');
+  const tr=document.getElementById(`tr-${paket}-${soalIdx}`);if(tr)tr.style.display='none';
+  updateScore(paket);updateHistory();
   const next=soalIdx+1;
-  if(next<BANK[paket].soal.length&&state.answers[paket][next]===undefined) startTimer(paket,next);
+  if(next<BANK[paket].soal.length&&state.answers[paket][next]===undefined)startTimer(paket,next);
 }
-
 function updateScore(paket){
   const cnt=Object.values(state.answers[paket]).filter(v=>v!==undefined).length;
   document.getElementById('scoreText').textContent=`${state.scores[paket]||0} / ${cnt}`;
@@ -423,21 +461,20 @@ function renderSoal(n){
   const ans=state.answers[n];
   document.getElementById('scoreText').textContent=`${state.scores[n]||0} / ${Object.values(ans).filter(v=>v!==undefined).length}`;
   document.getElementById('soalList').innerHTML=d.soal.map((s,i)=>{
-    const chosen=ans[i], answered=chosen!==undefined, isOk=chosen===s.jawaban, isTO=chosen===null;
+    const chosen=ans[i],answered=chosen!==undefined,isOk=chosen===s.jawaban,isTO=chosen===null;
     const optHTML=Object.entries(s.opsi).map(([k,v])=>{
       let cls='opt-btn';
-      if(answered){ if(isTO){ cls+=k===s.jawaban?' reveal':' timeout'; }
-        else{ if(k===s.jawaban) cls+=isOk&&k===chosen?' correct':' reveal'; if(k===chosen&&!isOk) cls+=' wrong'; } }
+      if(answered){if(isTO){cls+=k===s.jawaban?' reveal':' timeout';}
+        else{if(k===s.jawaban)cls+=isOk&&k===chosen?' correct':' reveal';if(k===chosen&&!isOk)cls+=' wrong';}}
       return `<button class="${cls}" data-paket="${n}" data-soal="${i}" data-key="${k}"
         ${answered?'disabled':''} onclick="answer(${n},${i},'${k}')">
-        <span class="opt-key">${k}</span><span>${v}</span></button>`;
-    }).join('');
+        <span class="opt-key">${k}</span><span>${v}</span></button>`;}).join('');
     let fbHTML=`<div class="feedback" id="fb-${n}-${i}"></div>`;
-    if(answered){ if(isTO) fbHTML=`<div class="feedback show timeout-fb" id="fb-${n}-${i}"><div class="feedback-title">⏱ Waktu habis! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div><div class="feedback-explain">💡 ${s.penjelasan}</div></div>`;
-      else if(isOk) fbHTML=`<div class="feedback show ok" id="fb-${n}-${i}"><div class="feedback-title">✓ Benar!</div></div>`;
-      else fbHTML=`<div class="feedback show bad" id="fb-${n}-${i}"><div class="feedback-title">✗ Salah! Jawaban yang benar: ${s.jawaban}. ${s.opsi[s.jawaban]}</div><div class="feedback-explain">💡 ${s.penjelasan}</div></div>`; }
+    if(answered){if(isTO)fbHTML=`<div class="feedback show timeout-fb" id="fb-${n}-${i}"><div class="feedback-title">⏱ Waktu habis! Jawaban: ${s.jawaban}. ${s.opsi[s.jawaban]}</div><div class="feedback-explain">💡 ${s.penjelasan}</div></div>`;
+      else if(isOk)fbHTML=`<div class="feedback show ok" id="fb-${n}-${i}"><div class="feedback-title">✓ Benar!</div></div>`;
+      else fbHTML=`<div class="feedback show bad" id="fb-${n}-${i}"><div class="feedback-title">✗ Salah! Jawaban: ${s.jawaban}. ${s.opsi[s.jawaban]}</div><div class="feedback-explain">💡 ${s.penjelasan}</div></div>`;}
     const numCls=answered?(isOk&&!isTO?'soal-num correct':'soal-num wrong'):'soal-num';
-    return `<div class="soal-item" style="animation-delay:${i*.04}s">
+    return `<div class="soal-item" style="animation-delay:${i*.03}s">
       <div class="soal-header"><div class="${numCls}" id="num-${n}-${i}">${s.no}</div><div class="soal-text">${s.pertanyaan}</div></div>
       <div class="timer-row" id="tr-${n}-${i}" style="${answered?'display:none':''}">
         <div class="timer-ring" id="tring-${n}-${i}">
@@ -445,42 +482,34 @@ function renderSoal(n){
           <circle class="prog" cx="18" cy="18" r="15" style="stroke-dasharray:${CIRC};stroke-dashoffset:0;"/></svg>
           <div class="timer-num" id="tnum-${n}-${i}">${TIMER_SEC}</div></div>
         <span class="timer-label">detik tersisa</span></div>
-      <div class="soal-options">${optHTML}</div>${fbHTML}</div>`;
-  }).join('');
+      <div class="soal-options">${optHTML}</div>${fbHTML}</div>`;}).join('');
   document.getElementById('resultCard').classList.add('visible');
   document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function updateHistory(){
-  const sec=document.getElementById('historySection'), g=document.getElementById('historyGrid');
-  if(!state.shown.length){ sec.style.display='none'; return; }
-  sec.style.display='block';
+  const sec=document.getElementById('historySection'),g=document.getElementById('historyGrid');
+  if(!state.shown.length){sec.style.display='none';return;}sec.style.display='block';
   g.innerHTML=state.shown.map(k=>{
-    const ans=state.answers[k]||{}, sc=state.scores[k]||0, cnt=Object.values(ans).filter(v=>v!==undefined).length;
-    return `<div class="history-item" onclick="selectPaket(${k})">
+    const ans=state.answers[k]||{},sc=state.scores[k]||0,cnt=Object.values(ans).filter(v=>v!==undefined).length;
+    return `<div class="history-item" onclick="state.current=${k};renderSoal(${k})">
       <div><div class="history-item-title">Paket ${k} [${BANK[k].pilar}] — ${BANK[k].topik}</div>
       <div class="history-item-meta">${BANK[k].soal.length} soal · Dijawab: ${cnt}</div></div>
-      <span class="history-score">${sc}/${cnt}</span></div>`;
-  }).join('');
+      <span class="history-score">${sc}/${cnt}</span></div>`;}).join('');
 }
-
-function selectPaket(n){ state.current=n; renderSoal(n); }
 
 function resetAll(){
-  if(!confirm('Reset semua paket?')) return;
-  Object.values(state.timers).forEach(t=>{if(t&&t!=='done') clearInterval(t);});
-  state.shown=[]; state.current=null; state.answers={}; state.scores={}; state.timers={};
-  wheelAngle=0; drawWheel();
+  if(!confirm('Reset semua paket?'))return;
+  Object.values(state.timers).forEach(t=>{if(t&&t!=='done')clearInterval(t);});
+  state.shown=[];state.current=null;state.answers={};state.scores={};state.timers={};
+  wheelAngle=0;drawWheel();
   document.getElementById('resultCard').classList.remove('visible');
-  document.getElementById('historySection').style.display='none';
-  showToast('Semua paket direset');
+  document.getElementById('historySection').style.display='none';showToast('Semua paket direset');
 }
-
 function showToast(msg){
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
-
 window.addEventListener('DOMContentLoaded',()=>setTimeout(drawWheel,100));
 </script>
 </body>
