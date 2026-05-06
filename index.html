@@ -84,6 +84,47 @@
   .toast{position:fixed;bottom:24px;right:24px;background:var(--gold);color:var(--dark);font-size:13px;font-weight:600;padding:12px 20px;border-radius:6px;z-index:999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;}
   .toast.show{opacity:1;transform:translateY(0);}
   @media(max-width:560px){.soal-options{grid-template-columns:1fr;}.result-card{padding:20px;}.feedback,.timer-row{margin-left:0;}}
+
+  /* ── Nama Siswa ── */
+  .nama-section{background:rgba(253,246,236,.04);border:1px solid rgba(201,168,76,.3);border-radius:10px;padding:20px 24px;margin-bottom:28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .nama-label{font-family:'Playfair Display',serif;font-size:15px;color:var(--gold);white-space:nowrap;}
+  .nama-input{flex:1;min-width:180px;background:rgba(253,246,236,.07);border:1px solid rgba(201,168,76,.4);border-radius:6px;padding:10px 16px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--cream);outline:none;transition:border-color .2s;}
+  .nama-input::placeholder{color:rgba(253,246,236,.3);}
+  .nama-input:focus{border-color:var(--gold);}
+  .nama-avatar{width:38px;height:38px;border-radius:50%;background:var(--red);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:white;flex-shrink:0;transition:background .3s;}
+
+  /* ── Leaderboard ── */
+  .leaderboard-section{margin-top:48px;border-top:1px solid rgba(201,168,76,.15);padding-top:32px;}
+  .lb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+  .lb-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);}
+  .lb-subtitle{font-size:12px;color:rgba(253,246,236,.4);margin-top:3px;}
+  .btn-clear-lb{background:transparent;border:1px solid rgba(192,57,43,.5);color:rgba(192,57,43,.8);font-size:12px;padding:7px 16px;border-radius:4px;cursor:pointer;transition:all .2s;}
+  .btn-clear-lb:hover{background:rgba(192,57,43,.1);border-color:var(--red);}
+  .lb-table-wrap{overflow-x:auto;}
+  .lb-table{width:100%;border-collapse:collapse;font-size:14px;}
+  .lb-table thead tr{border-bottom:1px solid rgba(201,168,76,.3);}
+  .lb-table th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gold);white-space:nowrap;}
+  .lb-table th.right,.lb-table td.right{text-align:right;}
+  .lb-table th.center,.lb-table td.center{text-align:center;}
+  .lb-table tbody tr{border-bottom:1px solid rgba(253,246,236,.06);transition:background .15s;}
+  .lb-table tbody tr:hover{background:rgba(201,168,76,.05);}
+  .lb-table td{padding:10px 14px;color:var(--cream);}
+  .lb-rank{font-family:'Playfair Display',serif;font-weight:700;font-size:16px;}
+  .lb-rank.gold{color:#FFD700;}
+  .lb-rank.silver{color:#C0C0C0;}
+  .lb-rank.bronze{color:#CD7F32;}
+  .lb-rank.other{color:rgba(253,246,236,.4);}
+  .lb-nama{font-weight:500;}
+  .lb-paket{font-size:12px;color:rgba(253,246,236,.5);}
+  .lb-score-chip{display:inline-block;font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--gold);}
+  .lb-time{font-size:13px;color:rgba(253,246,236,.6);font-variant-numeric:tabular-nums;}
+  .lb-pts{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;color:var(--cream);}
+  .lb-pts.top{color:#FFD700;}
+  .lb-empty{text-align:center;padding:32px;color:rgba(253,246,236,.3);font-size:14px;}
+  .lb-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+  .lb-badge.perfect{background:rgba(39,174,96,.2);color:#6ee7a0;border:1px solid rgba(39,174,96,.3);}
+  .lb-badge.timeout{background:rgba(201,168,76,.1);color:rgba(201,168,76,.7);border:1px solid rgba(201,168,76,.2);}
+  .score-formula{font-size:11px;color:rgba(253,246,236,.35);margin-top:8px;text-align:right;}
 </style>
 </head>
 <body>
@@ -93,6 +134,14 @@
     <p class="subtitle">4 Pilar Kebangsaan · SMA Kelas 10–12 · 10 Paket</p>
   </header>
   <div class="divider"><span class="divider-icon">❖</span></div>
+
+  <!-- Nama Siswa -->
+  <div class="nama-section">
+    <div class="nama-avatar" id="namaAvatar">?</div>
+    <label class="nama-label" for="namaInput">👤 Nama Siswa</label>
+    <input class="nama-input" id="namaInput" type="text" placeholder="Ketik nama kamu di sini..." maxlength="40" oninput="updateNama(this.value)" />
+  </div>
+
   <div class="draw-section">
     <div class="wheel-wrap">
       <div class="wheel-pointer"></div>
@@ -114,6 +163,37 @@
     <div class="section-label">Riwayat Paket</div>
     <div class="history-grid" id="historyGrid"></div>
   </div>
+
+  <!-- Leaderboard -->
+  <div class="leaderboard-section" id="leaderboardSection">
+    <div class="lb-header">
+      <div>
+        <div class="lb-title">🏆 Papan Skor</div>
+        <div class="lb-subtitle">Skor dihitung dari ketepatan × bonus kecepatan menjawab</div>
+      </div>
+      <button class="btn-clear-lb" onclick="clearLeaderboard()">🗑 Hapus Semua</button>
+    </div>
+    <div class="lb-table-wrap">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th class="center">#</th>
+            <th>Nama Siswa</th>
+            <th>Paket</th>
+            <th class="center">Benar</th>
+            <th class="center">Salah</th>
+            <th class="right">Rata² Waktu</th>
+            <th class="right">Total Poin</th>
+          </tr>
+        </thead>
+        <tbody id="lbBody">
+          <tr><td colspan="7" class="lb-empty">Belum ada data. Selesaikan paket soal untuk muncul di sini.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="score-formula">📐 Rumus poin: tiap jawaban benar = 10 + bonus waktu (maks. 5 poin). Timeout / salah = 0.</div>
+  </div>
+
 </div>
 <div class="toast" id="toast"></div>
 <script>
@@ -344,8 +424,56 @@ const BANK={
 };
 
 // ── State ──
-const state={shown:[],current:null,answers:{},scores:{},timers:{}};
-let wheelAngle=0,spinning=false;
+const state={shown:[],current:null,answers:{},scores:{},timers:{},waktuMulai:{},waktuJawab:{}};
+let wheelAngle=0,spinning=false,namaSiswa='';
+
+function updateNama(val){
+  namaSiswa=val.trim();
+  const av=document.getElementById('namaAvatar');
+  av.textContent=namaSiswa?namaSiswa.charAt(0).toUpperCase():'?';
+  av.style.background=namaSiswa?'var(--gold)':'var(--red)';
+  av.style.color=namaSiswa?'var(--dark)':'white';
+}
+
+// ── Leaderboard Storage ──
+function getLB(){try{return JSON.parse(localStorage.getItem('lb_pilar')||'[]');}catch{return[];}}
+function saveLB(data){try{localStorage.setItem('lb_pilar',JSON.stringify(data));}catch{}}
+function clearLeaderboard(){if(!confirm('Hapus semua data papan skor?'))return;localStorage.removeItem('lb_pilar');renderLB();showToast('Papan skor dihapus');}
+
+function addLBEntry(paket,scoreBenar,totalSoal,rataWaktu,totalPoin){
+  const nama=namaSiswa||'Anonim';
+  const data=getLB();
+  data.push({nama,paket,pilar:BANK[paket].pilar,topik:BANK[paket].topik,benar:scoreBenar,total:totalSoal,salah:totalSoal-scoreBenar,rataWaktu:Math.round(rataWaktu*10)/10,totalPoin,ts:Date.now()});
+  data.sort((a,b)=>b.totalPoin-a.totalPoin);
+  saveLB(data);
+  renderLB();
+}
+
+function renderLB(){
+  const data=getLB();
+  const tbody=document.getElementById('lbBody');
+  if(!data.length){tbody.innerHTML='<tr><td colspan="7" class="lb-empty">Belum ada data. Selesaikan paket soal untuk muncul di sini.</td></tr>';return;}
+  const rankIcon=(i)=>{
+    if(i===0)return'<span class="lb-rank gold">🥇</span>';
+    if(i===1)return'<span class="lb-rank silver">🥈</span>';
+    if(i===2)return'<span class="lb-rank bronze">🥉</span>';
+    return`<span class="lb-rank other">${i+1}</span>`;
+  };
+  tbody.innerHTML=data.map((d,i)=>{
+    const perfect=d.benar===d.total&&d.salah===0;
+    const badge=perfect?'<span class="lb-badge perfect">Sempurna</span>':'';
+    const poinClass=i<3?'lb-pts top':'lb-pts';
+    return`<tr>
+      <td class="center">${rankIcon(i)}</td>
+      <td><span class="lb-nama">${d.nama}</span>${badge}</td>
+      <td><span class="lb-paket">P${d.paket} · ${d.pilar}</span></td>
+      <td class="center"><span class="lb-score-chip">${d.benar}/${d.total}</span></td>
+      <td class="center" style="color:rgba(253,246,236,.5)">${d.salah}</td>
+      <td class="right"><span class="lb-time">${d.rataWaktu}s</span></td>
+      <td class="right"><span class="${poinClass}">${d.totalPoin}</span></td>
+    </tr>`;
+  }).join('');
+}
 
 // ── Wheel ──
 function getAvail(){return Array.from({length:10},(_,i)=>i+1).filter(i=>!state.shown.includes(i));}
@@ -396,6 +524,8 @@ function loadPacket(picked){
 // ── Timer ──
 function startTimer(paket,soalIdx){
   const key=`${paket}-${soalIdx}`;if(state.timers[key])return;
+  if(!state.waktuMulai[paket])state.waktuMulai[paket]={};
+  state.waktuMulai[paket][soalIdx]=Date.now();
   let rem=TIMER_SEC;updateTimerUI(paket,soalIdx,rem);
   state.timers[key]=setInterval(()=>{rem--;updateTimerUI(paket,soalIdx,rem);
     if(rem<=0){clearInterval(state.timers[key]);state.timers[key]='done';timeOut(paket,soalIdx);}},1000);
@@ -414,6 +544,8 @@ function updateTimerUI(paket,soalIdx,sec){
 }
 function timeOut(paket,soalIdx){
   if(state.answers[paket][soalIdx]!==undefined)return;
+  if(!state.waktuJawab[paket])state.waktuJawab[paket]={};
+  state.waktuJawab[paket][soalIdx]=TIMER_SEC;
   state.answers[paket][soalIdx]=null;const s=BANK[paket].soal[soalIdx];
   document.querySelectorAll(`.opt-btn[data-paket="${paket}"][data-soal="${soalIdx}"]`).forEach(btn=>{
     btn.disabled=true;if(btn.dataset.key===s.jawaban)btn.classList.add('reveal');else btn.classList.add('timeout');});
@@ -431,15 +563,28 @@ function timeOut(paket,soalIdx){
 // ── Answer ──
 function answer(paket,soalIdx,key){
   const s=BANK[paket].soal[soalIdx];if(state.answers[paket][soalIdx]!==undefined)return;
-  stopTimer(paket,soalIdx);state.answers[paket][soalIdx]=key;
-  const ok=key===s.jawaban;if(ok)state.scores[paket]=(state.scores[paket]||0)+1;
+  stopTimer(paket,soalIdx);
+  // catat waktu jawab
+  if(!state.waktuJawab[paket])state.waktuJawab[paket]={};
+  const mulai=(state.waktuMulai[paket]&&state.waktuMulai[paket][soalIdx])||Date.now();
+  const elapsedSec=Math.min(TIMER_SEC,(Date.now()-mulai)/1000);
+  state.waktuJawab[paket][soalIdx]=Math.round(elapsedSec*10)/10;
+  state.answers[paket][soalIdx]=key;
+  const ok=key===s.jawaban;
+  if(ok){
+    const bonus=Math.round((1-elapsedSec/TIMER_SEC)*5);
+    if(!state.poin)state.poin={};
+    if(!state.poin[paket])state.poin[paket]=0;
+    state.poin[paket]+=10+bonus;
+    state.scores[paket]=(state.scores[paket]||0)+1;
+  }
   document.querySelectorAll(`.opt-btn[data-paket="${paket}"][data-soal="${soalIdx}"]`).forEach(btn=>{
     btn.disabled=true;const k=btn.dataset.key;
     if(k===s.jawaban)btn.classList.add(ok&&k===key?'correct':'reveal');
     if(k===key&&!ok)btn.classList.add('wrong');});
   const fb=document.getElementById(`fb-${paket}-${soalIdx}`);
   if(fb){fb.classList.add('show',ok?'ok':'bad');
-    fb.innerHTML=ok?`<div class="feedback-title">✓ Benar!</div>`:
+    fb.innerHTML=ok?`<div class="feedback-title">✓ Benar! <span style="color:rgba(253,246,236,.5);font-size:12px;">(${elapsedSec.toFixed(1)}s)</span></div>`:
       `<div class="feedback-title">✗ Salah! Jawaban: ${s.jawaban}. ${s.opsi[s.jawaban]}</div>
        <div class="feedback-explain">💡 ${s.penjelasan}</div>`;}
   const numEl=document.getElementById(`num-${paket}-${soalIdx}`);if(numEl)numEl.classList.add(ok?'correct':'wrong');
@@ -447,6 +592,20 @@ function answer(paket,soalIdx,key){
   updateScore(paket);updateHistory();
   const next=soalIdx+1;
   if(next<BANK[paket].soal.length&&state.answers[paket][next]===undefined)startTimer(paket,next);
+  else if(next>=BANK[paket].soal.length){
+    // semua soal selesai — simpan ke leaderboard
+    setTimeout(()=>submitPaketToLB(paket),600);
+  }
+}
+
+function submitPaketToLB(paket){
+  const totalSoal=BANK[paket].soal.length;
+  const benar=state.scores[paket]||0;
+  const waktuArr=Object.values(state.waktuJawab[paket]||{});
+  const rataWaktu=waktuArr.length?waktuArr.reduce((a,b)=>a+b,0)/waktuArr.length:TIMER_SEC;
+  const totalPoin=state.poin&&state.poin[paket]?state.poin[paket]:0;
+  addLBEntry(paket,benar,totalSoal,rataWaktu,totalPoin);
+  showToast(`✅ Skor ${namaSiswa||'Anonim'} tersimpan!`);
 }
 function updateScore(paket){
   const cnt=Object.values(state.answers[paket]).filter(v=>v!==undefined).length;
@@ -501,7 +660,7 @@ function updateHistory(){
 function resetAll(){
   if(!confirm('Reset semua paket?'))return;
   Object.values(state.timers).forEach(t=>{if(t&&t!=='done')clearInterval(t);});
-  state.shown=[];state.current=null;state.answers={};state.scores={};state.timers={};
+  state.shown=[];state.current=null;state.answers={};state.scores={};state.timers={};state.waktuMulai={};state.waktuJawab={};state.poin={};
   wheelAngle=0;drawWheel();
   document.getElementById('resultCard').classList.remove('visible');
   document.getElementById('historySection').style.display='none';showToast('Semua paket direset');
@@ -510,7 +669,7 @@ function showToast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
-window.addEventListener('DOMContentLoaded',()=>setTimeout(drawWheel,100));
+window.addEventListener('DOMContentLoaded',()=>{setTimeout(drawWheel,100);renderLB();});
 </script>
 </body>
 </html>
