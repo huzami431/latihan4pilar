@@ -3,1112 +3,553 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Soal Empat Pilar MPR RI</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<title>Kuis 4 Pilar Kebangsaan Indonesia</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --merah: #C0392B;
-    --merah-gelap: #922B21;
-    --emas: #D4A827;
-    --emas-muda: #F5D06A;
-    --krem: #FDF6E3;
-    --krem-tua: #F0E4C3;
-    --coklat: #5D4037;
-    --hitam: #1A1208;
-    --abu: #6D6556;
-    --putih: #FFFEF9;
-  }
+:root{--p1:#1a56c4;--p1l:#deeaff;--p1d:#0d3585;--p2:#7c3aed;--p2l:#ede9fe;--p2d:#4c1d95;--p3:#059669;--p3l:#d1fae5;--p3d:#065f46;--p4:#d97706;--p4l:#fef3c7;--p4d:#92400e;--bg:#f8f6f0;--surface:#fff;--text:#1a1a2e;--muted:#6b7280;--ok:#059669;--err:#dc2626}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 15% 20%,rgba(26,86,196,.08) 0%,transparent 40%),radial-gradient(circle at 85% 80%,rgba(124,58,237,.07) 0%,transparent 40%);pointer-events:none;z-index:0}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* HEADER */
+.site-header{width:100%;background:linear-gradient(135deg,#b91c1c,#991b1b,#7f1d1d);color:#fff;padding:2.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
+.site-header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 30px,rgba(255,255,255,.03) 30px,rgba(255,255,255,.03) 60px)}
+.site-header::after{content:'🇮🇩';position:absolute;right:2rem;top:50%;transform:translateY(-50%);font-size:80px;opacity:.2}
+.hlabel{font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;opacity:.75;margin-bottom:.5rem}
+.htitle{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,46px);font-weight:900;line-height:1.1;margin-bottom:.75rem;position:relative}
+.hsub{font-size:15px;opacity:.8;max-width:480px;margin:0 auto;position:relative}
+.pillars-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;position:relative}
+.ptag{font-size:12px;font-weight:600;padding:5px 14px;border-radius:999px;border:1.5px solid rgba(255,255,255,.4);color:#fff;background:rgba(255,255,255,.15);letter-spacing:.5px}
+.wave{width:100%;height:50px;background:var(--bg);margin-top:-2px}
+.wave svg{display:block}
 
-  body {
-    font-family: 'Source Serif 4', Georgia, serif;
-    background: var(--krem);
-    color: var(--hitam);
-    min-height: 100vh;
-  }
+main{width:100%;max-width:860px;padding:1rem 1.5rem 4rem;position:relative;z-index:1}
 
-  /* ── HALAMAN AWAL ── */
-  #halaman-awal {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(160deg, #8B0000 0%, #C0392B 40%, #922B21 70%, #5D1010 100%);
-    padding: 40px 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  #halaman-awal::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
-  .garuda-icon {
-    font-size: 80px;
-    margin-bottom: 16px;
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
-    animation: turun 0.8s ease-out;
-  }
-  @keyframes turun { from { opacity:0; transform:translateY(-30px);} to { opacity:1; transform:translateY(0);} }
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-  .cover-badge {
-    background: var(--emas);
-    color: var(--hitam);
-    font-family: 'Source Serif 4', serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    padding: 6px 20px;
-    border-radius: 2px;
-    margin-bottom: 24px;
-    animation: turun 0.9s ease-out;
-  }
-  .cover-judul {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 5vw, 52px);
-    font-weight: 900;
-    color: var(--putih);
-    text-align: center;
-    line-height: 1.15;
-    margin-bottom: 12px;
-    text-shadow: 0 3px 20px rgba(0,0,0,0.4);
-    animation: turun 1s ease-out;
-    max-width: 640px;
-  }
-  .cover-sub {
-    font-family: 'Source Serif 4', serif;
-    font-size: 17px;
-    font-weight: 300;
-    font-style: italic;
-    color: var(--emas-muda);
-    text-align: center;
-    margin-bottom: 36px;
-    animation: turun 1.1s ease-out;
-  }
-  .cover-stats {
-    display: flex;
-    gap: 32px;
-    margin-bottom: 44px;
-    animation: turun 1.2s ease-out;
-  }
-  .stat-item {
-    text-align: center;
-    color: var(--putih);
-  }
-  .stat-angka {
-    font-family: 'Playfair Display', serif;
-    font-size: 38px;
-    font-weight: 700;
-    color: var(--emas-muda);
-    line-height: 1;
-  }
-  .stat-label {
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    opacity: 0.75;
-    margin-top: 4px;
-  }
-  .btn-mulai {
-    background: var(--emas);
-    color: var(--hitam);
-    border: none;
-    font-family: 'Playfair Display', serif;
-    font-size: 17px;
-    font-weight: 700;
-    padding: 16px 52px;
-    border-radius: 4px;
-    cursor: pointer;
-    letter-spacing: 1px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.3);
-    transition: all 0.2s;
-    animation: turun 1.3s ease-out;
-  }
-  .btn-mulai:hover { background: var(--emas-muda); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+/* ===== SPIN WHEEL SCREEN ===== */
+#wheel-screen{animation:fadeUp .4s ease}
+.wheel-intro{text-align:center;margin-bottom:1.75rem}
+.wheel-intro h2{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text);margin-bottom:.4rem}
+.wheel-intro p{font-size:14px;color:var(--muted)}
 
-  /* ── SOAL ── */
-  #halaman-soal { display: none; min-height: 100vh; padding: 0 0 60px; }
+.wheel-layout{display:flex;gap:2rem;align-items:flex-start;justify-content:center;flex-wrap:wrap}
 
-  .header-quiz {
-    background: var(--merah-gelap);
-    padding: 16px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky; top: 0; z-index: 100;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-  }
-  .header-brand {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 16px;
-    color: var(--emas-muda);
-    letter-spacing: 0.5px;
-  }
-  .header-progress-text {
-    font-size: 13px;
-    color: rgba(255,255,255,0.7);
-    font-family: 'Source Serif 4', serif;
-  }
-  .progress-bar-wrap {
-    height: 4px;
-    background: rgba(255,255,255,0.15);
-    width: 100%;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--emas), var(--emas-muda));
-    transition: width 0.5s ease;
-  }
+.wheel-container{position:relative;width:320px;height:320px;flex-shrink:0}
+.wheel-pointer{position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:28px solid #b91c1c;z-index:10;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+#wheelCanvas{border-radius:50%;box-shadow:0 8px 32px rgba(0,0,0,.15);display:block;cursor:pointer}
 
-  .soal-container {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 48px 28px 20px;
-  }
+.wheel-sidebar{flex:1;min-width:260px;max-width:380px;display:flex;flex-direction:column;gap:12px}
 
-  .soal-meta {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .soal-nomor {
-    font-family: 'Playfair Display', serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--merah);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-  .soal-tema {
-    background: var(--krem-tua);
-    border: 1px solid var(--emas);
-    color: var(--coklat);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 2px;
-  }
-  .soal-level {
-    margin-left: auto;
-    font-size: 11px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 2px;
-    font-weight: 600;
-  }
-  .level-sedang { background: #FFF3CD; color: #856404; border: 1px solid #F0C040; }
-  .level-sulit  { background: #FDECEA; color: #922B21; border: 1px solid #E8A09A; }
+.paket-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.paket-card{border:2px solid #e5e7eb;border-radius:14px;padding:.75rem 1rem;text-align:left;background:var(--surface);transition:all .25s}
+.paket-card.active{box-shadow:0 0 0 3px rgba(185,28,28,.15)}
+.pc-num{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.pc-name{font-size:14px;font-weight:600;color:var(--text)}
+.pc-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
 
-  .soal-teks {
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 1.6;
-    color: var(--hitam);
-    margin-bottom: 32px;
-    border-left: 4px solid var(--merah);
-    padding-left: 20px;
-  }
+.spin-btn{width:100%;padding:1rem 1.5rem;background:linear-gradient(135deg,#b91c1c,#ef4444);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;border:none;border-radius:14px;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:10px}
+.spin-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(185,28,28,.35)}
+.spin-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
 
-  .opsi-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.result-banner{display:none;background:var(--surface);border:2px solid #e5e7eb;border-radius:16px;padding:1.1rem 1.25rem;animation:fadeUp .3s ease}
+.result-banner.show{display:block}
+.rb-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px}
+.rb-name{font-size:20px;font-weight:700;margin-bottom:.75rem}
+.start-btn{display:block;width:100%;padding:.8rem 1.5rem;background:#1a1a2e;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;cursor:pointer;transition:all .18s;text-align:center}
+.start-btn:hover{background:#b91c1c;transform:translateY(-1px);box-shadow:0 6px 16px rgba(185,28,28,.25)}
 
-  .opsi-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 16px 20px;
-    border: 2px solid var(--krem-tua);
-    border-radius: 6px;
-    background: var(--putih);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: left;
-  }
-  .opsi-item:hover:not(.disabled) {
-    border-color: var(--emas);
-    background: #FFFBF0;
-    transform: translateX(4px);
-  }
-  .opsi-huruf {
-    flex-shrink: 0;
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    background: var(--krem-tua);
-    border: 2px solid var(--emas);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--coklat);
-    transition: all 0.2s;
-    margin-top: 1px;
-  }
-  .opsi-teks {
-    font-size: 15.5px;
-    line-height: 1.55;
-    color: var(--hitam);
-    padding-top: 4px;
-  }
+/* ===== QUIZ SCREEN ===== */
+#quiz-view{display:none;animation:fadeUp .4s ease}
+.progress-wrap{display:flex;align-items:center;gap:14px;margin-bottom:1.5rem}
+.progress-bar{flex:1;height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#b91c1c,#ef4444);transition:width .5s cubic-bezier(.4,0,.2,1);width:0%}
+.progress-text{font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;min-width:70px;text-align:right}
 
-  /* State setelah jawab */
-  .opsi-item.benar {
-    border-color: #27AE60;
-    background: #EAFAF1;
-  }
-  .opsi-item.benar .opsi-huruf { background: #27AE60; border-color: #27AE60; color: #fff; }
-  .opsi-item.salah {
-    border-color: #E74C3C;
-    background: #FDECEA;
-    opacity: 0.7;
-  }
-  .opsi-item.salah .opsi-huruf { background: #E74C3C; border-color: #E74C3C; color: #fff; }
-  .opsi-item.disabled { cursor: default; }
+.q-card{background:var(--surface);border-radius:20px;box-shadow:0 4px 24px rgba(0,0,0,.07),0 1px 4px rgba(0,0,0,.04);padding:2rem;margin-bottom:1.25rem;animation:fadeUp .35s cubic-bezier(.4,0,.2,1)}
+.q-meta{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.q-number{font-size:13px;font-weight:600;color:var(--muted)}
+.q-badge{font-size:11px;font-weight:700;padding:3px 12px;border-radius:999px;letter-spacing:.5px;text-transform:uppercase}
+.badge-p1{background:var(--p1l);color:var(--p1d)}.badge-p2{background:var(--p2l);color:var(--p2d)}.badge-p3{background:var(--p3l);color:var(--p3d)}.badge-p4{background:var(--p4l);color:var(--p4d)}
+.q-text{font-family:'Playfair Display',serif;font-size:clamp(18px,3vw,23px);font-weight:700;color:var(--text);line-height:1.45;margin-bottom:1.75rem}
 
-  /* Penjelasan */
-  .penjelasan-box {
-    display: none;
-    background: #FFFBF0;
-    border: 1px solid var(--emas);
-    border-left: 5px solid var(--emas);
-    border-radius: 6px;
-    padding: 18px 22px;
-    margin-bottom: 28px;
-    animation: fadeIn 0.4s ease;
-  }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:translateY(0);} }
-  .penjelasan-label {
-    font-family: 'Playfair Display', serif;
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--emas);
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-  .penjelasan-teks {
-    font-size: 14.5px;
-    line-height: 1.65;
-    color: var(--coklat);
-  }
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:540px){.options{grid-template-columns:1fr}}
+.opt-btn{display:flex;align-items:flex-start;gap:12px;background:#f9fafb;border:2px solid #e5e7eb;border-radius:14px;padding:1rem 1.1rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:500;color:var(--text);cursor:pointer;text-align:left;transition:all .18s;line-height:1.4}
+.opt-btn:hover:not(:disabled){background:#eff6ff;border-color:var(--p1);transform:translateY(-2px);box-shadow:0 4px 12px rgba(26,86,196,.12)}
+.opt-btn:disabled{cursor:not-allowed}
+.opt-label{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;min-width:26px;border-radius:8px;background:#e5e7eb;font-size:12px;font-weight:700;color:#6b7280;transition:all .18s}
+.opt-btn:hover:not(:disabled) .opt-label{background:var(--p1);color:#fff}
+.opt-btn.correct{background:#f0fdf4;border-color:var(--ok);box-shadow:0 0 0 3px rgba(5,150,105,.1)}
+.opt-btn.correct .opt-label{background:var(--ok);color:#fff}
+.opt-btn.wrong{background:#fef2f2;border-color:var(--err);box-shadow:0 0 0 3px rgba(220,38,38,.1)}
+.opt-btn.wrong .opt-label{background:var(--err);color:#fff}
+.opt-btn.reveal-correct{background:#f0fdf4;border-color:var(--ok);opacity:.7}
+.opt-btn.reveal-correct .opt-label{background:var(--ok);color:#fff}
 
-  .btn-next {
-    display: none;
-    background: var(--merah);
-    color: #fff;
-    border: none;
-    font-family: 'Playfair Display', serif;
-    font-size: 16px;
-    font-weight: 700;
-    padding: 14px 40px;
-    border-radius: 4px;
-    cursor: pointer;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 16px rgba(192,57,43,0.35);
-    transition: all 0.2s;
-    width: 100%;
-  }
-  .btn-next:hover { background: var(--merah-gelap); transform: translateY(-2px); }
+.feedback{margin-top:1.25rem;border-radius:14px;font-size:14px;line-height:1.6;display:none;animation:fadeUp .3s ease;overflow:hidden}
+.feedback.show{display:block}
+.feedback.benar{background:#f0fdf4;border:1.5px solid #86efac}
+.feedback.salah{background:#fef2f2;border:1.5px solid #fca5a5}
+.fb-header{display:flex;align-items:center;gap:10px;padding:.85rem 1.25rem;font-weight:700;font-size:15px}
+.benar .fb-header{color:#065f46;background:#dcfce7}
+.salah .fb-header{color:#991b1b;background:#fee2e2}
+.fb-header-icon{font-size:20px}
+.fb-body{padding:.9rem 1.25rem}
+.fb-jawaban-benar{display:flex;align-items:flex-start;gap:10px;background:#fff;border:1.5px solid #86efac;border-radius:10px;padding:.7rem 1rem;margin-bottom:.75rem}
+.fb-jawaban-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#059669;white-space:nowrap;padding-top:1px}
+.fb-jawaban-teks{font-weight:600;color:#064e3b;line-height:1.4;font-size:14px}
+.fb-penjelasan{font-size:14px;color:#7f1d1d;line-height:1.65}
+.benar .fb-penjelasan{color:#065f46}
+.fb-penjelasan-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;opacity:.65}
 
-  /* ── HALAMAN HASIL ── */
-  #halaman-hasil {
-    display: none;
-    min-height: 100vh;
-    background: linear-gradient(160deg, #8B0000 0%, #C0392B 50%, #5D1010 100%);
-    padding: 60px 20px;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-  }
-  .hasil-card {
-    background: var(--putih);
-    border-radius: 12px;
-    max-width: 600px;
-    width: 100%;
-    padding: 52px 44px;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-    animation: turun 0.6s ease-out;
-  }
-  .hasil-emoji { font-size: 72px; margin-bottom: 20px; }
-  .hasil-judul {
-    font-family: 'Playfair Display', serif;
-    font-size: 32px;
-    font-weight: 900;
-    color: var(--merah);
-    margin-bottom: 8px;
-  }
-  .hasil-skor-besar {
-    font-family: 'Playfair Display', serif;
-    font-size: 80px;
-    font-weight: 900;
-    color: var(--merah);
-    line-height: 1;
-    margin: 20px 0 4px;
-  }
-  .hasil-dari { color: var(--abu); font-size: 16px; margin-bottom: 28px; }
-  .hasil-bar-wrap { background: var(--krem-tua); border-radius: 10px; height: 14px; overflow: hidden; margin-bottom: 36px; }
-  .hasil-bar-fill { height: 100%; background: linear-gradient(90deg, var(--merah), var(--emas)); border-radius: 10px; transition: width 1s ease; }
-  .hasil-detail {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px;
-  }
-  .detail-item {
-    background: var(--krem);
-    border: 1px solid var(--krem-tua);
-    border-radius: 8px;
-    padding: 18px;
-  }
-  .detail-angka { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; }
-  .detail-label { font-size: 12px; color: var(--abu); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
-  .detail-benar .detail-angka { color: #27AE60; }
-  .detail-salah .detail-angka { color: #E74C3C; }
-  .btn-ulangi {
-    background: var(--merah);
-    color: #fff;
-    border: none;
-    font-family: 'Playfair Display', serif;
-    font-size: 16px; font-weight: 700;
-    padding: 15px 48px;
-    border-radius: 4px;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(192,57,43,0.35);
-    transition: all 0.2s;
-    width: 100%;
-  }
-  .btn-ulangi:hover { background: var(--merah-gelap); transform: translateY(-2px); }
+.nav-btn{display:none;width:100%;padding:1rem;background:linear-gradient(135deg,#b91c1c,#ef4444);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:600;border:none;border-radius:14px;cursor:pointer;transition:all .18s}
+.nav-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(185,28,28,.3)}
+.nav-btn:active{transform:scale(.98)}
 
-  .predikat { font-size: 15px; color: var(--abu); font-style: italic; margin-bottom: 24px; }
+/* ===== SCORE SCREEN ===== */
+#score-view{display:none;animation:fadeUp .4s ease}
+.score-top{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;border-radius:20px;padding:2.5rem 2rem;text-align:center;margin-bottom:1.25rem;position:relative;overflow:hidden}
+.score-top::before{content:'';position:absolute;width:300px;height:300px;background:radial-gradient(circle,rgba(185,28,28,.3),transparent 70%);top:-80px;left:50%;transform:translateX(-50%);border-radius:50%}
+.score-emoji-big{font-size:60px;margin-bottom:.75rem;position:relative}
+.score-persen{font-family:'Playfair Display',serif;font-size:64px;font-weight:900;color:#fbbf24;line-height:1;position:relative}
+.score-persen span{font-size:28px}
+.score-predikat{font-size:18px;font-weight:600;margin:.5rem 0 .25rem;position:relative}
+.score-pesan{font-size:14px;opacity:.7;position:relative;max-width:380px;margin:0 auto}
+.score-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.25rem}
+.stat-box{background:#fff;border-radius:16px;padding:1.25rem 1rem;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.stat-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;line-height:1}
+.stat-lbl{font-size:12px;font-weight:600;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+.stat-benar .stat-num{color:var(--ok)}.stat-salah .stat-num{color:var(--err)}.stat-nilai .stat-num{color:#b91c1c}
+.breakdown{background:#fff;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.breakdown-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:1rem}
+.breakdown-row{display:flex;align-items:center;gap:12px}
+.breakdown-label{font-size:13px;font-weight:600;min-width:140px}
+.breakdown-bar-wrap{flex:1;height:10px;background:#f3f4f6;border-radius:999px;overflow:hidden}
+.breakdown-bar-fill{height:100%;border-radius:999px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.breakdown-score{font-size:13px;font-weight:700;min-width:36px;text-align:right}
+.score-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.respin-btn{padding:1rem;background:var(--surface);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;border:2px solid #e5e7eb;border-radius:14px;cursor:pointer;transition:all .18s}
+.respin-btn:hover{border-color:#b91c1c;color:#b91c1c;transform:translateY(-2px)}
+.restart-btn{padding:1rem;background:#1a1a2e;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:14px;cursor:pointer;transition:all .18s}
+.restart-btn:hover{background:#b91c1c;transform:translateY(-2px);box-shadow:0 8px 20px rgba(185,28,28,.25)}
 
-  @media (max-width: 600px) {
-    .cover-stats { gap: 20px; }
-    .stat-angka { font-size: 30px; }
-    .soal-teks { font-size: 17px; }
-    .hasil-skor-besar { font-size: 60px; }
-    .hasil-card { padding: 36px 24px; }
-  }
-
-  /* ── MODAL SANKSI ── */
-  .overlay-sanksi {
-    display: none;
-    position: fixed; inset: 0; z-index: 9999;
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(6px);
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .overlay-sanksi.aktif { display: flex; }
-  .sanksi-card {
-    background: var(--putih);
-    border-radius: 12px;
-    max-width: 460px; width: 100%;
-    padding: 40px 36px;
-    text-align: center;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
-    animation: turun 0.4s ease-out;
-    border-top: 6px solid var(--merah);
-  }
-  .sanksi-ikon { font-size: 56px; margin-bottom: 16px; }
-  .sanksi-judul {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px; font-weight: 900;
-    color: var(--merah); margin-bottom: 10px;
-  }
-  .sanksi-teks {
-    font-size: 15px; line-height: 1.65;
-    color: var(--coklat); margin-bottom: 8px;
-  }
-  .sanksi-counter {
-    font-family: 'Playfair Display', serif;
-    font-size: 42px; font-weight: 900;
-    color: var(--merah); margin: 12px 0;
-    line-height: 1;
-  }
-  .sanksi-counter-label { font-size: 13px; color: var(--abu); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px; }
-  .sanksi-total-pelanggaran {
-    background: #FDECEA; border: 1px solid #E8A09A;
-    border-radius: 6px; padding: 10px 16px;
-    font-size: 13px; color: var(--merah);
-    margin-bottom: 24px;
-  }
-  .btn-sanksi-lanjut {
-    background: var(--merah);
-    color: #fff; border: none;
-    font-family: 'Playfair Display', serif;
-    font-size: 15px; font-weight: 700;
-    padding: 13px 36px; border-radius: 4px;
-    cursor: pointer; width: 100%;
-    transition: all 0.2s;
-  }
-  .btn-sanksi-lanjut:hover { background: var(--merah-gelap); }
-
-  /* ── INDIKATOR SANKSI DI HEADER ── */
-  .sanksi-badge {
-    display: flex; align-items: center; gap: 6px;
-    background: rgba(192,57,43,0.25);
-    border: 1px solid rgba(192,57,43,0.5);
-    border-radius: 4px; padding: 4px 10px;
-    font-size: 12px; color: #FFCDD2;
-    font-family: 'Source Serif 4', serif;
-    letter-spacing: 0.5px;
-    transition: all 0.3s;
-  }
-  .sanksi-badge.menyala {
-    background: rgba(192,57,43,0.6);
-    border-color: var(--emas);
-    color: var(--emas-muda);
-    animation: kedip 0.5s ease 3;
-  }
-  @keyframes kedip { 0%,100%{opacity:1} 50%{opacity:0.3} }
+footer{text-align:center;font-size:12px;color:var(--muted);padding:1rem;position:relative;z-index:1}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════ HALAMAN AWAL ═══════════════ -->
-<div id="halaman-awal">
-  <div class="garuda-icon">🦅</div>
-  <div class="cover-badge">Sekretariat Jenderal MPR RI</div>
-  <h1 class="cover-judul">Soal Empat Pilar MPR RI</h1>
-  <p class="cover-sub">Pancasila · UUD NRI 1945 · NKRI · Bhinneka Tunggal Ika</p>
-  <div class="cover-stats">
-    <div class="stat-item">
-      <div class="stat-angka">50</div>
-      <div class="stat-label">Soal</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-angka">6</div>
-      <div class="stat-label">Tema</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-angka">4</div>
-      <div class="stat-label">Pilar</div>
-    </div>
+<header class="site-header">
+  <div class="hlabel">Permainan Interaktif</div>
+  <h1 class="htitle">Kuis 4 Pilar Kebangsaan</h1>
+  <p class="hsub">Putar roda untuk memilih paket soal, lalu uji pemahamanmu!</p>
+  <div class="pillars-row">
+    <span class="ptag">⚡ Pancasila</span>
+    <span class="ptag">📜 UUD 1945</span>
+    <span class="ptag">🗺️ NKRI</span>
+    <span class="ptag">🤝 Bhinneka Tunggal Ika</span>
   </div>
-  <button class="btn-mulai" onclick="mulaiKuis()">Mulai Mengerjakan →</button>
+</header>
+
+<div class="wave">
+  <svg viewBox="0 0 1440 50" preserveAspectRatio="none" style="width:100%;height:50px">
+    <path d="M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z" fill="#f8f6f0"/>
+  </svg>
 </div>
 
-<!-- ═══════════════ MODAL SANKSI PINDAH TAB ═══════════════ -->
-<div class="overlay-sanksi" id="overlaySanksi">
-  <div class="sanksi-card">
-    <div class="sanksi-ikon">⚠️</div>
-    <div class="sanksi-judul">Pelanggaran Terdeteksi!</div>
-    <p class="sanksi-teks">Anda terdeteksi meninggalkan halaman ujian. Setiap pelanggaran dikenakan <strong>sanksi pengurangan 2 poin</strong> dari skor akhir.</p>
-    <div class="sanksi-counter" id="sanksiKurang">−2</div>
-    <div class="sanksi-counter-label">Poin Dikurangi</div>
-    <div class="sanksi-total-pelanggaran" id="sanksiTotalInfo">Total pelanggaran: 1 kali — Total pengurangan: 2 poin</div>
-    <button class="btn-sanksi-lanjut" onclick="tutupSanksi()">Mengerti, Kembali ke Ujian</button>
-  </div>
-</div>
+<main>
 
-<!-- ═══════════════ HALAMAN SOAL ═══════════════ -->
-<div id="halaman-soal">
-  <div class="header-quiz">
-    <span class="header-brand">🦅 Empat Pilar MPR RI</span>
-    <span class="sanksi-badge" id="sanksiBadge" title="Jumlah pelanggaran pindah tab">🚨 Pelanggaran: <strong id="badgeHitungPelanggaran">0</strong></span>
-    <span class="header-progress-text" id="headerProgress">Soal 1 dari 50</span>
-  </div>
-  <div class="progress-bar-wrap">
-    <div class="progress-bar-fill" id="progressBar" style="width:2%"></div>
-  </div>
-  <div class="soal-container">
-    <div class="soal-meta">
-      <span class="soal-nomor" id="soalNomor">Soal 1</span>
-      <span class="soal-tema" id="soalTema">Pancasila</span>
-      <span class="soal-level" id="soalLevel">Sedang</span>
+  <!-- SPIN WHEEL SCREEN -->
+  <div id="wheel-screen">
+    <div class="wheel-intro">
+      <h2>🎡 Putar Roda Paket Soal</h2>
+      <p>Klik tombol di bawah — roda akan menentukan paket soal yang kamu kerjakan!</p>
     </div>
-    <p class="soal-teks" id="soalTeks"></p>
-    <div class="opsi-list" id="opsiList"></div>
-    <div class="penjelasan-box" id="penjelasanBox">
-      <div class="penjelasan-label">📖 Pembahasan</div>
-      <p class="penjelasan-teks" id="penjelasanTeks"></p>
-    </div>
-    <button class="btn-next" id="btnNext" onclick="soalBerikutnya()">Soal Berikutnya →</button>
-  </div>
-</div>
-
-<!-- ═══════════════ HALAMAN HASIL ═══════════════ -->
-<div id="halaman-hasil" style="display:none; min-height:100vh; background:linear-gradient(160deg,#8B0000 0%,#C0392B 50%,#5D1010 100%); padding:60px 20px; flex-direction:column; align-items:center; justify-content:center;">
-  <div class="hasil-card">
-    <div class="hasil-emoji" id="hasilEmoji">🏆</div>
-    <div class="hasil-judul" id="hasilJudul">Luar Biasa!</div>
-    <p class="predikat" id="hasilPredikat"></p>
-    <div class="hasil-skor-besar" id="hasilSkor">0</div>
-    <div class="hasil-dari" id="hasilDari">dari 50 soal benar</div>
-    <div class="hasil-bar-wrap">
-      <div class="hasil-bar-fill" id="hasilBarFill" style="width:0%"></div>
-    </div>
-    <div class="hasil-detail">
-      <div class="detail-item detail-benar">
-        <div class="detail-angka" id="jmlBenar">0</div>
-        <div class="detail-label">✅ Benar</div>
+    <div class="wheel-layout">
+      <div class="wheel-container">
+        <div class="wheel-pointer"></div>
+        <canvas id="wheelCanvas" width="320" height="320" onclick="spinWheel()"></canvas>
       </div>
-      <div class="detail-item detail-salah">
-        <div class="detail-angka" id="jmlSalah">0</div>
-        <div class="detail-label">❌ Salah</div>
+      <div class="wheel-sidebar">
+        <div class="paket-cards" id="paket-cards"></div>
+        <button class="spin-btn" id="spin-btn" onclick="spinWheel()">
+          🎰 &nbsp; Putar Roda!
+        </button>
+        <div class="result-banner" id="result-banner">
+          <div class="rb-label">Paket terpilih</div>
+          <div class="rb-name" id="rb-name"></div>
+          <button class="start-btn" onclick="startQuiz()">Mulai Kuis →</button>
+        </div>
       </div>
     </div>
-    <div id="hasilSanksiBox" style="display:none; background:#FDECEA; border:1px solid #E8A09A; border-radius:8px; padding:14px 18px; margin-bottom:20px; text-align:left;">
-      <div style="font-family:'Playfair Display',serif; font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:#922B21; font-weight:700; margin-bottom:6px;">⚠️ Catatan Sanksi</div>
-      <div style="font-size:14px; color:#5D1010; line-height:1.6;" id="hasilSanksiTeks"></div>
-    </div>
-    <button class="btn-ulangi" onclick="ulangiKuis()">↩ Ulangi Kuis</button>
   </div>
-</div>
 
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-view">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+      <div class="progress-text" id="prog-text">1 / 5</div>
+    </div>
+    <div class="q-card" id="q-card">
+      <div class="q-meta">
+        <span class="q-number" id="q-num">Soal 1</span>
+        <span class="q-badge" id="q-badge"></span>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback">
+        <div class="fb-header">
+          <span class="fb-header-icon" id="fb-icon"></span>
+          <span id="fb-judul"></span>
+        </div>
+        <div class="fb-body" id="fb-body"></div>
+      </div>
+    </div>
+    <button class="nav-btn" id="nav-btn">Soal Berikutnya →</button>
+  </div>
+
+  <!-- SCORE SCREEN -->
+  <div id="score-view">
+    <div class="score-top">
+      <div class="score-emoji-big" id="s-emoji"></div>
+      <div class="score-persen" id="s-persen"></div>
+      <div class="score-predikat" id="s-predikat"></div>
+      <div class="score-pesan" id="s-pesan"></div>
+    </div>
+    <div class="score-stats">
+      <div class="stat-box stat-benar"><div class="stat-num" id="s-benar">0</div><div class="stat-lbl">Benar</div></div>
+      <div class="stat-box stat-salah"><div class="stat-num" id="s-salah">0</div><div class="stat-lbl">Salah</div></div>
+      <div class="stat-box stat-nilai"><div class="stat-num" id="s-nilai">0</div><div class="stat-lbl">Nilai</div></div>
+    </div>
+    <div class="breakdown">
+      <div class="breakdown-title">Hasil Paket Ini</div>
+      <div id="breakdown-rows"></div>
+    </div>
+    <div class="score-actions">
+      <button class="respin-btn" onclick="backToWheel()">🎡 Putar Roda Lagi</button>
+      <button class="restart-btn" onclick="replayQuiz()">🔄 Ulangi Paket Ini</button>
+    </div>
+  </div>
+
+</main>
+<footer>Kuis 4 Pilar Kebangsaan &nbsp;·&nbsp; Pendidikan Kewarganegaraan</footer>
 
 <script>
-// ═══════════════ DATA SOAL ═══════════════
-const SOAL = [
-  // ── PANCASILA (1–10) ──
+/* ============================================================
+   DATA
+============================================================ */
+const PAKET = [
   {
-    no:1, tema:"Pancasila", level:"Sulit",
-    pertanyaan:"Dalam pidato 1 Juni 1945, Soekarno menawarkan kemungkinan pemadatan Pancasila menjadi Trisila, lalu Ekasila. Yang dimaksud dengan Ekasila menurut Soekarno adalah...",
-    opsi:{A:"Ketuhanan Yang Maha Esa sebagai satu-satunya prinsip dasar negara",B:"Sosio-Nasionalisme sebagai inti dari semua sila yang ada",C:"Gotong Royong sebagai intisari seluruh prinsip dasar negara",D:"Persatuan Indonesia yang merangkum semua nilai kebangsaan"},
-    jawaban:"C",
-    penjelasan:"Dalam pidato 1 Juni 1945, Soekarno menyatakan bahwa Pancasila dapat diperas menjadi Trisila (Sosio-Nasionalisme, Sosio-Demokrasi, Ketuhanan), dan Trisila dapat diperas lagi menjadi Ekasila yaitu Gotong Royong. Ini sesuai slide 11 bahan tayang MPR."
+    id:"p1", nama:"Pancasila", icon:"⚡",
+    warna:"#1a56c4", warnaGelap:"#0d3585", warnaTerang:"#deeaff",
+    soal:[
+      {teks:"Pancasila ditetapkan sebagai dasar negara pada tanggal...",opsi:["17 Agustus 1945","18 Agustus 1945","1 Juni 1945","22 Juni 1945"],jawaban:1,penjelasan:"Pancasila ditetapkan sebagai dasar negara pada 18 Agustus 1945 saat sidang PPKI mengesahkan UUD 1945."},
+      {teks:"Sila ke-3 Pancasila berbunyi...",opsi:["Kemanusiaan yang adil dan beradab","Persatuan Indonesia","Kerakyatan yang dipimpin oleh hikmat kebijaksanaan","Ketuhanan Yang Maha Esa"],jawaban:1,penjelasan:"Sila ke-3 adalah 'Persatuan Indonesia', yang menegaskan pentingnya persatuan bangsa."},
+      {teks:"Lambang sila 'Keadilan Sosial bagi Seluruh Rakyat Indonesia' adalah...",opsi:["Bintang emas","Rantai emas","Pohon beringin","Padi dan kapas"],jawaban:3,penjelasan:"Padi dan kapas melambangkan kemakmuran dan keadilan sosial — sandang dan pangan bagi seluruh rakyat."},
+      {teks:"Siapakah yang mengusulkan nama 'Pancasila' pada sidang BPUPKI?",opsi:["Moh. Yamin","Soepomo","Soekarno","Moh. Hatta"],jawaban:2,penjelasan:"Ir. Soekarno mengusulkan nama 'Pancasila' dalam pidatonya pada 1 Juni 1945 di sidang BPUPKI."},
+      {teks:"Nilai-nilai Pancasila bersumber dari...",opsi:["Ajaran agama Islam","Nilai-nilai luhur bangsa Indonesia","Hukum kolonial Belanda","Konstitusi Amerika Serikat"],jawaban:1,penjelasan:"Pancasila digali dari nilai-nilai luhur yang telah hidup dalam budaya dan adat istiadat bangsa Indonesia."}
+    ]
   },
   {
-    no:2, tema:"Pancasila", level:"Sedang",
-    pertanyaan:"Pancasila sebagai Dasar Negara secara yuridis-konstitusional berlaku mengikat karena rumusan sila-silanya terdapat dalam...",
-    opsi:{A:"Ketetapan MPR Nomor XVIII/MPR/1998 tentang Pencabutan P4",D:"Pidato Soekarno pada Sidang BPUPKI 1 Juni 1945",C:"Batang Tubuh UUD 1945 Pasal 1 tentang bentuk negara",B:"Alinea keempat Pembukaan UUD NRI Tahun 1945"},
-    jawaban:"D",
-    penjelasan:"Slide 7 bahan tayang menyatakan: 'Dalam Pembukaan UUD NRI Tahun 1945 alinea keempat terdapat rumusan sila-sila Pancasila sebagai dasar negara Indonesia. Rumusan sila-sila Pancasila itulan hukum positif Indonesia secara yuridis-konstitusional sah, berlaku, dan mengikat seluruh lembaga negara, lembaga masyarakat, dan setiap warga negara, tanpa kecuali.'"
+    id:"p2", nama:"UUD 1945", icon:"📜",
+    warna:"#7c3aed", warnaGelap:"#4c1d95", warnaTerang:"#ede9fe",
+    soal:[
+      {teks:"UUD 1945 terdiri dari berapa pasal setelah amandemen?",opsi:["37 pasal","73 pasal","37 bab","73 bab"],jawaban:1,penjelasan:"Setelah 4 kali amandemen (1999–2002), UUD 1945 memiliki 73 pasal yang tersebar dalam berbagai bab."},
+      {teks:"Pasal berapa UUD 1945 yang mengatur tentang hak atas pendidikan?",opsi:["Pasal 28","Pasal 31","Pasal 33","Pasal 27"],jawaban:1,penjelasan:"Pasal 31 UUD 1945 menegaskan bahwa setiap warga negara berhak mendapat pendidikan."},
+      {teks:"Pembukaan UUD 1945 terdiri dari berapa alinea?",opsi:["3 alinea","4 alinea","5 alinea","6 alinea"],jawaban:1,penjelasan:"Pembukaan UUD 1945 terdiri dari 4 alinea yang memuat cita-cita dan tujuan negara Indonesia."},
+      {teks:"UUD 1945 mengalami perubahan (amandemen) sebanyak...",opsi:["2 kali","3 kali","4 kali","5 kali"],jawaban:2,penjelasan:"UUD 1945 diubah sebanyak 4 kali: tahun 1999, 2000, 2001, dan 2002 oleh MPR."},
+      {teks:"Pasal 1 ayat (2) UUD 1945 menyatakan bahwa kedaulatan berada di tangan...",opsi:["Presiden","DPR","Rakyat","MPR"],jawaban:2,penjelasan:"Pasal 1 ayat (2) menyatakan bahwa kedaulatan berada di tangan rakyat dan dilaksanakan menurut UUD."}
+    ]
   },
   {
-    no:3, tema:"Pancasila", level:"Sulit",
-    pertanyaan:"BPUPKI dibentuk pada 29 April 1945. Susunan pengurusnya terdiri dari Ketua, Wakil Ketua I, Wakil Ketua II, dan anggota. Berapa total anggota BPUPKI termasuk anggota istimewa?",
-    opsi:{A:"62 orang anggota biasa dan 7 anggota istimewa",D:"66 orang anggota biasa dan 7 anggota istimewa",C:"69 orang anggota biasa dan 7 anggota istimewa",B:"60 orang anggota biasa dan 7 anggota istimewa"},
-    jawaban:"C",
-    penjelasan:"Slide 9 bahan tayang menyebutkan bahwa BPUPKI terdiri dari 69 orang + 7 anggota istimewa. Ketuanya adalah Dr. K.R.T Radjiman Wediodiningrat. Sidang pertama berlangsung 29 Mei–1 Juni 1945, dan sidang kedua 10–17 Juli 1945."
+    id:"p3", nama:"NKRI", icon:"🗺️",
+    warna:"#059669", warnaGelap:"#065f46", warnaTerang:"#d1fae5",
+    soal:[
+      {teks:"NKRI diproklamasikan pada tanggal...",opsi:["17 Agustus 1945","18 Agustus 1945","1 Oktober 1945","20 Mei 1908"],jawaban:0,penjelasan:"Proklamasi Kemerdekaan Indonesia dibacakan oleh Soekarno-Hatta pada 17 Agustus 1945 di Jakarta."},
+      {teks:"Bentuk negara Indonesia adalah...",opsi:["Federal","Konfederasi","Kesatuan","Monarki"],jawaban:2,penjelasan:"Indonesia adalah Negara Kesatuan (bukan federal), artinya kekuasaan pemerintahan berpusat pada pemerintah pusat."},
+      {teks:"Semboyan 'dari Sabang sampai Merauke' menggambarkan...",opsi:["Keberagaman budaya","Kesatuan wilayah Indonesia dari barat ke timur","Jumlah pulau di Indonesia","Batas wilayah laut Indonesia"],jawaban:1,penjelasan:"Sabang di ujung barat (Aceh) dan Merauke di ujung timur (Papua) menggambarkan kesatuan wilayah NKRI."},
+      {teks:"Sistem pemerintahan Indonesia adalah...",opsi:["Presidensial","Parlementer","Semi-presidensial","Monarki konstitusional"],jawaban:0,penjelasan:"Indonesia menganut sistem presidensial, di mana presiden menjadi kepala negara sekaligus kepala pemerintahan."},
+      {teks:"Lagu kebangsaan Indonesia yang wajib dihormati sesuai undang-undang adalah...",opsi:["Bagimu Negeri","Garuda Pancasila","Indonesia Raya","Tanah Airku"],jawaban:2,penjelasan:"'Indonesia Raya' karya W.R. Soepratman adalah lagu kebangsaan yang dilindungi oleh Undang-Undang."}
+    ]
   },
   {
-    no:4, tema:"Pancasila", level:"Sedang",
-    pertanyaan:"Panitia Sembilan berhasil merumuskan Piagam Jakarta pada 22 Juni 1945. Perbedaan antara rumusan dasar negara dalam Piagam Jakarta dengan rumusan final Pancasila yang disahkan PPKI terletak pada...",
-    opsi:{B:"Penghapusan kalimat 'dengan kewajiban menjalankan syariat Islam bagi pemeluk-pemeluknya' pada sila Ketuhanan",A:"Perubahan urutan sila dari lima menjadi empat dengan penggabungan sila nasionalisme dan internasionalisme",C:"Penggantian nama 'Ketuhanan' menjadi 'Ketuhanan Yang Maha Esa' pada sila pertama Pancasila",D:"Penambahan sila Keadilan Sosial yang sebelumnya tidak ada dalam rumusan Piagam Jakarta"},
-    jawaban:"B",
-    penjelasan:"Slide 8 menunjukkan bahwa Piagam Jakarta memuat: 'Ketuhanan dengan kewajiban menjalankan syariat Islam bagi pemeluk-pemeluknya'. Kalimat itu dihapus dalam sidang PPKI 18 Agustus 1945, sehingga menjadi 'Ketuhanan Yang Maha Esa' demi menjaga persatuan Indonesia."
-  },
-  {
-    no:5, tema:"Pancasila", level:"Sulit",
-    pertanyaan:"Siapakah Ketua Panitia Delapan yang bertugas menampung usul-usul dan menggolongkan usul-usul dari anggota BPUPKI mengenai perumusan dasar negara?",
-    opsi:{A:"Drs. Moh. Hatta didampingi Mr. Moh Yamin sebagai wakil ketua",B:"Mr. A.A Maramis yang mewakili golongan Kebangsaan Kristen",C:"Ir. Soekarno sebagai Ketua Panitia Delapan",D:"Prof. Dr. Mr. Soepomo yang mewakili golongan nasionalis"},
-    jawaban:"C",
-    penjelasan:"Slide 12 bahan tayang menunjukkan susunan Panitia Delapan dengan Ir. Soekarno sebagai Ketua, anggotanya terdiri dari tokoh-tokoh kebangsaan dan Islam seperti Drs. Moh. Hatta, Mr. Moh Yamin, Mr. A.A Maramis, R. Otto Iskandardinata, M.S Kartohadikoesoemoe, Ki Bagoes Hadikoesoemoe, dan K.H Wachid Hasjim."
-  },
-  {
-    no:6, tema:"Pancasila", level:"Sedang",
-    pertanyaan:"Menurut bahan tayang MPR, tantangan kebangsaan yang bersifat internal berdasarkan TAP MPR No. VI Tahun 2001 tentang Etika Kehidupan Berbangsa meliputi lima hal. Yang BUKAN merupakan tantangan internal tersebut adalah...",
-    opsi:{A:"Masih lemahnya penghayatan dan pengamalan agama serta munculnya pemahaman agama yang keliru dan sempit",B:"Kurang berkembangnya pemahaman dan penghargaan atas kebhinnekaan dan kemajemukan bangsa",C:"Pengaruh globalisasi kehidupan yang semakin meluas dan persaingan antar bangsa yang semakin tajam",D:"Tidak berjalannya penegakan hukum secara optimal di berbagai bidang kehidupan"},
-    jawaban:"C",
-    penjelasan:"Slide 8 menunjukkan bahwa 'Pengaruh globalisasi' adalah tantangan EKSTERNAL, bukan internal. Lima tantangan internal yang disebutkan: lemahnya penghayatan agama, pengabaian kepentingan daerah/fanatisme kedaerahan, kurang berkembangnya pemahaman kebhinnekaan, kurangnya keteladanan pemimpin, dan tidak berjalannya penegakan hukum secara optimal."
-  },
-  {
-    no:7, tema:"Pancasila", level:"Sulit",
-    pertanyaan:"Pancasila sebagai Ideologi Negara, menurut bahan tayang MPR, dapat dimaknai sebagai sistem kehidupan nasional yang meliputi beberapa aspek. Aspek manakah yang PALING LENGKAP menggambarkan cakupan tersebut?",
-    opsi:{A:"Aspek etika/moral, hukum, ekonomi, dan pertahanan keamanan",B:"Aspek etika/moral, politik, ekonomi, sosial budaya, dan pertahanan keamanan",C:"Aspek sosial budaya, politik, ekonomi, dan lingkungan hidup",D:"Aspek ideologi, hukum, pertahanan, keamanan, dan ekonomi"},
-    jawaban:"B",
-    penjelasan:"Slide 7 bahan tayang menyatakan: 'Pancasila sebagai ideologi negara, dapat dimaknai sebagai sistem kehidupan nasional yang meliputi aspek etika/moral, politik, ekonomi, sosial budaya, dan pertahanan keamanan dalam rangka pencapaian cita-cita dan tujuan bangsa yang berlandaskan dasar negara.'"
-  },
-  {
-    no:8, tema:"Pancasila", level:"Sedang",
-    pertanyaan:"Sila Persatuan Indonesia dalam bahan tayang MPR menegaskan bahwa kebangsaan Indonesia bukanlah kebangsaan yang sempit dan berlebihan (chauvinisme). Hal ini berarti bangsa Indonesia...",
-    opsi:{A:"Mengutamakan kepentingan kelompok dan golongan di atas kepentingan bangsa lain",D:"Hanya mengakui keberagaman suku bangsa di dalam wilayah NKRI tanpa membuka diri pada dunia",C:"Menghormati eksistensi bangsa-bangsa lain dalam pergaulan internasional yang setara",B:"Menolak segala bentuk kerja sama internasional demi mempertahankan kemurnian budaya nasional"},
-    jawaban:"C",
-    penjelasan:"Slide 21 bahan tayang menyatakan: 'kebangsaan Indonesia bukanlah kebangsaan yang sempit dan berlebihan (chauvinisme), melainkan kebangsaan yang menghormati eksistensi bangsa-bangsa lain.' Ini mencerminkan semangat internasionalisme yang tetap menghargai perbedaan antar bangsa."
-  },
-  {
-    no:9, tema:"Pancasila", level:"Sulit",
-    pertanyaan:"Menurut slide tentang Sila Kerakyatan dalam bahan tayang MPR, salah satu prinsip yang ditegaskan adalah bahwa bangsa Indonesia dalam mengambil keputusan senantiasa dipimpin oleh nilai-nilai yang bersumber dari...",
-    opsi:{B:"Nilai kebebasan individu, kesetaraan, dan keadilan berdasarkan hukum positif yang berlaku",A:"Nilai ketuhanan, kemanusiaan, persatuan, dan keadilan dalam semangat hikmat kebijaksanaan permusyawaratan",C:"Nilai adat istiadat setempat, kearifan lokal, dan tradisi musyawarah masyarakat",D:"Nilai demokrasi liberal yang mengutamakan suara mayoritas dalam setiap pengambilan keputusan"},
-    jawaban:"A",
-    penjelasan:"Slide 22 bahan tayang menyatakan: 'dalam mengambil keputusan senantiasa dipimpin oleh nilai-nilai ketuhanan, kemanusiaan, persatuan, dan keadilan dalam semangat hikmat kebijaksanaan dalam permusyawaratan untuk mewujudkan keadilan.' Ini membedakan demokrasi Pancasila dari demokrasi liberal."
-  },
-  {
-    no:10, tema:"Pancasila", level:"Sedang",
-    pertanyaan:"Berdasarkan prinsip Sila Keadilan Sosial bagi Seluruh Rakyat Indonesia yang termuat dalam bahan tayang, negara Indonesia wajib menjamin setiap warga negara untuk mendapatkan...",
-    opsi:{B:"Pendidikan, pekerjaan, dan penghidupan yang layak, bermartabat, dan berkeadilan",A:"Penghasilan yang sama rata tanpa membedakan jenis pekerjaan dan tingkat pendidikan warga",C:"Akses yang sama ke seluruh sumber daya alam yang dikuasai oleh negara",D:"Perlakuan hukum yang sepenuhnya identik tanpa memandang kondisi sosial dan ekonomi"},
-    jawaban:"B",
-    penjelasan:"Slide 23 bahan tayang menyatakan: 'negara Indonesia wajib menjamin setiap warga negara untuk mendapatkan pendidikan, pekerjaan dan penghidupan yang layak, bermartabat dan berkeadilan.' Ini adalah perwujudan nyata keadilan sosial dalam kerangka Pancasila."
-  },
-
-  // ── UUD NRI 1945 (11–20) ──
-  {
-    no:11, tema:"UUD NRI 1945", level:"Sedang",
-    pertanyaan:"UUD NRI Tahun 1945 sebagai hukum dasar tertulis mengatur 4 hal penting. Manakah yang TIDAK termasuk dalam keempat hal tersebut menurut bahan tayang MPR?",
-    opsi:{C:"Mekanisme pemilihan umum dan penggantian pemerintahan",B:"Pembatasan kekuasaan organ-organ negara",A:"Prinsip kedaulatan rakyat dan negara hukum",D:"Mengatur hubungan kekuasaan antar lembaga negara dengan warga negara"},
-    jawaban:"C",
-    penjelasan:"Slide 25 bahan tayang menyebutkan UUD mengatur: (1) Prinsip kedaulatan rakyat dan negara hukum, (2) Pembatasan kekuasaan organ-organ negara, (3) Mengatur hubungan antar lembaga-lembaga negara, (4) Mengatur hubungan kekuasaan antar lembaga negara dengan warga negara. Mekanisme pemilu tidak disebutkan sebagai satu dari empat hal tersebut."
-  },
-  {
-    no:12, tema:"UUD NRI 1945", level:"Sulit",
-    pertanyaan:"Dalam sejarah ketatanegaraan Indonesia, ada lima era konstitusi yang pernah berlaku. Konstitusi RIS 1949 memiliki keistimewaan tersendiri. Dari 16 negara bagian pada masa RIS, hanya berapa negara bagian yang tunduk kepada pemerintah federal?",
-    opsi:{A:"Seluruh 16 negara bagian tunduk kepada pemerintah federal tanpa pengecualian",B:"Hanya 3 negara bagian yang tunduk: negara republik Indonesia, negara timur, dan negara Sumatera timur",C:"Sebanyak 13 negara bagian tunduk, sedangkan 3 lainnya memisahkan diri",D:"Tidak ada negara bagian yang benar-benar tunduk karena RIS bersifat konfederatif"},
-    jawaban:"B",
-    penjelasan:"Slide 26 bahan tayang menjelaskan bahwa pada masa Konstitusi RIS, banyak negara bagian yang tidak tunduk kepada pemerintah federal. 'Dari 16 negara bagian hanya 3 negara bagian yang tunduk: negara republik Indonesia, negara timur, dan negara Sumatera timur.' Ini menjadi salah satu faktor kegagalan sistem federal."
-  },
-  {
-    no:13, tema:"UUD NRI 1945", level:"Sedang",
-    pertanyaan:"Kesepakatan dasar perubahan UUD 1945 dari perubahan pertama hingga keempat (1999–2002) terdiri dari lima poin. Manakah yang merupakan kesepakatan dasar tersebut?",
-    opsi:{A:"Tidak mengubah Pembukaan UUD 1945, mempertahankan NKRI, mempertegas sistem presidensiil, memasukkan Penjelasan ke dalam pasal-pasal, dan perubahan cara adendum",B:"Mengubah sistem pemilihan langsung, menghapus utusan golongan, mempertegas otonomi daerah, membentuk MK, dan perubahan cara adendum",C:"Mempertahankan NKRI, mengubah Pembukaan, menghapus DPA, membentuk DPD, dan membatasi masa jabatan presiden",D:"Tidak mengubah Pancasila, mempertegas sistem parlementer, membentuk MK, mengatur HAM, dan membatasi kewenangan MPR"},
-    jawaban:"A",
-    penjelasan:"Slide 24 dan 27 bahan tayang menyebutkan lima kesepakatan dasar: (1) Tidak mengubah Pembukaan UUD 1945, (2) Tetap mempertahankan NKRI, (3) Mempertegas sistem presidensiil, (4) Penjelasan UUD 1945 yang memuat hal-hal normatif akan dimasukkan ke dalam pasal-pasal, (5) Perubahan dilakukan dengan cara 'adendum'."
-  },
-  {
-    no:14, tema:"UUD NRI 1945", level:"Sulit",
-    pertanyaan:"Mekanisme perubahan UUD NRI 1945 diatur dalam Pasal 37. Berdasarkan bahan tayang MPR, sidang MPR untuk membahas usul perubahan harus dihadiri oleh sekurang-kurangnya berapa anggota MPR, dan putusan diambil dengan persetujuan berapa persen?",
-    opsi:{A:"Sidang dihadiri 2/3 anggota MPR dan putusan diambil dengan persetujuan 2/3 dari anggota yang hadir",B:"Sidang dihadiri 2/3 anggota MPR dan putusan diambil dengan persetujuan 50%+1 dari seluruh anggota MPR",C:"Sidang dihadiri 1/2 anggota MPR dan putusan diambil dengan persetujuan 2/3 dari anggota yang hadir",D:"Sidang dihadiri 3/4 anggota MPR dan putusan diambil dengan persetujuan 3/4 dari seluruh anggota MPR"},
-    jawaban:"B",
-    penjelasan:"Slide 32 bahan tayang menjelaskan: usul perubahan diajukan minimal 1/3 anggota MPR [Pasal 37(1)]; sidang MPR dihadiri minimal 2/3 anggota MPR [Pasal 37(3)]; putusan dilakukan dengan persetujuan sekurang-kurangnya 50%+1 anggota dari seluruh anggota MPR [Pasal 37(4)]."
-  },
-  {
-    no:15, tema:"UUD NRI 1945", level:"Sedang",
-    pertanyaan:"Berdasarkan bahan tayang MPR tentang penataan kekuasaan/lembaga negara, kekuasaan legislatif untuk membentuk undang-undang dipegang oleh...",
-    opsi:{A:"MPR sebagai lembaga tertinggi negara yang merupakan penjelmaan seluruh rakyat Indonesia",B:"DPR yang memegang kekuasaan membentuk UU berdasarkan Pasal 20 ayat (1)",C:"Presiden bersama DPR secara bersama-sama dalam sistem keseimbangan kekuasaan",D:"DPD sebagai representasi daerah yang memiliki kewenangan legislatif setara dengan DPR"},
-    jawaban:"B",
-    penjelasan:"Slide 30 bahan tayang menunjukkan diagram penataan kekuasaan: 'Legislatif – DPR – Memegang kekuasaan membentuk UU Pasal 20 (1)*.' Ini berbeda dari sistem sebelum perubahan di mana kekuasaan membentuk UU berada di tangan presiden."
-  },
-  {
-    no:16, tema:"UUD NRI 1945", level:"Sulit",
-    pertanyaan:"Wewenang MPR sesudah perubahan UUD 1945 berbeda secara signifikan dari sebelum perubahan. Salah satu wewenang MPR sesudah perubahan yang TIDAK dimiliki MPR sebelum perubahan adalah...",
-    opsi:{A:"Menetapkan dan mengubah Undang-Undang Dasar [Pasal 3 ayat (1)]",B:"Memilih Wakil Presiden dari dua calon yang diusulkan oleh Presiden dalam hal terjadi kekosongan Wakil Presiden",C:"Menetapkan Garis-garis Besar daripada Haluan Negara sebagai pedoman pembangunan",D:"Memilih dan memberhentikan Presiden dan Wakil Presiden"},
-    jawaban:"B",
-    penjelasan:"Slide 31 bahan tayang membandingkan wewenang MPR sebelum dan sesudah perubahan. Wewenang baru MPR sesudah perubahan antara lain: memilih Wakil Presiden dari 2 calon yang diusulkan Presiden saat terjadi kekosongan [Pasal 8 ayat (2)***]. Sementara kewenangan menetapkan GBHN dihapus setelah perubahan."
-  },
-  {
-    no:17, tema:"UUD NRI 1945", level:"Sedang",
-    pertanyaan:"Aturan Peralihan Pasal III UUD NRI Tahun 1945 mengatur tentang pembentukan Mahkamah Konstitusi. Sebelum MK terbentuk selambat-lambatnya 17 Agustus 2003, segala kewenangannya dilaksanakan oleh Mahkamah Agung. Aturan Tambahan Pasal I mengamanatkan MPR untuk...",
-    opsi:{A:"Memilih anggota Mahkamah Konstitusi pertama melalui sidang paripurna MPR",B:"Mengkaji ulang materi dan status hukum TAP MPRS dan TAP MPR untuk diambil putusan pada Sidang MPR tahun 2003",C:"Menetapkan peraturan tata tertib MPR yang baru sebagai tindak lanjut amandemen keempat",D:"Membentuk Komisi Konstitusi yang bertugas merumuskan konstitusi baru Indonesia"},
-    jawaban:"B",
-    penjelasan:"Slide 60 bahan tayang menyebutkan Aturan Tambahan Pasal I: 'Majelis Permusyawaratan Rakyat ditugasi untuk melakukan peninjauan terhadap materi dan status hukum Ketetapan Majelis Permusyawaratan Rakyat Sementara dan Ketetapan Majelis Permusyawaratan Rakyat untuk diambil putusan pada Sidang Majelis Permusyawaratan Rakyat tahun 2003.'"
-  },
-  {
-    no:18, tema:"UUD NRI 1945", level:"Sulit",
-    pertanyaan:"Pasal 29 UUD NRI Tahun 1945 tentang Agama (Bab XI) menegaskan dua hal: negara berdasar Ketuhanan Yang Maha Esa (ayat 1) dan negara menjamin kemerdekaan beribadah (ayat 2). Implikasi konstitusional dari dua pasal ini adalah...",
-    opsi:{A:"Indonesia adalah negara agama (theokrasi) karena menjadikan Ketuhanan sebagai dasar bernegara",B:"Indonesia menganut sekularisme penuh karena memisahkan urusan agama dari urusan negara secara tegas",D:"Indonesia wajib menerapkan hukum agama mayoritas sebagai hukum positif yang berlaku bagi seluruh warga",C:"Indonesia bukan negara agama dan bukan negara sekuler; agama menjadi landasan moral tapi tidak ada agama resmi negara"},
-    jawaban:"C",
-    penjelasan:"Pasal 29 ayat (1) menegaskan Indonesia berdasar Ketuhanan, namun ayat (2) menjamin kebebasan semua warga memeluk agamanya masing-masing. Ini menunjukkan Indonesia bukan theokrasi (tak ada agama resmi negara) dan bukan negara sekuler (agama menjadi fondasi moral kehidupan berbangsa)."
-  },
-  {
-    no:19, tema:"UUD NRI 1945", level:"Sedang",
-    pertanyaan:"Berdasarkan slide tentang Pendidikan dan Kebudayaan (Bab XIII), negara memprioritaskan anggaran pendidikan sekurang-kurangnya 20% dari APBN dan APBD. Ketentuan ini tertuang dalam pasal...",
-    opsi:{A:"Pasal 31 ayat (2) yang mengatur kewajiban pemerintah membiayai pendidikan dasar",B:"Pasal 31 ayat (3) yang mengatur sistem pendidikan nasional yang meningkatkan keimanan",C:"Pasal 31 ayat (4) yang mengatur prioritas anggaran pendidikan dari APBN dan APBD",D:"Pasal 32 ayat (1) yang mengatur pemajuan kebudayaan nasional Indonesia"},
-    jawaban:"C",
-    penjelasan:"Slide 57 bahan tayang menunjukkan: 'Negara memprioritaskan anggaran pendidikan sekurang-kurangnya 20% dari APBN dan APBD untuk memenuhi kebutuhan penyelenggaraan pendidikan nasional [Pasal 31 (4)****].' Ini merupakan ketentuan yang ditambahkan dalam amandemen keempat UUD 1945."
-  },
-  {
-    no:20, tema:"UUD NRI 1945", level:"Sulit",
-    pertanyaan:"TAP MPR RI Nomor I/MPR/2003 mengkelompokkan TAP MPRS dan TAP MPR ke dalam 6 kategori (Pasal 1–6). TAP MPR yang termasuk Pasal 6 adalah TAP yang dinyatakan...",
-    opsi:{A:"Tetap berlaku sampai dengan terbentuknya pemerintahan hasil Pemilu 2004 (8 Ketetapan)",B:"Tetap berlaku sampai dengan terbentuknya undang-undang (11 Ketetapan)",C:"Masih berlaku sampai dengan ditetapkannya Peraturan Tata Tertib baru oleh MPR hasil Pemilu 2004",D:"Tidak perlu dilakukan tindakan hukum lebih lanjut karena bersifat final (einmalig), telah dicabut, atau telah selesai dilaksanakan (104 Ketetapan)"},
-    jawaban:"D",
-    penjelasan:"Slide 72 bahan tayang menjelaskan substansi TAP MPR RI Nomor I/MPR/2003. Pasal 6 berisi: 'TAP MPRS/TAP MPR yang dinyatakan tidak perlu lagi dilakukan tindakan hukum lebih lanjut, baik karena bersifat final (einmalig), telah dicabut, maupun telah selesai dilaksanakan (104 Ketetapan).'"
-  },
-
-  // ── NKRI (21–26) ──
-  {
-    no:21, tema:"NKRI", level:"Sedang",
-    pertanyaan:"Berdasarkan Pasal 1 UUD NRI 1945 (Bab I tentang Bentuk dan Kedaulatan), terdapat tiga prinsip mendasar tentang NKRI. Prinsip manakah yang BENAR mengenai kedaulatan Indonesia?",
-    opsi:{A:"Kedaulatan berada di tangan MPR sebagai lembaga tertinggi perwakilan rakyat Indonesia",B:"Kedaulatan berada di tangan rakyat dan dilaksanakan menurut Undang-Undang Dasar [Pasal 1 ayat (2)]",C:"Kedaulatan berada di tangan presiden sebagai kepala negara dan kepala pemerintahan",D:"Kedaulatan bersifat terbagi antara pemerintah pusat dan pemerintah daerah secara proporsional"},
-    jawaban:"B",
-    penjelasan:"Slide 29 bahan tayang menjelaskan Bab I UUD 1945: 'Kedaulatan berada di tangan rakyat dan dilaksanakan menurut Undang-Undang Dasar [Pasal 1 (2)***].' Setelah amandemen, tidak ada lagi frasa 'dilaksanakan sepenuhnya oleh MPR', sehingga kedaulatan rakyat dilaksanakan langsung melalui pemilu dan lembaga-lembaga negara."
-  },
-  {
-    no:22, tema:"NKRI", level:"Sulit",
-    pertanyaan:"Deklarasi Djuanda pada 13 Desember 1957 sangat penting bagi NKRI. Salah satu dampak strategis deklarasi tersebut yang disebutkan dalam bahan tayang MPR adalah...",
-    opsi:{A:"Indonesia memperoleh pengakuan internasional sebagai negara kepulauan melalui Konvensi Wina 1958",B:"Indonesia meratifikasi UNCLOS 1982 dan menerbitkan UU Nomor 17 Tahun 1985 sehingga dunia mengakui Indonesia sebagai negara kepulauan",C:"Indonesia berhasil menambah wilayah seluas 2.000.000 km² termasuk sumber daya alam yang dikandungnya",D:"Batas laut dari 3 mil menjadi 12 mil diakui langsung oleh PBB melalui resolusi Sidang Umum PBB"},
-    jawaban:"C",
-    penjelasan:"Slide 64 bahan tayang menyatakan: 'Berkat pandangan visioner Deklarasi Djuanda, Bangsa Indonesia akhirnya memiliki tambahan wilayah seluas 2.000.000 kilometer persegi, termasuk sumber daya alam yang dikandungnya.' Selain itu, konsep archipelagic state kemudian diakui dalam UNCLOS 1982 yang diratifikasi Indonesia melalui UU No. 17 Tahun 1985."
-  },
-  {
-    no:23, tema:"NKRI", level:"Sedang",
-    pertanyaan:"Berdasarkan dasar hukum sosialisasi Empat Pilar MPR RI yang tercantum dalam slide 2 bahan tayang, Instruksi Presiden (Inpres) yang mendukung kelancaran sosialisasi UUD NRI Tahun 1945 yang dilakukan oleh MPR adalah...",
-    opsi:{A:"Inpres No. 4 Tahun 2010 tentang Percepatan Pembangunan Infrastruktur",B:"Inpres No. 7 Tahun 2015 tentang Aksi Pencegahan dan Pemberantasan Korupsi",D:"Inpres No. 2 Tahun 2020 tentang Rencana Aksi Nasional Pendidikan Karakter",C:"Inpres No. 6 Tahun 2005 tentang Dukungan kelancaran pelaksanaan Sosialisasi UUD NRI Tahun 1945 yang dilakukan oleh MPR"},
-    jawaban:"C",
-    penjelasan:"Slide 6 bahan tayang tentang Dasar Hukum Sosialisasi Empat Pilar MPR RI menyebutkan tiga dasar hukum, salah satunya adalah: 'INPRES NO. 6 TAHUN 2005 tentang Dukungan kelancaran pelaksanaan Sosialisasi UUD NRI Tahun 1945 yang dilakukan oleh MPR.'"
-  },
-  {
-    no:24, tema:"NKRI", level:"Sulit",
-    pertanyaan:"TAP MPR Nomor XV/MPR/1998 tentang Penyelenggaraan Otonomi Daerah yang termasuk dalam Pasal 4 TAP MPR I/2003 memiliki substansi utama. Berdasarkan bahan tayang MPR, mengapa TAP ini ditetapkan tetap berlaku?",
-    opsi:{A:"Karena seluruh amanat TAP ini telah dituangkan ke dalam undang-undang sehingga memiliki daya laku dan daya guna",B:"Karena amanat TAP ini belum seluruhnya dituangkan ke dalam undang-undang sehingga ketetapan ini tetap berlaku (memiliki daya laku dan daya guna/efficacy)",C:"Karena TAP ini masih diperlukan sebagai pedoman sementara sampai terbentuknya pemerintah baru hasil Pemilu 2004",D:"Karena TAP ini bersifat final (einmalig) dan tidak memerlukan tindak lanjut perundang-undangan apapun"},
-    jawaban:"B",
-    penjelasan:"Slide 82 bahan tayang menyatakan hasil kajian TAP MPR XV/MPR/1998: 'Karena amanat dari Ketetapan MPR RI Nomor XV/MPR/1998 belum seluruhnya dituangkan ke dalam undang-undang maka ketetapan ini tetap berlaku (memiliki daya laku/validity dan daya guna/efficacy).'"
-  },
-  {
-    no:25, tema:"NKRI", level:"Sedang",
-    pertanyaan:"Berdasarkan diagram penataan kekuasaan/lembaga negara dalam bahan tayang MPR, di tingkat pusat terdapat lembaga-lembaga yang langsung berkaitan dengan UUD NRI Tahun 1945. Manakah kelompok lembaga yang TEPAT berada di tingkat pusat?",
-    opsi:{A:"KPU, BPK, Bank Sentral, Presiden, DPR, MPR, DPD, MA, MK, KY",B:"KPU, BPK, Presiden, DPR, MPR, DPD, MA, MK, KY, Gubernur",C:"BPK, Presiden, DPR, MPR, DPD, MA, MK, KY, DPRD Provinsi, DPRD Kabupaten/Kota",D:"Presiden, DPR, MPR, DPD, MA, MK, KY, Gubernur, Bupati, Walikota"},
-    jawaban:"A",
-    penjelasan:"Slide 30 bahan tayang menunjukkan diagram penataan kekuasaan. Di tingkat PUSAT terdapat: KPU, BPK, Bank Sentral, Presiden (beserta Kementerian Negara, Dewan Pertimbangan, TNI/POLRI), DPR, MPR, DPD, MA (beserta badan-badan peradilan), MK, dan KY. Gubernur/DPRD adalah tingkat DAERAH."
-  },
-  {
-    no:26, tema:"NKRI", level:"Sulit",
-    pertanyaan:"TAP MPR Nomor VI/MPR/2001 tentang Etika Kehidupan Berbangsa yang termasuk Pasal 4 TAP MPR I/2003 mengamanatkan penegakan beberapa dimensi etika kehidupan berbangsa. Berdasarkan bahan tayang MPR, dimensi etika manakah yang TIDAK disebutkan dalam amanat tersebut?",
-    opsi:{A:"Etika sosial dan budaya serta etika politik dan pemerintahan",B:"Etika ekonomi dan bisnis serta etika penegakan hukum yang berkeadilan",C:"Etika keilmuan dan etika lingkungan untuk dijadikan acuan dasar penyelenggaraan kehidupan berbangsa",D:"Etika pertahanan dan keamanan serta etika hubungan internasional"},
-    jawaban:"D",
-    penjelasan:"Slide 87 bahan tayang menyebutkan amanat TAP MPR No. I/MPR/2003 untuk TAP VI/MPR/2001: perlu ditegakkan etika kehidupan berbangsa yang meliputi etika sosial dan budaya, etika politik dan pemerintahan, etika ekonomi dan bisnis, etika penegakan hukum yang berkeadilan dan berkesetaraan, etika keilmuan, dan etika lingkungan. Etika pertahanan/keamanan dan hubungan internasional tidak disebutkan."
-  },
-
-  // ── BHINNEKA TUNGGAL IKA (27–30) ──
-  {
-    no:27, tema:"Bhinneka Tunggal Ika", level:"Sedang",
-    pertanyaan:"Berdasarkan bahan tayang MPR, Sila Ketuhanan Yang Maha Esa pada prinsipnya menegaskan bahwa bangsa Indonesia menolak paham anti-Tuhan (ateisme). Selain itu, sila ini juga menegaskan bahwa...",
-    opsi:{A:"Bangsa Indonesia hanya mengakui satu agama resmi yang ditetapkan oleh negara sebagai agama negara",B:"Bangsa Indonesia wajib menyembah Tuhan dan beribadah menurut agama dan kepercayaannya masing-masing secara leluasa, berkeadaban, dan berkeadilan",C:"Bangsa Indonesia mengutamakan kepentingan agama di atas kepentingan negara dalam setiap pengambilan kebijakan",D:"Bangsa Indonesia hanya mengizinkan ibadah yang dilakukan dalam tempat ibadah resmi yang diakui pemerintah"},
-    jawaban:"B",
-    penjelasan:"Slide 23 bahan tayang menjelaskan intisari Sila Ketuhanan Yang Maha Esa: 'Pada prinsipnya bangsa Indonesia wajib untuk menyembah Tuhannya dan beribadah menurut agama dan kepercayaannya masing-masing secara leluasa, berkeadaban, dan berkeadilan.' Ini menegaskan kebebasan beragama dalam kerangka kehidupan berkeadaban."
-  },
-  {
-    no:28, tema:"Bhinneka Tunggal Ika", level:"Sulit",
-    pertanyaan:"Berdasarkan prinsip Sila Kemanusiaan Yang Adil dan Beradab dalam bahan tayang MPR, Indonesia sebagai nation state yang merdeka dan berdaulat memiliki posisi dalam pergaulan bangsa-bangsa di dunia. Prinsip pergaulan internasional yang dianut Indonesia adalah...",
-    opsi:{A:"Mengutamakan kerja sama bilateral dengan negara-negara berkembang di kawasan Asia Tenggara",B:"Menghendaki pergaulan bangsa-bangsa di dunia dengan prinsip saling menghormati nilai-nilai nasionalisme setiap bangsa yang tumbuh subur dalam taman sarinya pergaulan bangsa-bangsa di dunia",C:"Membatasi hubungan internasional hanya pada negara-negara yang memiliki sistem pemerintahan serupa",D:"Mengutamakan kepentingan nasional di atas segalanya tanpa mempertimbangkan dampak terhadap bangsa lain"},
-    jawaban:"B",
-    penjelasan:"Slide 24 bahan tayang menyatakan prinsip Sila Kemanusiaan: 'bangsa Indonesia adalah bangsa yang menghendaki pergaulan bangsa-bangsa di dunia dengan prinsip saling menghormati nilai-nilai nasionalisme setiap bangsa yang tumbuh subur dalam taman sarinya pergaulan bangsa-bangsa di dunia.'"
-  },
-  {
-    no:29, tema:"Bhinneka Tunggal Ika", level:"Sedang",
-    pertanyaan:"Pembukaan UUD NRI Tahun 1945 yang disahkan PPKI pada 18 Agustus 1945 berbeda dari Piagam Jakarta terutama pada alinea keempat. Menurut slide 17 bahan tayang, naskah Pembukaan UUD 1945 yang telah disahkan tersebut merupakan...",
-    opsi:{A:"Dokumen sementara yang masih bisa diubah melalui Sidang MPR berikutnya jika diperlukan",B:"Kesepakatan final, sah, dan mengikat seluruh rakyat dan bangsa Indonesia, dan sejak disahkan 18 Agustus 1945 Pancasila resmi menjadi dasar negara",C:"Hasil kompromi sementara yang akan disempurnakan setelah Indonesia mendapat pengakuan internasional",D:"Dokumen sejarah yang memiliki nilai moral namun tidak memiliki kekuatan hukum mengikat secara formal"},
-    jawaban:"B",
-    penjelasan:"Slide 17 bahan tayang menegaskan: 'NASKAH PEMBUKAAN UUD TAHUN 1945 TERSEBUT MERUPAKAN KESEPAKATAN FINAL, SAH DAN MENGIKAT SELURUH RAKYAT DAN BANGSA INDONESIA. SEJAK DISAHKAN TANGGAL 18 AGUSTUS 1945, PANCASILA RESMI MENJADI DASAR NEGARA.' Ini menegaskan finalitas dan legalitas Pembukaan UUD 1945."
-  },
-  {
-    no:30, tema:"Bhinneka Tunggal Ika", level:"Sulit",
-    pertanyaan:"Bahan tayang MPR mengidentifikasi dua tantangan eksternal kebangsaan berdasarkan TAP MPR No. VI Tahun 2001. Di sisi lain, Prinsip Sila Kemanusiaan menegaskan posisi Indonesia di tengah arus global tersebut. Pernyataan yang paling TEPAT mencerminkan sikap Indonesia menghadapi tantangan eksternal itu adalah...",
-    opsi:{A:"Menutup diri dari pergaulan internasional untuk melindungi identitas budaya dan kedaulatan nasional dari pengaruh asing",B:"Menerima sepenuhnya nilai-nilai global tanpa filter karena bangsa yang maju harus mengikuti standar internasional",C:"Menjadi bagian dari kemanusiaan universal yang menjunjung tinggi HAM dan persaudaraan dunia, sambil mempertahankan jati diri nasional berdasarkan nilai-nilai Pancasila",D:"Mengutamakan kepentingan ekonomi nasional di atas pertimbangan HAM dan persaudaraan internasional"},
-    jawaban:"C",
-    penjelasan:"Slide 8 mengidentifikasi tantangan eksternal: pengaruh globalisasi dan intervensi kekuatan global. Slide 24 menjawab dengan prinsip Sila Kemanusiaan: 'bangsa Indonesia merupakan bagian dari kemanusiaan universal yang menjunjung tinggi hak asasi manusia dan mengembangkan persaudaraan dunia berdasarkan nilai-nilai keadilan dan keadaban.' Inilah sikap Indonesia yang kontekstual dan berkarakter."
-  },
-
-  // ── KI HADJAR DEWANTARA (31–33) ──
-  {
-    no:31, tema:"Ki Hadjar Dewantara", level:"Sedang",
-    pertanyaan:"Ki Hadjar Dewantara lahir pada 2 Mei 1889 dengan nama asli Raden Mas Soewardi Soerjaningrat. Beliau dikenal sebagai Bapak Pendidikan Nasional Indonesia. Semboyan pendidikan yang paling terkenal yang dirumuskannya adalah...",
-    opsi:{A:"Ing madya mangun karsa, ing ngarso sung tulodo, tut wuri handayani",B:"Tut wuri handayani, ing ngarso sung tulodo, ing madya mangun karsa",C:"Ing ngarso sung tulodo, ing madya mangun karsa, tut wuri handayani",D:"Maju tak gentar, pantang menyerah, dan selalu berkarya untuk bangsa"},
-    jawaban:"C",
-    penjelasan:"Semboyan pendidikan Ki Hadjar Dewantara yang terkenal adalah: 'Ing ngarso sung tulodo' (di depan memberi teladan), 'Ing madya mangun karsa' (di tengah membangun semangat), dan 'Tut wuri handayani' (di belakang memberi dorongan). Semboyan ketiga yaitu 'Tut Wuri Handayani' menjadi moto Kementerian Pendidikan Nasional Indonesia."
-  },
-  {
-    no:32, tema:"Ki Hadjar Dewantara", level:"Sulit",
-    pertanyaan:"Ki Hadjar Dewantara mendirikan Nationaal Onderwijs Instituut Tamansiswa (Perguruan Nasional Tamansiswa) pada tanggal 3 Juli 1922 di Yogyakarta. Tujuan utama pendirian Tamansiswa adalah...",
-    opsi:{A:"Mendirikan sekolah khusus bagi golongan priyayi Jawa agar dapat bersaing dengan kaum kolonial Belanda",B:"Menyediakan pendidikan bagi rakyat Indonesia berdasarkan kebudayaan nasional dan semangat kebangsaan untuk melawan penjajahan melalui jalur pendidikan",C:"Membentuk kader militer pemuda Indonesia yang siap mengangkat senjata untuk kemerdekaan bangsa",D:"Menerapkan sistem pendidikan modern Barat secara penuh agar rakyat Indonesia setara dengan bangsa Eropa"},
-    jawaban:"B",
-    penjelasan:"Tamansiswa didirikan Ki Hadjar Dewantara pada 3 Juli 1922 sebagai sarana perjuangan melalui jalur pendidikan. Tujuannya adalah memberikan pendidikan kepada rakyat Indonesia berdasarkan kebudayaan nasional sendiri dan semangat kebangsaan, bukan sekadar meniru sistem Barat. Ki Hadjar percaya bahwa kemerdekaan sejati harus dimulai dari pembebasan akal dan budi rakyat."
-  },
-  {
-    no:33, tema:"Ki Hadjar Dewantara", level:"Sedang",
-    pertanyaan:"Ki Hadjar Dewantara pernah menulis artikel berjudul 'Als Ik Eens Nederlander Was' (Seandainya Aku Seorang Belanda) yang dimuat di surat kabar De Express pada tahun 1913. Akibat dari penulisan artikel tersebut adalah...",
-    opsi:{A:"Ki Hadjar Dewantara diangkat menjadi anggota Volksraad (Dewan Rakyat) oleh pemerintah kolonial Belanda",B:"Ki Hadjar Dewantara dihukum penjara seumur hidup di Penjara Cipinang bersama Cipto Mangunkusumo",C:"Ki Hadjar Dewantara dibuang ke Bangka bersama rekan-rekannya atas perintah Gubernur Jenderal Belanda",D:"Ki Hadjar Dewantara dibuang (diasingkan) ke Belanda oleh pemerintah kolonial bersama Cipto Mangunkusumo dan Douwes Dekker"},
-    jawaban:"D",
-    penjelasan:"Artikel 'Als Ik Eens Nederlander Was' yang mengkritik kebijakan kolonial Belanda menyebabkan Ki Hadjar Dewantara bersama Cipto Mangunkusumo dan Ernest Douwes Dekker diasingkan ke Belanda oleh pemerintah kolonial pada tahun 1913. Ketiga tokoh ini dikenal sebagai 'Tiga Serangkai' yang juga merupakan pendiri Indische Partij."
-  },
-
-  // ── 3 SERANGKAI INDISCHE PARTIJ (34–36) ──
-  {
-    no:34, tema:"3 Serangkai Indische Partij", level:"Sedang",
-    pertanyaan:"Indische Partij didirikan pada tanggal 25 Desember 1912 oleh tiga tokoh yang dikenal sebagai Tiga Serangkai. Siapakah ketiga tokoh pendiri Indische Partij tersebut?",
-    opsi:{A:"Soekarno, Moh. Hatta, dan Sutan Sjahrir sebagai pemimpin gerakan nasionalisme Indonesia",B:"Ernest Douwes Dekker (Danudirja Setiabudi), Cipto Mangunkusumo, dan Ki Hadjar Dewantara (Soewardi Soerjaningrat)",C:"H.O.S. Tjokroaminoto, Abdul Muis, dan Agus Salim sebagai pendiri gerakan Islam nasional",D:"Wahidin Sudirohusodo, Soetomo, dan Gunawan Mangunkusumo sebagai pelopor Budi Utomo"},
-    jawaban:"B",
-    penjelasan:"Indische Partij didirikan pada 25 Desember 1912 oleh Tiga Serangkai: Ernest François Eugène Douwes Dekker (yang kemudian berganti nama menjadi Danudirja Setiabudi), dr. Cipto Mangunkusumo, dan Raden Mas Soewardi Soerjaningrat (Ki Hadjar Dewantara). Mereka adalah pionir gerakan nasionalisme Indonesia yang terbuka bagi semua golongan."
-  },
-  {
-    no:35, tema:"3 Serangkai Indische Partij", level:"Sulit",
-    pertanyaan:"Indische Partij merupakan partai politik pertama di Hindia Belanda yang secara tegas mengusung platform kemerdekaan (onafhankelijkheid). Namun partai ini dibubarkan oleh pemerintah kolonial Belanda. Apa alasan utama pemerintah kolonial menolak dan membubarkan Indische Partij?",
-    opsi:{A:"Karena Indische Partij terlibat dalam aksi kekerasan bersenjata dan sabotase terhadap pemerintah kolonial Belanda",B:"Karena anggaran dasar partai dianggap berbahaya bagi ketenteraman dan ketertiban umum, serta terang-terangan menentang kekuasaan kolonial",C:"Karena Indische Partij menerima anggota dari berbagai ras dan golongan yang dianggap mengancam kebijakan diskriminasi ras kolonial",D:"Karena Indische Partij menolak membayar pajak kepada pemerintah kolonial dan mengajak rakyat untuk melakukan pemogokan umum"},
-    jawaban:"B",
-    penjelasan:"Pemerintah kolonial Belanda menolak memberikan status badan hukum kepada Indische Partij karena anggaran dasarnya dianggap membahayakan ketertiban umum dan terang-terangan bertujuan menentang kekuasaan kolonial. Partai ini kemudian dibubarkan pada tahun 1913. Para pemimpinnya—Tiga Serangkai—diasingkan ke Belanda akibat aktivisme mereka yang berani."
-  },
-  {
-    no:36, tema:"3 Serangkai Indische Partij", level:"Sedang",
-    pertanyaan:"Slogan perjuangan Indische Partij yang paling terkenal dan mencerminkan semangat kebangsaannya adalah...",
-    opsi:{A:"'Hindia untuk bangsa Hindia' (Indië voor Indiërs) — menegaskan bahwa tanah Hindia adalah milik rakyatnya, bukan penjajah",B:"'Merdeka atau mati' — sebagai seruan perjuangan bersenjata melawan penjajahan kolonial Belanda",C:"'Bersatu kita teguh, bercerai kita runtuh' — semboyan persatuan antar etnis di Hindia Belanda",D:"'Sama rata sama rasa' — menegaskan prinsip kesetaraan ekonomi bagi seluruh rakyat Hindia Belanda"},
-    jawaban:"A",
-    penjelasan:"Slogan terkenal Indische Partij adalah 'Indië voor Indiërs' (Hindia untuk bangsa Hindia), yang menegaskan bahwa tanah Hindia adalah milik seluruh rakyatnya—bukan monopoli penjajah. Semboyan ini mencerminkan semangat nasionalisme inklusif Indische Partij yang menerima semua golongan (pribumi, Indo-Eropa, Tionghoa) yang mencintai tanah Hindia sebagai tanah airnya."
-  },
-
-  // ── KLAUSA DIMENSI PANCASILA (37–39) ──
-  {
-    no:37, tema:"Klausa Dimensi Pancasila", level:"Sedang",
-    pertanyaan:"Pancasila sebagai ideologi nasional memiliki tiga dimensi utama yang menjadikannya ideologi terbuka. Ketiga dimensi tersebut adalah...",
-    opsi:{A:"Dimensi normatif, dimensi idealis, dan dimensi konstitutif yang mengatur kehidupan bernegara",B:"Dimensi realitas, dimensi idealitas, dan dimensi fleksibilitas (normatif) yang menjadikan Pancasila mampu merespons perkembangan zaman",C:"Dimensi historis, dimensi filosofis, dan dimensi sosiologis yang mendasari nilai-nilai Pancasila",D:"Dimensi vertikal, dimensi horizontal, dan dimensi temporal yang mengatur hubungan manusia, sesama, dan alam"},
-    jawaban:"B",
-    penjelasan:"Pancasila sebagai ideologi terbuka memiliki tiga dimensi: (1) Dimensi Realitas — nilai-nilai Pancasila bersumber dari nilai-nilai nyata yang hidup dalam masyarakat Indonesia; (2) Dimensi Idealitas — Pancasila mengandung cita-cita yang ingin diwujudkan dalam berbagai bidang kehidupan; (3) Dimensi Fleksibilitas/Normatif — Pancasila dapat dijabarkan dalam norma-norma yang dapat disesuaikan dengan perkembangan zaman tanpa mengubah nilai dasarnya."
-  },
-  {
-    no:38, tema:"Klausa Dimensi Pancasila", level:"Sulit",
-    pertanyaan:"Pancasila memiliki kedudukan dan fungsi yang beragam dalam kehidupan bernegara. Fungsi Pancasila sebagai 'Paradigma Pembangunan' berarti...",
-    opsi:{A:"Pancasila menjadi sumber segala sumber hukum yang mengatur hierarki perundang-undangan di Indonesia",B:"Pancasila menjadi kerangka acuan dan tolok ukur bagi setiap kebijakan dan program pembangunan nasional di segala bidang",C:"Pancasila menjadi ideologi tunggal yang tidak boleh diganti atau diubah dalam keadaan apapun",D:"Pancasila menjadi dasar penilaian moral dan etika bagi perilaku seluruh warga negara Indonesia dalam kehidupan sehari-hari"},
-    jawaban:"B",
-    penjelasan:"Pancasila sebagai paradigma pembangunan berarti nilai-nilai Pancasila menjadi kerangka acuan, arah, dan tolok ukur bagi perencanaan dan pelaksanaan pembangunan nasional di segala bidang—politik, ekonomi, sosial budaya, dan pertahanan keamanan. Setiap kebijakan pembangunan harus dapat dipertanggungjawabkan kesesuaiannya dengan nilai-nilai yang terkandung dalam sila-sila Pancasila."
-  },
-  {
-    no:39, tema:"Klausa Dimensi Pancasila", level:"Sedang",
-    pertanyaan:"Pancasila sebagai 'Sumber dari Segala Sumber Hukum' (Staatsfundamentalnorm) memiliki implikasi yang penting dalam sistem hukum Indonesia. Implikasi tersebut adalah...",
-    opsi:{A:"Seluruh peraturan perundang-undangan Indonesia harus bersumber, tidak boleh bertentangan, dan harus dapat dipertanggungjawabkan sesuai nilai-nilai Pancasila",B:"Setiap warga negara berhak membuat peraturan sendiri selama tidak bertentangan dengan sila-sila Pancasila yang berlaku",C:"Mahkamah Konstitusi berhak membatalkan Pancasila jika dianggap bertentangan dengan konstitusi yang lebih tinggi",D:"Pengadilan wajib menjadikan teks pidato 1 Juni 1945 sebagai sumber hukum primer dalam memutus setiap perkara"},
-    jawaban:"A",
-    penjelasan:"Pancasila sebagai Staatsfundamentalnorm (norma dasar negara) berarti Pancasila adalah sumber dari segala sumber hukum. Implikasinya, seluruh peraturan perundang-undangan—dari UUD hingga peraturan daerah—harus bersumber pada nilai Pancasila, tidak boleh bertentangan dengannya, dan dapat diuji kebenarannya berdasarkan nilai-nilai Pancasila. Hal ini dipertegas dalam UU No. 12 Tahun 2011 tentang Pembentukan Peraturan Perundang-undangan."
-  },
-
-  // ── CAUSA PANCASILA (40–42) ──
-  {
-    no:40, tema:"Causa Pancasila", level:"Sulit",
-    pertanyaan:"Dalam filsafat hukum dan ketatanegaraan, Pancasila dapat dikaji melalui empat causa (sebab musabab) yang berasal dari konsep Aristoteles. Causa Materialis Pancasila merujuk pada...",
-    opsi:{A:"Proses perumusan dan pengesahan Pancasila oleh BPUPKI dan PPKI sebagai badan yang berwenang",B:"Nilai-nilai adat istiadat, kebudayaan, dan nilai religius yang telah ada dan hidup dalam masyarakat Indonesia jauh sebelum kemerdekaan",C:"Tujuan akhir yang ingin dicapai oleh Pancasila yaitu masyarakat yang adil, makmur, dan sejahtera",D:"Bentuk atau rumusan resmi Pancasila yang terdapat dalam Pembukaan UUD NRI Tahun 1945 alinea keempat"},
-    jawaban:"B",
-    penjelasan:"Causa Materialis (sebab material/bahan) Pancasila adalah nilai-nilai yang menjadi bahan baku pembentukan Pancasila, yaitu nilai-nilai adat istiadat, kebudayaan, dan nilai-nilai religius yang sudah ada dan hidup dalam masyarakat Indonesia jauh sebelum Pancasila dirumuskan secara formal. Para pendiri bangsa menggali nilai-nilai yang sudah ada dalam masyarakat sebagai bahan perumusan dasar negara."
-  },
-  {
-    no:41, tema:"Causa Pancasila", level:"Sedang",
-    pertanyaan:"Causa Formalis Pancasila dalam kajian filsafat ketatanegaraan menunjukkan bagaimana Pancasila mendapatkan bentuk dan status hukumnya yang resmi. Causa Formalis Pancasila adalah...",
-    opsi:{A:"Nilai-nilai filosofis yang digali para pendiri bangsa dari kepribadian asli masyarakat Indonesia",B:"Tujuan yang ingin dicapai oleh bangsa Indonesia dalam mewujudkan masyarakat adil dan makmur",C:"Proses perumusan Pancasila dalam sidang BPUPKI dan pengesahannya oleh PPKI yang memberikan bentuk dan status hukum resmi",D:"Semangat kebangsaan dan cita-cita kemerdekaan yang mendorong para pendiri bangsa merumuskan dasar negara"},
-    jawaban:"C",
-    penjelasan:"Causa Formalis (sebab formal/bentuk) Pancasila adalah bagaimana Pancasila memperoleh bentuk dan rumusan yang resmi sebagai dasar negara, yaitu melalui proses sidang-sidang BPUPKI (termasuk pidato 1 Juni 1945 oleh Soekarno dan kerja Panitia Sembilan) dan kemudian disahkan oleh PPKI pada 18 Agustus 1945 dalam Pembukaan UUD 1945. Proses inilah yang memberikan bentuk hukum resmi bagi Pancasila."
-  },
-  {
-    no:42, tema:"Causa Pancasila", level:"Sulit",
-    pertanyaan:"Causa Finalis Pancasila dalam kajian filsafat ketatanegaraan berkaitan dengan tujuan akhir Pancasila. Apakah yang dimaksud dengan Causa Finalis Pancasila?",
-    opsi:{A:"Tujuan dibentuknya BPUPKI sebagai badan yang bertugas menyelidiki usaha-usaha persiapan kemerdekaan Indonesia",B:"Pancasila sebagai tujuan akhir yang ingin diwujudkan, yaitu masyarakat Indonesia yang merdeka, bersatu, berdaulat, adil, dan makmur berdasarkan nilai-nilai Pancasila",C:"Sebab-sebab yang mendorong para pendiri bangsa merumuskan dasar negara dalam situasi menjelang kemerdekaan",D:"Rumusan sila-sila Pancasila sebagaimana tercantum secara resmi dalam Pembukaan UUD NRI Tahun 1945"},
-    jawaban:"B",
-    penjelasan:"Causa Finalis (sebab final/tujuan) Pancasila adalah tujuan akhir yang ingin dicapai melalui Pancasila sebagai dasar negara, yaitu terwujudnya masyarakat Indonesia yang merdeka, bersatu, berdaulat, adil, dan makmur—sebagaimana tercermin dalam alinea keempat Pembukaan UUD 1945 tentang tujuan negara: melindungi segenap bangsa, memajukan kesejahteraan umum, mencerdaskan kehidupan bangsa, dan ikut melaksanakan ketertiban dunia."
-  },
-
-  // ── RECHTSTAAT DAN MACHTSTAAT (43–46) ──
-  {
-    no:43, tema:"Rechtsstaat dan Machtstaat", level:"Sedang",
-    pertanyaan:"Konsep Rechtsstaat (negara hukum) yang dianut Indonesia berbeda dari konsep Machtstaat (negara kekuasaan). Perbedaan mendasar antara keduanya adalah...",
-    opsi:{A:"Rechtsstaat mengutamakan kekuatan militer dalam menegakkan ketertiban, sedangkan Machtstaat mengutamakan hukum sebagai instrumen pemerintahan",B:"Rechtsstaat menempatkan hukum sebagai panglima tertinggi yang membatasi kekuasaan, sedangkan Machtstaat menempatkan kekuasaan negara/penguasa di atas segalanya tanpa batas hukum yang efektif",C:"Rechtsstaat hanya berlaku di negara-negara demokrasi liberal, sedangkan Machtstaat hanya berlaku di negara-negara otoriter dan totaliter",D:"Rechtsstaat bersumber pada filsafat hukum kontinental Eropa, sedangkan Machtstaat bersumber pada tradisi common law Anglo-Saxon"},
-    jawaban:"B",
-    penjelasan:"Dalam Rechtsstaat (negara hukum), hukum menjadi panglima tertinggi yang membatasi dan mengontrol kekuasaan negara sehingga kekuasaan tidak dapat sewenang-wenang. Sebaliknya, dalam Machtstaat (negara kekuasaan), kekuasaan negara/penguasa diletakkan di atas segalanya—hukum hanya menjadi alat penguasa. Pasal 1 ayat (3) UUD NRI Tahun 1945 secara tegas menyatakan bahwa Indonesia adalah negara hukum (Rechtsstaat), bukan negara kekuasaan."
-  },
-  {
-    no:44, tema:"Rechtsstaat dan Machtstaat", level:"Sulit",
-    pertanyaan:"Unsur-unsur Rechtsstaat menurut Friedrich Julius Stahl (ahli hukum Jerman) yang kemudian diadaptasi dalam sistem hukum Indonesia meliputi empat hal. Manakah yang BUKAN merupakan unsur Rechtsstaat menurut Stahl?",
-    opsi:{A:"Perlindungan hak-hak asasi manusia yang diakui dan dijamin oleh undang-undang dasar",B:"Pemisahan atau pembagian kekuasaan untuk menjamin hak-hak asasi tersebut",C:"Supremasi militer sebagai penjaga keutuhan negara dan penegak kedaulatan hukum",D:"Peradilan administrasi dalam perselisihan antara pemerintah dan warga negara"},
-    jawaban:"C",
-    penjelasan:"Empat unsur Rechtsstaat menurut Friedrich Julius Stahl adalah: (1) Perlindungan hak-hak asasi manusia; (2) Pemisahan/pembagian kekuasaan; (3) Pemerintahan berdasarkan undang-undang; dan (4) Peradilan administrasi dalam perselisihan antara pemerintah dan rakyat. Supremasi militer bukan merupakan unsur Rechtsstaat—justru bertentangan dengan konsep negara hukum yang menempatkan hukum di atas segala kekuasaan, termasuk militer."
-  },
-  {
-    no:45, tema:"Rechtsstaat dan Machtstaat", level:"Sedang",
-    pertanyaan:"Pasal 1 ayat (3) UUD NRI Tahun 1945 (hasil amandemen ketiga) secara tegas menyatakan 'Negara Indonesia adalah negara hukum.' Pernyataan ini memiliki konsekuensi konstitusional bahwa...",
-    opsi:{A:"Presiden sebagai kepala negara memiliki kewenangan tertinggi di atas hukum dalam keadaan darurat nasional",B:"Setiap tindakan penyelenggaraan negara harus berdasarkan dan tunduk pada hukum, dan tidak seorang pun—termasuk penguasa—yang berada di atas hukum",C:"Mahkamah Agung berhak membatalkan semua kebijakan presiden yang dianggap tidak sesuai dengan konstitusi",D:"Hukum adat dan hukum agama secara otomatis memiliki kedudukan yang setara dengan hukum positif nasional"},
-    jawaban:"B",
-    penjelasan:"Konsekuensi konstitusional dari pernyataan Indonesia sebagai negara hukum (Pasal 1 ayat 3 UUD 1945) adalah asas supremasi hukum (rule of law): setiap tindakan penyelenggaraan negara harus berdasarkan hukum, dan tidak ada seorang pun—termasuk presiden dan pejabat negara—yang berada di atas hukum. Ini menegaskan penolakan Indonesia terhadap Machtstaat di mana penguasa dapat bertindak sewenang-wenang tanpa pertanggungjawaban hukum."
-  },
-  {
-    no:46, tema:"Rechtsstaat dan Machtstaat", level:"Sulit",
-    pertanyaan:"Konsep Rule of Law dari tradisi Anglo-Saxon (dikembangkan oleh A.V. Dicey) memiliki persamaan dan perbedaan dengan konsep Rechtsstaat dari tradisi Eropa Kontinental. Prinsip utama Rule of Law menurut Dicey yang membedakannya dari Rechtsstaat adalah penekanannya pada...",
-    opsi:{A:"Supremasi hukum tertulis (konstitusi) sebagai sumber utama hak-hak warga negara yang tidak dapat diganggu gugat",B:"Supremasi hukum (tidak ada yang di atas hukum), kesetaraan di muka hukum (equality before the law), dan dominasi hukum kebiasaan (konstitusi sebagai hasil dari hak-hak individual yang diakui pengadilan)",C:"Pemisahan kekuasaan yang ketat antara eksekutif, legislatif, dan yudikatif sebagai jaminan terhadap kesewenang-wenangan",D:"Supremasi parlemen sebagai lembaga tertinggi yang mencerminkan kehendak rakyat dalam negara demokratis"},
-    jawaban:"B",
-    penjelasan:"A.V. Dicey merumuskan tiga prinsip Rule of Law: (1) Supremacy of Law — tidak ada seorang pun di atas hukum; (2) Equality before the Law — semua orang setara di hadapan hukum; (3) Predominance of Legal Spirit — konstitusi bukanlah sumber hak asasi, melainkan konsekuensi dari hak-hak individual yang diakui dan dijamin melalui keputusan pengadilan. Ini berbeda dengan Rechtsstaat yang lebih menekankan hukum tertulis dan kodifikasi sebagai instrumen utama perlindungan hak."
-  },
-
-  // ── MOSI INTEGRAL NATSIR (47–50) ──
-  {
-    no:47, tema:"Mosi Integral Natsir", level:"Sedang",
-    pertanyaan:"Mosi Integral Natsir diajukan oleh Mohammad Natsir pada tanggal 3 April 1950 di hadapan Parlemen RIS. Apa inti dari Mosi Integral yang disampaikan Natsir tersebut?",
-    opsi:{A:"Mengusulkan pembentukan negara federal yang memberikan otonomi penuh kepada seluruh negara bagian RIS",B:"Mengusulkan agar seluruh negara bagian RIS bergabung ke dalam Negara Kesatuan Republik Indonesia (NKRI) melalui jalan damai dan demokratis",C:"Mengusulkan pembubaran Parlemen RIS dan penyelenggaraan pemilihan umum secara langsung untuk seluruh wilayah Indonesia",D:"Mengusulkan agar RIS bergabung dengan negara-negara Asia Tenggara untuk membentuk federasi regional yang lebih kuat"},
-    jawaban:"B",
-    penjelasan:"Mosi Integral Natsir yang disampaikan pada 3 April 1950 mengusulkan agar seluruh negara bagian Republik Indonesia Serikat (RIS) meleburkan diri ke dalam Negara Kesatuan Republik Indonesia (NKRI) secara damai dan demokratis. Mosi ini diterima dan menjadi tonggak penting dalam sejarah ketatanegaraan Indonesia karena berhasil membubarkan RIS dan memulihkan NKRI pada 17 Agustus 1950."
-  },
-  {
-    no:48, tema:"Mosi Integral Natsir", level:"Sulit",
-    pertanyaan:"Latar belakang diajukannya Mosi Integral Natsir pada tahun 1950 berkaitan erat dengan situasi politik pasca-Konferensi Meja Bundar (KMB). Situasi yang mendorong Natsir mengajukan mosi tersebut adalah...",
-    opsi:{A:"Kegagalan negosiasi antara Indonesia dan Belanda dalam sengketa Irian Barat yang berlarut-larut di forum PBB",B:"Sistem federal RIS yang dinilai tidak mencerminkan kehendak rakyat Indonesia, ditambah banyaknya negara bagian yang ingin bergabung kembali ke RI, serta ancaman disintegrasi yang nyata",C:"Tekanan dari negara-negara Asia-Afrika yang meminta Indonesia memilih antara sistem federal atau kesatuan dalam Konferensi Bandung",D:"Keputusan Mahkamah Internasional yang menyatakan Konstitusi RIS tidak sah secara hukum internasional"},
-    jawaban:"B",
-    penjelasan:"Mosi Integral Natsir dilatarbelakangi oleh: (1) Sistem federal RIS hasil KMB 1949 dinilai sebagai buatan Belanda yang tidak sesuai kehendak rakyat Indonesia yang menginginkan kesatuan; (2) Banyak negara bagian RIS yang satu per satu membubarkan diri dan minta bergabung ke Republik Indonesia; (3) Ancaman disintegrasi semakin nyata. Natsir melihat perlunya langkah konstitusional yang integral untuk menyelamatkan persatuan bangsa."
-  },
-  {
-    no:49, tema:"Mosi Integral Natsir", level:"Sedang",
-    pertanyaan:"Setelah Mosi Integral Natsir diterima oleh Parlemen RIS, Mohammad Natsir kemudian ditunjuk untuk menjalankan amanat penting dalam proses pembentukan kembali NKRI. Peran Natsir tersebut adalah...",
-    opsi:{A:"Natsir ditunjuk sebagai Ketua Panitia Persiapan Kemerdekaan Indonesia (PPKI) untuk merumuskan konstitusi NKRI yang baru",B:"Natsir ditunjuk menjadi Perdana Menteri pertama NKRI setelah RIS dibubarkan pada 17 Agustus 1950 dan memimpin kabinet pertama NKRI",C:"Natsir ditunjuk sebagai Ketua Komisi Konstitusi yang bertugas merancang UUD Sementara 1950 bagi NKRI",D:"Natsir ditunjuk sebagai Menteri Luar Negeri NKRI yang pertama untuk menjalin hubungan diplomatik internasional"},
-    jawaban:"B",
-    penjelasan:"Setelah Mosi Integralnya diterima dan RIS dibubarkan, Mohammad Natsir dipercaya menjadi Perdana Menteri pertama NKRI (Kabinet Natsir, September 1950 – Maret 1951). Ia memimpin proses konsolidasi pemerintahan NKRI pasca penyatuan. Natsir adalah satu-satunya tokoh yang berhasil mewujudkan kembali NKRI melalui jalur konstitusional dan diplomasi tanpa pertumpahan darah."
-  },
-  {
-    no:50, tema:"Mosi Integral Natsir", level:"Sulit",
-    pertanyaan:"Mohammad Natsir adalah tokoh yang sangat berpengaruh dalam sejarah Indonesia. Selain perannya melalui Mosi Integral, Natsir juga dikenal sebagai pemimpin partai politik Islam terbesar pada masa itu. Partai tersebut adalah...",
-    opsi:{A:"Partai Syarikat Islam Indonesia (PSII) yang merupakan transformasi dari organisasi Sarekat Islam yang didirikan H.O.S. Tjokroaminoto",B:"Masyumi (Majelis Syuro Muslimin Indonesia) yang menjadi partai Islam terbesar pada era demokrasi parlementer dan dipimpin Natsir sebagai ketua umum",C:"Nahdlatul Ulama (NU) yang merupakan organisasi Islam terbesar di Indonesia dengan basis pesantren di seluruh nusantara",D:"Partai Islam Indonesia (PII) yang didirikan Natsir bersama tokoh-tokoh Islam progresif setelah keluar dari Masyumi"},
-    jawaban:"B",
-    penjelasan:"Mohammad Natsir adalah Ketua Umum Masyumi (Majelis Syuro Muslimin Indonesia), partai Islam terbesar pada era demokrasi parlementer (1945–1960). Masyumi menjadi wadah bagi berbagai ormas Islam seperti Muhammadiyah dan pada awalnya NU. Natsir dikenal sebagai negarawan, intelektual Islam, dan demokrat sejati yang memperjuangkan nilai-nilai Islam melalui jalur konstitusional dan demokrasi."
+    id:"p4", nama:"Bhinneka Tunggal Ika", icon:"🤝",
+    warna:"#d97706", warnaGelap:"#92400e", warnaTerang:"#fef3c7",
+    soal:[
+      {teks:"Bhinneka Tunggal Ika berasal dari bahasa...",opsi:["Melayu kuno","Jawa kuno","Sansekerta","Kawi"],jawaban:3,penjelasan:"Bhinneka Tunggal Ika berasal dari bahasa Kawi (Jawa Kuno), dikutip dari kitab Sutasoma karya Mpu Tantular."},
+      {teks:"Arti Bhinneka Tunggal Ika adalah...",opsi:["Satu nusa satu bangsa","Berbeda-beda tetapi tetap satu","Bersatu kita teguh","Keberagaman adalah kekuatan"],jawaban:1,penjelasan:"Bhinneka Tunggal Ika berarti 'Berbeda-beda tetapi tetap satu jua', mencerminkan keberagaman dalam persatuan."},
+      {teks:"Kitab yang memuat kalimat Bhinneka Tunggal Ika adalah...",opsi:["Negarakertagama","Sutasoma","Pararaton","Arjunawiwaha"],jawaban:1,penjelasan:"Kalimat Bhinneka Tunggal Ika terdapat dalam Kitab Sutasoma karya Mpu Tantular dari zaman Majapahit."},
+      {teks:"Bhinneka Tunggal Ika tercantum pada lambang negara Indonesia, yaitu...",opsi:["Bendera Merah Putih","Garuda Pancasila","Peta Indonesia","Tugu Monas"],jawaban:1,penjelasan:"Semboyan Bhinneka Tunggal Ika terdapat pada pita yang dicengkeram oleh Garuda Pancasila, lambang negara RI."},
+      {teks:"Sikap yang mencerminkan nilai Bhinneka Tunggal Ika dalam kehidupan sehari-hari adalah...",opsi:["Hanya berteman dengan yang sesuku","Mengejek budaya daerah lain","Menghargai perbedaan agama dan budaya","Menolak tradisi daerah lain"],jawaban:2,penjelasan:"Bhinneka Tunggal Ika mengajarkan sikap toleransi, saling menghargai perbedaan, dan menjaga persatuan."}
+    ]
   }
 ];
 
-// ═══════════════ DATA & STATE ═══════════════
-let soalSaat = 0;
-let skorBenar = 0;
-let sudahJawab = false;
-let jumlahPelanggaran = 0;
-const SANKSI_PER_PELANGGARAN = 2;
-let kuisAktif = false;
+const DESCS = {p1:"Dasar negara & sila-sila",p2:"Konstitusi & pasal-pasal",p3:"Kesatuan wilayah & pemerintahan",p4:"Keberagaman & toleransi"};
+const SEG_COLORS = ["#1a56c4","#7c3aed","#059669","#d97706"];
+const LABELS = ["A","B","C","D"];
 
-// ═══════════════ ANTI-TAB SWITCHING ═══════════════
-document.addEventListener('visibilitychange', function() {
-  if (!kuisAktif) return;
-  if (document.hidden) {
-    jumlahPelanggaran++;
-    tampilkanModalSanksi();
-  }
-});
+/* ============================================================
+   WHEEL ENGINE
+============================================================ */
+const canvas = document.getElementById("wheelCanvas");
+const ctx = canvas.getContext("2d");
+const N = PAKET.length;
+const ARC = (2*Math.PI)/N;
+let rotation = 0, spinning = false;
+let selectedPaket = null, currentSoal = [];
+let cur=0, benar=0, salah=0, answered=false;
 
-window.addEventListener('blur', function() {
-  if (!kuisAktif) return;
-  setTimeout(function() {
-    if (!document.hasFocus()) {
-      jumlahPelanggaran++;
-      tampilkanModalSanksi();
+function drawWheel(rot){
+  const cx=canvas.width/2, cy=canvas.height/2, r=cx-6;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // outer shadow ring
+  ctx.save();
+  ctx.shadowColor="rgba(0,0,0,0.2)";ctx.shadowBlur=20;
+  ctx.beginPath();ctx.arc(cx,cy,r+4,0,2*Math.PI);
+  ctx.fillStyle="#fff";ctx.fill();
+  ctx.restore();
+
+  PAKET.forEach((p,i)=>{
+    const start=rot+i*ARC-Math.PI/2, end=start+ARC;
+    // segment
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();
+    ctx.fillStyle=SEG_COLORS[i];ctx.fill();
+    // border
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();
+    ctx.strokeStyle="#fff";ctx.lineWidth=3;ctx.stroke();
+
+    // text content
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(start+ARC/2);
+    const tr=r*0.60;
+    // icon
+    ctx.font="26px serif";ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillText(p.icon,tr,-13);
+    // name — wrap if needed
+    ctx.fillStyle="#fff";ctx.font="bold 12px 'Plus Jakarta Sans',sans-serif";
+    const words=p.nama.split(" ");
+    if(words.length===1){
+      ctx.fillText(p.nama,tr,7);
+    } else {
+      ctx.fillText(words[0],tr,5);
+      ctx.fillText(words.slice(1).join(" "),tr,20);
     }
-  }, 200);
-});
-
-function tampilkanModalSanksi() {
-  const totalKurang = jumlahPelanggaran * SANKSI_PER_PELANGGARAN;
-  document.getElementById('sanksiKurang').textContent = '-' + SANKSI_PER_PELANGGARAN;
-  document.getElementById('sanksiTotalInfo').textContent =
-    'Total pelanggaran: ' + jumlahPelanggaran + ' kali — Total pengurangan: ' + totalKurang + ' poin';
-  document.getElementById('overlaySanksi').classList.add('aktif');
-  document.getElementById('badgeHitungPelanggaran').textContent = jumlahPelanggaran;
-  const badge = document.getElementById('sanksiBadge');
-  badge.classList.add('menyala');
-  setTimeout(function() { badge.classList.remove('menyala'); }, 1600);
-}
-
-function tutupSanksi() {
-  document.getElementById('overlaySanksi').classList.remove('aktif');
-  window.focus();
-}
-
-// ═══════════════ FUNGSI KUIS ═══════════════
-function mulaiKuis() {
-  document.getElementById('halaman-awal').style.display = 'none';
-  document.getElementById('halaman-soal').style.display = 'block';
-  kuisAktif = true;
-  tampilkanSoal();
-}
-
-function tampilkanSoal() {
-  const s = SOAL[soalSaat];
-  sudahJawab = false;
-
-  document.getElementById('headerProgress').textContent = 'Soal ' + (soalSaat+1) + ' dari ' + SOAL.length;
-  document.getElementById('progressBar').style.width = (((soalSaat+1)/SOAL.length)*100) + '%';
-
-  document.getElementById('soalNomor').textContent = 'Soal ' + (soalSaat+1);
-  document.getElementById('soalTema').textContent = s.tema;
-  const lvlEl = document.getElementById('soalLevel');
-  lvlEl.textContent = s.level;
-  lvlEl.className = 'soal-level ' + (s.level === 'Sulit' ? 'level-sulit' : 'level-sedang');
-
-  document.getElementById('soalTeks').textContent = s.pertanyaan;
-
-  const list = document.getElementById('opsiList');
-  list.innerHTML = '';
-  const huruf = ['A','B','C','D'];
-  huruf.forEach(function(h) {
-    if (!s.opsi[h]) return;
-    const div = document.createElement('div');
-    div.className = 'opsi-item';
-    div.onclick = function() { pilihJawaban(h, div); };
-    div.innerHTML = '<div class="opsi-huruf">' + h + '</div><div class="opsi-teks">' + s.opsi[h] + '</div>';
-    list.appendChild(div);
+    ctx.restore();
   });
 
-  document.getElementById('penjelasanBox').style.display = 'none';
-  document.getElementById('btnNext').style.display = 'none';
-  document.getElementById('penjelasanTeks').textContent = '';
+  // center hub
+  ctx.beginPath();ctx.arc(cx,cy,34,0,2*Math.PI);
+  ctx.fillStyle="#fff";ctx.fill();
+  ctx.strokeStyle="#e5e7eb";ctx.lineWidth=2;ctx.stroke();
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  ctx.beginPath();ctx.arc(cx,cy,24,0,2*Math.PI);
+  ctx.fillStyle="#b91c1c";ctx.fill();
+
+  ctx.fillStyle="#fff";ctx.font="bold 9px sans-serif";
+  ctx.textAlign="center";ctx.textBaseline="middle";
+  ctx.fillText("PUTAR",cx,cy);
 }
 
-function pilihJawaban(huruf, elDipilih) {
-  if (sudahJawab) return;
-  sudahJawab = true;
+function spinWheel(){
+  if(spinning) return;
+  spinning=true;
+  const btn=document.getElementById("spin-btn");
+  btn.disabled=true;
+  document.getElementById("result-banner").className="result-banner";
 
-  const s = SOAL[soalSaat];
-  const benar = huruf === s.jawaban;
-  if (benar) skorBenar++;
+  // pick random target segment
+  const targetIdx=Math.floor(Math.random()*N);
+  // aim pointer (top = -PI/2) at center of targetIdx segment
+  // center of segment i is at: rotation + i*ARC + ARC/2 - PI/2
+  // We want that to land at -PI/2 (top), so:
+  // rot_new + i*ARC + ARC/2 - PI/2 ≡ -PI/2  =>  rot_new = -i*ARC - ARC/2
+  const baseTarget = -targetIdx*ARC - ARC/2;
+  const spins = (6 + Math.random()*4) * 2*Math.PI;
+  const totalDelta = spins + ((baseTarget - rotation) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
 
-  const items = document.querySelectorAll('.opsi-item');
-  items.forEach(function(item) {
-    item.classList.add('disabled');
-    const h = item.querySelector('.opsi-huruf').textContent;
-    if (h === s.jawaban) item.classList.add('benar');
-    else if (h === huruf && !benar) item.classList.add('salah');
+  const startRot=rotation, duration=4800, startTime=performance.now();
+  function ease(t){return 1-Math.pow(1-t,4)}
+
+  function animate(now){
+    const t=Math.min((now-startTime)/duration,1);
+    rotation=startRot+totalDelta*ease(t);
+    drawWheel(rotation);
+    if(t<1){requestAnimationFrame(animate);}
+    else{
+      rotation=rotation%(2*Math.PI);
+      spinning=false;
+      btn.disabled=false;
+      btn.innerHTML="🎰 &nbsp; Putar Lagi";
+      selectedPaket=PAKET[targetIdx];
+
+      // highlight card
+      document.querySelectorAll(".paket-card").forEach((el,i)=>{
+        const active=i===targetIdx;
+        el.classList.toggle("active",active);
+        el.style.borderColor=active?PAKET[i].warna:"#e5e7eb";
+        el.style.background=active?PAKET[i].warnaTerang:"#fff";
+      });
+
+      const banner=document.getElementById("result-banner");
+      document.getElementById("rb-name").innerHTML=selectedPaket.icon+" "+selectedPaket.nama;
+      document.getElementById("rb-name").style.color=selectedPaket.warna;
+      banner.className="result-banner show";
+      banner.style.borderColor=selectedPaket.warna;
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+/* ============================================================
+   BUILD PAKET CARDS
+============================================================ */
+function buildCards(){
+  const wrap=document.getElementById("paket-cards");
+  PAKET.forEach((p,i)=>{
+    const d=document.createElement("div");
+    d.className="paket-card"; d.id="pc-"+p.id;
+    d.innerHTML=`<div class="pc-num" style="color:${p.warna}">Paket ${i+1}</div>
+      <div class="pc-name">${p.icon} ${p.nama}</div>
+      <div class="pc-desc">${DESCS[p.id]}</div>`;
+    wrap.appendChild(d);
   });
-
-  document.getElementById('penjelasanTeks').textContent = s.penjelasan;
-  document.getElementById('penjelasanBox').style.display = 'block';
-
-  const btn = document.getElementById('btnNext');
-  btn.style.display = 'block';
-  btn.textContent = soalSaat < SOAL.length - 1 ? 'Soal Berikutnya →' : 'Lihat Hasil →';
 }
 
-function soalBerikutnya() {
-  soalSaat++;
-  if (soalSaat < SOAL.length) {
-    tampilkanSoal();
+/* ============================================================
+   QUIZ LOGIC
+============================================================ */
+function startQuiz(){
+  if(!selectedPaket) return;
+  currentSoal=selectedPaket.soal;
+  cur=0;benar=0;salah=0;answered=false;
+  document.getElementById("wheel-screen").style.display="none";
+  const qv=document.getElementById("quiz-view");
+  qv.style.display="block";
+  renderQ();
+}
+
+function renderQ(){
+  const q=currentSoal[cur], total=currentSoal.length;
+  document.getElementById("prog-fill").style.width=((cur/total)*100)+"%";
+  document.getElementById("prog-text").textContent=(cur+1)+" / "+total;
+  document.getElementById("q-num").textContent="Soal "+(cur+1);
+  const badge=document.getElementById("q-badge");
+  badge.textContent=selectedPaket.nama;
+  badge.className="q-badge badge-"+selectedPaket.id;
+  document.getElementById("q-text").textContent=q.teks;
+  const optsDiv=document.getElementById("options");
+  optsDiv.innerHTML="";
+  q.opsi.forEach((o,i)=>{
+    const btn=document.createElement("button");
+    btn.className="opt-btn";
+    btn.innerHTML='<span class="opt-label">'+LABELS[i]+'</span><span>'+o+'</span>';
+    btn.onclick=()=>pilih(i);
+    optsDiv.appendChild(btn);
+  });
+  document.getElementById("feedback").className="feedback";
+  document.getElementById("nav-btn").style.display="none";
+  answered=false;
+}
+
+function pilih(idx){
+  if(answered) return;
+  answered=true;
+  const q=currentSoal[cur];
+  document.querySelectorAll(".opt-btn").forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.jawaban&&idx!==q.jawaban) b.classList.add("reveal-correct");
+    else if(i===q.jawaban) b.classList.add("correct");
+    else if(i===idx) b.classList.add("wrong");
+  });
+  const fb=document.getElementById("feedback");
+  if(idx===q.jawaban){
+    benar++;
+    document.getElementById("fb-icon").textContent="✅";
+    document.getElementById("fb-judul").textContent="Jawaban Benar!";
+    document.getElementById("fb-body").innerHTML=
+      '<div class="fb-penjelasan-label">Penjelasan</div>'+
+      '<div class="fb-penjelasan">'+q.penjelasan+'</div>';
+    fb.className="feedback show benar";
   } else {
-    tampilkanHasil();
+    salah++;
+    const lbl=LABELS[q.jawaban], txt=q.opsi[q.jawaban];
+    document.getElementById("fb-icon").textContent="❌";
+    document.getElementById("fb-judul").textContent="Jawaban Kurang Tepat";
+    document.getElementById("fb-body").innerHTML=
+      '<div class="fb-jawaban-benar"><div class="fb-jawaban-label">Jawaban<br>benar</div>'+
+      '<div class="fb-jawaban-teks">'+lbl+'. '+txt+'</div></div>'+
+      '<div class="fb-penjelasan-label" style="color:#991b1b">Penjelasan</div>'+
+      '<div class="fb-penjelasan">'+q.penjelasan+'</div>';
+    fb.className="feedback show salah";
   }
+  const nav=document.getElementById("nav-btn");
+  nav.style.display="block";
+  nav.textContent=cur<currentSoal.length-1?"Soal Berikutnya →":"Lihat Hasil Akhir 🏁";
 }
 
-function tampilkanHasil() {
-  kuisAktif = false;
-  document.getElementById('halaman-soal').style.display = 'none';
-  const hasil = document.getElementById('halaman-hasil');
-  hasil.style.display = 'flex';
+document.getElementById("nav-btn").onclick=()=>{
+  cur++;
+  if(cur<currentSoal.length){
+    const card=document.getElementById("q-card");
+    card.style.animation="none";card.offsetHeight;
+    card.style.animation="fadeUp .35s cubic-bezier(.4,0,.2,1)";
+    renderQ();
+  } else showScore();
+};
 
-  const totalKurang = jumlahPelanggaran * SANKSI_PER_PELANGGARAN;
-  const skorAkhir = Math.max(0, skorBenar - totalKurang);
-  const jmlSalah = SOAL.length - skorBenar;
-  const persen = Math.round((skorAkhir / SOAL.length) * 100);
+function showScore(){
+  document.getElementById("quiz-view").style.display="none";
+  document.getElementById("score-view").style.display="block";
+  const total=currentSoal.length, persen=Math.round((benar/total)*100);
+  let emoji,predikat,pesan;
+  if(persen===100){emoji="🏆";predikat="Sempurna!";pesan="Luar biasa! Semua soal dijawab dengan benar. Kamu ahlinya!";}
+  else if(persen>=80){emoji="🎉";predikat="Memuaskan!";pesan="Hebat! Pemahamanmu tentang "+selectedPaket.nama+" sudah sangat baik.";}
+  else if(persen>=60){emoji="👍";predikat="Cukup Baik!";pesan="Bagus! Masih ada yang perlu dipelajari lebih lanjut.";}
+  else{emoji="💪";predikat="Perlu Belajar Lagi";pesan="Semangat! Pelajari kembali materi "+selectedPaket.nama+" dan coba lagi.";}
 
-  let emoji, judul, predikat;
-  if (persen >= 87) { emoji='🏆'; judul='Istimewa!'; predikat='Pemahaman Anda tentang Empat Pilar MPR RI sangat luar biasa!'; }
-  else if (persen >= 73) { emoji='🎖️'; judul='Sangat Baik!'; predikat='Penguasaan materi Anda sangat kuat. Terus pertahankan!'; }
-  else if (persen >= 60) { emoji='👍'; judul='Baik!'; predikat='Anda memahami sebagian besar materi. Pelajari ulang yang terlewat!'; }
-  else if (persen >= 40) { emoji='📚'; judul='Cukup'; predikat='Masih banyak materi yang perlu diperkuat. Ayo baca lagi bahan tayangnya!'; }
-  else { emoji='💪'; judul='Terus Belajar!'; predikat='Jangan menyerah! Baca ulang bahan tayang MPR dan coba lagi.'; }
+  document.getElementById("s-emoji").textContent=emoji;
+  document.getElementById("s-persen").innerHTML=persen+"<span>/100</span>";
+  document.getElementById("s-predikat").textContent=predikat;
+  document.getElementById("s-pesan").textContent=pesan;
+  document.getElementById("s-benar").textContent=benar;
+  document.getElementById("s-salah").textContent=salah;
+  document.getElementById("s-nilai").textContent=persen;
 
-  document.getElementById('hasilEmoji').textContent = emoji;
-  document.getElementById('hasilJudul').textContent = judul;
-  document.getElementById('hasilPredikat').textContent = predikat;
-  document.getElementById('hasilSkor').textContent = skorAkhir;
-  document.getElementById('hasilDari').textContent = 'dari ' + SOAL.length + ' soal benar (' + persen + '%)';
-  document.getElementById('jmlBenar').textContent = skorBenar;
-  document.getElementById('jmlSalah').textContent = jmlSalah;
-
-  if (jumlahPelanggaran > 0) {
-    const sanksiBox = document.getElementById('hasilSanksiBox');
-    const sanksiTeks = document.getElementById('hasilSanksiTeks');
-    sanksiBox.style.display = 'block';
-    sanksiTeks.innerHTML = 'Jawaban benar: <strong>' + skorBenar + ' soal</strong><br>' +
-      'Pelanggaran pindah tab: <strong>' + jumlahPelanggaran + ' kali</strong> &times; ' + SANKSI_PER_PELANGGARAN + ' poin = <strong>&minus;' + totalKurang + ' poin sanksi</strong><br>' +
-      '<span style="font-size:15px; font-weight:700; color:#8B0000;">Skor akhir setelah sanksi: ' + skorAkhir + ' poin</span>';
-  }
-
-  setTimeout(function() {
-    document.getElementById('hasilBarFill').style.width = persen + '%';
-  }, 300);
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById("breakdown-rows").innerHTML=`
+    <div class="breakdown-row">
+      <div class="breakdown-label" style="color:${selectedPaket.warnaGelap}">${selectedPaket.icon} ${selectedPaket.nama}</div>
+      <div class="breakdown-bar-wrap"><div class="breakdown-bar-fill" id="bar-main" style="background:${selectedPaket.warna};width:0%"></div></div>
+      <div class="breakdown-score" style="color:${selectedPaket.warnaGelap}">${benar}/${total}</div>
+    </div>`;
+  setTimeout(()=>{ document.getElementById("bar-main").style.width=persen+"%"; },200);
 }
 
-function ulangiKuis() {
-  soalSaat = 0;
-  skorBenar = 0;
-  jumlahPelanggaran = 0;
-  sudahJawab = false;
-  document.getElementById('badgeHitungPelanggaran').textContent = '0';
-  document.getElementById('hasilSanksiBox').style.display = 'none';
-  document.getElementById('halaman-hasil').style.display = 'none';
-  document.getElementById('halaman-soal').style.display = 'block';
-  kuisAktif = true;
-  tampilkanSoal();
+function backToWheel(){
+  document.getElementById("score-view").style.display="none";
+  document.getElementById("wheel-screen").style.display="block";
+  document.getElementById("result-banner").className="result-banner";
+  document.getElementById("spin-btn").innerHTML="🎰 &nbsp; Putar Roda!";
+  document.querySelectorAll(".paket-card").forEach(el=>{
+    el.classList.remove("active");
+    el.style.borderColor="#e5e7eb";
+    el.style.background="#fff";
+  });
+  selectedPaket=null;
 }
+
+function replayQuiz(){
+  document.getElementById("score-view").style.display="none";
+  document.getElementById("quiz-view").style.display="block";
+  cur=0;benar=0;salah=0;answered=false;
+  renderQ();
+}
+
+/* INIT */
+buildCards();
+drawWheel(0);
 </script>
 </body>
 </html>
