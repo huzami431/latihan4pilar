@@ -392,6 +392,80 @@
     .hasil-skor-besar { font-size: 60px; }
     .hasil-card { padding: 36px 24px; }
   }
+
+  /* ── MODAL SANKSI ── */
+  .overlay-sanksi {
+    display: none;
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .overlay-sanksi.aktif { display: flex; }
+  .sanksi-card {
+    background: var(--putih);
+    border-radius: 12px;
+    max-width: 460px; width: 100%;
+    padding: 40px 36px;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    animation: turun 0.4s ease-out;
+    border-top: 6px solid var(--merah);
+  }
+  .sanksi-ikon { font-size: 56px; margin-bottom: 16px; }
+  .sanksi-judul {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--merah); margin-bottom: 10px;
+  }
+  .sanksi-teks {
+    font-size: 15px; line-height: 1.65;
+    color: var(--coklat); margin-bottom: 8px;
+  }
+  .sanksi-counter {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px; font-weight: 900;
+    color: var(--merah); margin: 12px 0;
+    line-height: 1;
+  }
+  .sanksi-counter-label { font-size: 13px; color: var(--abu); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px; }
+  .sanksi-total-pelanggaran {
+    background: #FDECEA; border: 1px solid #E8A09A;
+    border-radius: 6px; padding: 10px 16px;
+    font-size: 13px; color: var(--merah);
+    margin-bottom: 24px;
+  }
+  .btn-sanksi-lanjut {
+    background: var(--merah);
+    color: #fff; border: none;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px; font-weight: 700;
+    padding: 13px 36px; border-radius: 4px;
+    cursor: pointer; width: 100%;
+    transition: all 0.2s;
+  }
+  .btn-sanksi-lanjut:hover { background: var(--merah-gelap); }
+
+  /* ── INDIKATOR SANKSI DI HEADER ── */
+  .sanksi-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(192,57,43,0.25);
+    border: 1px solid rgba(192,57,43,0.5);
+    border-radius: 4px; padding: 4px 10px;
+    font-size: 12px; color: #FFCDD2;
+    font-family: 'Source Serif 4', serif;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+  }
+  .sanksi-badge.menyala {
+    background: rgba(192,57,43,0.6);
+    border-color: var(--emas);
+    color: var(--emas-muda);
+    animation: kedip 0.5s ease 3;
+  }
+  @keyframes kedip { 0%,100%{opacity:1} 50%{opacity:0.3} }
 </style>
 </head>
 <body>
@@ -419,10 +493,24 @@
   <button class="btn-mulai" onclick="mulaiKuis()">Mulai Mengerjakan →</button>
 </div>
 
+<!-- ═══════════════ MODAL SANKSI PINDAH TAB ═══════════════ -->
+<div class="overlay-sanksi" id="overlaySanksi">
+  <div class="sanksi-card">
+    <div class="sanksi-ikon">⚠️</div>
+    <div class="sanksi-judul">Pelanggaran Terdeteksi!</div>
+    <p class="sanksi-teks">Anda terdeteksi meninggalkan halaman ujian. Setiap pelanggaran dikenakan <strong>sanksi pengurangan 2 poin</strong> dari skor akhir.</p>
+    <div class="sanksi-counter" id="sanksiKurang">−2</div>
+    <div class="sanksi-counter-label">Poin Dikurangi</div>
+    <div class="sanksi-total-pelanggaran" id="sanksiTotalInfo">Total pelanggaran: 1 kali — Total pengurangan: 2 poin</div>
+    <button class="btn-sanksi-lanjut" onclick="tutupSanksi()">Mengerti, Kembali ke Ujian</button>
+  </div>
+</div>
+
 <!-- ═══════════════ HALAMAN SOAL ═══════════════ -->
 <div id="halaman-soal">
   <div class="header-quiz">
     <span class="header-brand">🦅 Empat Pilar MPR RI</span>
+    <span class="sanksi-badge" id="sanksiBadge" title="Jumlah pelanggaran pindah tab">🚨 Pelanggaran: <strong id="badgeHitungPelanggaran">0</strong></span>
     <span class="header-progress-text" id="headerProgress">Soal 1 dari 50</span>
   </div>
   <div class="progress-bar-wrap">
@@ -465,11 +553,17 @@
         <div class="detail-label">❌ Salah</div>
       </div>
     </div>
+    <div id="hasilSanksiBox" style="display:none; background:#FDECEA; border:1px solid #E8A09A; border-radius:8px; padding:14px 18px; margin-bottom:20px; text-align:left;">
+      <div style="font-family:'Playfair Display',serif; font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:#922B21; font-weight:700; margin-bottom:6px;">⚠️ Catatan Sanksi</div>
+      <div style="font-size:14px; color:#5D1010; line-height:1.6;" id="hasilSanksiTeks"></div>
+    </div>
     <button class="btn-ulangi" onclick="ulangiKuis()">↩ Ulangi Kuis</button>
   </div>
 </div>
 
+
 <script>
+// ═══════════════ DATA SOAL ═══════════════
 const SOAL = [
   // ── PANCASILA (1–10) ──
   {
@@ -497,7 +591,7 @@ const SOAL = [
     no:4, tema:"Pancasila", level:"Sedang",
     pertanyaan:"Panitia Sembilan berhasil merumuskan Piagam Jakarta pada 22 Juni 1945. Perbedaan antara rumusan dasar negara dalam Piagam Jakarta dengan rumusan final Pancasila yang disahkan PPKI terletak pada...",
     opsi:{B:"Penghapusan kalimat 'dengan kewajiban menjalankan syariat Islam bagi pemeluk-pemeluknya' pada sila Ketuhanan",A:"Perubahan urutan sila dari lima menjadi empat dengan penggabungan sila nasionalisme dan internasionalisme",C:"Penggantian nama 'Ketuhanan' menjadi 'Ketuhanan Yang Maha Esa' pada sila pertama Pancasila",D:"Penambahan sila Keadilan Sosial yang sebelumnya tidak ada dalam rumusan Piagam Jakarta"},
-    jawaban:"A",
+    jawaban:"B",
     penjelasan:"Slide 8 menunjukkan bahwa Piagam Jakarta memuat: 'Ketuhanan dengan kewajiban menjalankan syariat Islam bagi pemeluk-pemeluknya'. Kalimat itu dihapus dalam sidang PPKI 18 Agustus 1945, sehingga menjadi 'Ketuhanan Yang Maha Esa' demi menjaga persatuan Indonesia."
   },
   {
@@ -539,7 +633,7 @@ const SOAL = [
     no:10, tema:"Pancasila", level:"Sedang",
     pertanyaan:"Berdasarkan prinsip Sila Keadilan Sosial bagi Seluruh Rakyat Indonesia yang termuat dalam bahan tayang, negara Indonesia wajib menjamin setiap warga negara untuk mendapatkan...",
     opsi:{B:"Pendidikan, pekerjaan, dan penghidupan yang layak, bermartabat, dan berkeadilan",A:"Penghasilan yang sama rata tanpa membedakan jenis pekerjaan dan tingkat pendidikan warga",C:"Akses yang sama ke seluruh sumber daya alam yang dikuasai oleh negara",D:"Perlakuan hukum yang sepenuhnya identik tanpa memandang kondisi sosial dan ekonomi"},
-    jawaban:"A",
+    jawaban:"B",
     penjelasan:"Slide 23 bahan tayang menyatakan: 'negara Indonesia wajib menjamin setiap warga negara untuk mendapatkan pendidikan, pekerjaan dan penghidupan yang layak, bermartabat dan berkeadilan.' Ini adalah perwujudan nyata keadilan sosial dalam kerangka Pancasila."
   },
 
@@ -548,7 +642,7 @@ const SOAL = [
     no:11, tema:"UUD NRI 1945", level:"Sedang",
     pertanyaan:"UUD NRI Tahun 1945 sebagai hukum dasar tertulis mengatur 4 hal penting. Manakah yang TIDAK termasuk dalam keempat hal tersebut menurut bahan tayang MPR?",
     opsi:{C:"Mekanisme pemilihan umum dan penggantian pemerintahan",B:"Pembatasan kekuasaan organ-organ negara",A:"Prinsip kedaulatan rakyat dan negara hukum",D:"Mengatur hubungan kekuasaan antar lembaga negara dengan warga negara"},
-    jawaban:"A",
+    jawaban:"C",
     penjelasan:"Slide 25 bahan tayang menyebutkan UUD mengatur: (1) Prinsip kedaulatan rakyat dan negara hukum, (2) Pembatasan kekuasaan organ-organ negara, (3) Mengatur hubungan antar lembaga-lembaga negara, (4) Mengatur hubungan kekuasaan antar lembaga negara dengan warga negara. Mekanisme pemilu tidak disebutkan sebagai satu dari empat hal tersebut."
   },
   {
@@ -597,7 +691,7 @@ const SOAL = [
     no:18, tema:"UUD NRI 1945", level:"Sulit",
     pertanyaan:"Pasal 29 UUD NRI Tahun 1945 tentang Agama (Bab XI) menegaskan dua hal: negara berdasar Ketuhanan Yang Maha Esa (ayat 1) dan negara menjamin kemerdekaan beribadah (ayat 2). Implikasi konstitusional dari dua pasal ini adalah...",
     opsi:{A:"Indonesia adalah negara agama (theokrasi) karena menjadikan Ketuhanan sebagai dasar bernegara",B:"Indonesia menganut sekularisme penuh karena memisahkan urusan agama dari urusan negara secara tegas",D:"Indonesia wajib menerapkan hukum agama mayoritas sebagai hukum positif yang berlaku bagi seluruh warga",C:"Indonesia bukan negara agama dan bukan negara sekuler; agama menjadi landasan moral tapi tidak ada agama resmi negara"},
-    jawaban:"D",
+    jawaban:"C",
     penjelasan:"Pasal 29 ayat (1) menegaskan Indonesia berdasar Ketuhanan, namun ayat (2) menjamin kebebasan semua warga memeluk agamanya masing-masing. Ini menunjukkan Indonesia bukan theokrasi (tak ada agama resmi negara) dan bukan negara sekuler (agama menjadi fondasi moral kehidupan berbangsa)."
   },
   {
@@ -634,7 +728,7 @@ const SOAL = [
     no:23, tema:"NKRI", level:"Sedang",
     pertanyaan:"Berdasarkan dasar hukum sosialisasi Empat Pilar MPR RI yang tercantum dalam slide 2 bahan tayang, Instruksi Presiden (Inpres) yang mendukung kelancaran sosialisasi UUD NRI Tahun 1945 yang dilakukan oleh MPR adalah...",
     opsi:{A:"Inpres No. 4 Tahun 2010 tentang Percepatan Pembangunan Infrastruktur",B:"Inpres No. 7 Tahun 2015 tentang Aksi Pencegahan dan Pemberantasan Korupsi",D:"Inpres No. 2 Tahun 2020 tentang Rencana Aksi Nasional Pendidikan Karakter",C:"Inpres No. 6 Tahun 2005 tentang Dukungan kelancaran pelaksanaan Sosialisasi UUD NRI Tahun 1945 yang dilakukan oleh MPR"},
-    jawaban:"D",
+    jawaban:"C",
     penjelasan:"Slide 6 bahan tayang tentang Dasar Hukum Sosialisasi Empat Pilar MPR RI menyebutkan tiga dasar hukum, salah satunya adalah: 'INPRES NO. 6 TAHUN 2005 tentang Dukungan kelancaran pelaksanaan Sosialisasi UUD NRI Tahun 1945 yang dilakukan oleh MPR.'"
   },
   {
@@ -842,13 +936,55 @@ const SOAL = [
   }
 ];
 
+// ═══════════════ DATA & STATE ═══════════════
 let soalSaat = 0;
 let skorBenar = 0;
 let sudahJawab = false;
+let jumlahPelanggaran = 0;
+const SANKSI_PER_PELANGGARAN = 2;
+let kuisAktif = false;
 
+// ═══════════════ ANTI-TAB SWITCHING ═══════════════
+document.addEventListener('visibilitychange', function() {
+  if (!kuisAktif) return;
+  if (document.hidden) {
+    jumlahPelanggaran++;
+    tampilkanModalSanksi();
+  }
+});
+
+window.addEventListener('blur', function() {
+  if (!kuisAktif) return;
+  setTimeout(function() {
+    if (!document.hasFocus()) {
+      jumlahPelanggaran++;
+      tampilkanModalSanksi();
+    }
+  }, 200);
+});
+
+function tampilkanModalSanksi() {
+  const totalKurang = jumlahPelanggaran * SANKSI_PER_PELANGGARAN;
+  document.getElementById('sanksiKurang').textContent = '-' + SANKSI_PER_PELANGGARAN;
+  document.getElementById('sanksiTotalInfo').textContent =
+    'Total pelanggaran: ' + jumlahPelanggaran + ' kali — Total pengurangan: ' + totalKurang + ' poin';
+  document.getElementById('overlaySanksi').classList.add('aktif');
+  document.getElementById('badgeHitungPelanggaran').textContent = jumlahPelanggaran;
+  const badge = document.getElementById('sanksiBadge');
+  badge.classList.add('menyala');
+  setTimeout(function() { badge.classList.remove('menyala'); }, 1600);
+}
+
+function tutupSanksi() {
+  document.getElementById('overlaySanksi').classList.remove('aktif');
+  window.focus();
+}
+
+// ═══════════════ FUNGSI KUIS ═══════════════
 function mulaiKuis() {
   document.getElementById('halaman-awal').style.display = 'none';
   document.getElementById('halaman-soal').style.display = 'block';
+  kuisAktif = true;
   tampilkanSoal();
 }
 
@@ -856,39 +992,33 @@ function tampilkanSoal() {
   const s = SOAL[soalSaat];
   sudahJawab = false;
 
-  // Header
-  document.getElementById('headerProgress').textContent = `Soal ${soalSaat+1} dari ${SOAL.length}`;
-  document.getElementById('progressBar').style.width = `${((soalSaat+1)/SOAL.length)*100}%`;
+  document.getElementById('headerProgress').textContent = 'Soal ' + (soalSaat+1) + ' dari ' + SOAL.length;
+  document.getElementById('progressBar').style.width = (((soalSaat+1)/SOAL.length)*100) + '%';
 
-  // Meta
-  document.getElementById('soalNomor').textContent = `Soal ${soalSaat+1}`;
+  document.getElementById('soalNomor').textContent = 'Soal ' + (soalSaat+1);
   document.getElementById('soalTema').textContent = s.tema;
   const lvlEl = document.getElementById('soalLevel');
   lvlEl.textContent = s.level;
   lvlEl.className = 'soal-level ' + (s.level === 'Sulit' ? 'level-sulit' : 'level-sedang');
 
-  // Pertanyaan
   document.getElementById('soalTeks').textContent = s.pertanyaan;
 
-  // Opsi
   const list = document.getElementById('opsiList');
   list.innerHTML = '';
   const huruf = ['A','B','C','D'];
-  huruf.forEach(h => {
+  huruf.forEach(function(h) {
     if (!s.opsi[h]) return;
     const div = document.createElement('div');
     div.className = 'opsi-item';
-    div.onclick = () => pilihJawaban(h, div);
-    div.innerHTML = `<div class="opsi-huruf">${h}</div><div class="opsi-teks">${s.opsi[h]}</div>`;
+    div.onclick = function() { pilihJawaban(h, div); };
+    div.innerHTML = '<div class="opsi-huruf">' + h + '</div><div class="opsi-teks">' + s.opsi[h] + '</div>';
     list.appendChild(div);
   });
 
-  // Reset
   document.getElementById('penjelasanBox').style.display = 'none';
   document.getElementById('btnNext').style.display = 'none';
   document.getElementById('penjelasanTeks').textContent = '';
 
-  // Scroll ke atas
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -900,21 +1030,17 @@ function pilihJawaban(huruf, elDipilih) {
   const benar = huruf === s.jawaban;
   if (benar) skorBenar++;
 
-  // Tandai semua opsi
   const items = document.querySelectorAll('.opsi-item');
-  items.forEach(item => {
+  items.forEach(function(item) {
     item.classList.add('disabled');
     const h = item.querySelector('.opsi-huruf').textContent;
     if (h === s.jawaban) item.classList.add('benar');
     else if (h === huruf && !benar) item.classList.add('salah');
   });
 
-  // Penjelasan
-  const box = document.getElementById('penjelasanBox');
   document.getElementById('penjelasanTeks').textContent = s.penjelasan;
-  box.style.display = 'block';
+  document.getElementById('penjelasanBox').style.display = 'block';
 
-  // Tombol next
   const btn = document.getElementById('btnNext');
   btn.style.display = 'block';
   btn.textContent = soalSaat < SOAL.length - 1 ? 'Soal Berikutnya →' : 'Lihat Hasil →';
@@ -930,14 +1056,16 @@ function soalBerikutnya() {
 }
 
 function tampilkanHasil() {
+  kuisAktif = false;
   document.getElementById('halaman-soal').style.display = 'none';
   const hasil = document.getElementById('halaman-hasil');
   hasil.style.display = 'flex';
 
-  const persen = Math.round((skorBenar / SOAL.length) * 100);
+  const totalKurang = jumlahPelanggaran * SANKSI_PER_PELANGGARAN;
+  const skorAkhir = Math.max(0, skorBenar - totalKurang);
   const jmlSalah = SOAL.length - skorBenar;
+  const persen = Math.round((skorAkhir / SOAL.length) * 100);
 
-  // Predikat
   let emoji, judul, predikat;
   if (persen >= 87) { emoji='🏆'; judul='Istimewa!'; predikat='Pemahaman Anda tentang Empat Pilar MPR RI sangat luar biasa!'; }
   else if (persen >= 73) { emoji='🎖️'; judul='Sangat Baik!'; predikat='Penguasaan materi Anda sangat kuat. Terus pertahankan!'; }
@@ -948,12 +1076,21 @@ function tampilkanHasil() {
   document.getElementById('hasilEmoji').textContent = emoji;
   document.getElementById('hasilJudul').textContent = judul;
   document.getElementById('hasilPredikat').textContent = predikat;
-  document.getElementById('hasilSkor').textContent = skorBenar;
-  document.getElementById('hasilDari').textContent = `dari ${SOAL.length} soal benar (${persen}%)`;
+  document.getElementById('hasilSkor').textContent = skorAkhir;
+  document.getElementById('hasilDari').textContent = 'dari ' + SOAL.length + ' soal benar (' + persen + '%)';
   document.getElementById('jmlBenar').textContent = skorBenar;
   document.getElementById('jmlSalah').textContent = jmlSalah;
 
-  setTimeout(() => {
+  if (jumlahPelanggaran > 0) {
+    const sanksiBox = document.getElementById('hasilSanksiBox');
+    const sanksiTeks = document.getElementById('hasilSanksiTeks');
+    sanksiBox.style.display = 'block';
+    sanksiTeks.innerHTML = 'Jawaban benar: <strong>' + skorBenar + ' soal</strong><br>' +
+      'Pelanggaran pindah tab: <strong>' + jumlahPelanggaran + ' kali</strong> &times; ' + SANKSI_PER_PELANGGARAN + ' poin = <strong>&minus;' + totalKurang + ' poin sanksi</strong><br>' +
+      '<span style="font-size:15px; font-weight:700; color:#8B0000;">Skor akhir setelah sanksi: ' + skorAkhir + ' poin</span>';
+  }
+
+  setTimeout(function() {
     document.getElementById('hasilBarFill').style.width = persen + '%';
   }, 300);
 
@@ -963,8 +1100,13 @@ function tampilkanHasil() {
 function ulangiKuis() {
   soalSaat = 0;
   skorBenar = 0;
+  jumlahPelanggaran = 0;
+  sudahJawab = false;
+  document.getElementById('badgeHitungPelanggaran').textContent = '0';
+  document.getElementById('hasilSanksiBox').style.display = 'none';
   document.getElementById('halaman-hasil').style.display = 'none';
   document.getElementById('halaman-soal').style.display = 'block';
+  kuisAktif = true;
   tampilkanSoal();
 }
 </script>
